@@ -11,6 +11,11 @@ Store: saasquill-app-dev, theme #149206040653.
 | Sticky scroll-up: tucks after downward scroll, reveals on upward | ✅ (first false reading was a scroll-clamp artifact; retest clean) |
 | Focus-in reveals tucked header | implemented; not separately exercised |
 | Liquid error caught by theme check (filter inside render args) | fixed before push |
-| Multi-level nav (3 levels) | markup + coordination implemented; **fixture pending** — menu nesting requires drag-drop the automation cannot perform; "Snowboards" item added flat, needs manual drag under Catalog |
-| Desktop disclosure open/Escape/sibling-close | implemented; verify after nesting fixture |
+| Multi-level nav | ✅ nested fixture created (user drag): Catalog → [Catalog, Snowboards]; renders as disclosure dropdown |
+| Desktop dropdown opens, panel visible | ✅ (1280px) |
+| Escape closes + focus returns to summary | ✅ |
+| Outside click closes | ✅ |
+| Mobile drawer accordion with nested submenu | ✅ Catalog expands to sub-links in drawer |
+| Sibling-close | implemented; needs a second parent-with-children to exercise (single dropdown in menu today) |
+| Third level | markup supports; no 3rd-level fixture yet |
 

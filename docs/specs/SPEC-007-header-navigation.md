@@ -1,6 +1,6 @@
 # SPEC-007 · Header & navigation
 
-Status: Implemented (verified 2026-09-14 on saasquill-app-dev; multi-level fixture pending)
+Status: Implemented (verified 2026-09-14 on saasquill-app-dev incl. nested nav)
 Phase: 3, slice 1
 Provenance: Original QuillCommerce design; native details/dialog semantics;
 Shopify menus (linklists), routes, and customer account component docs.
