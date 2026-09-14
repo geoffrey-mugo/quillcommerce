@@ -84,6 +84,12 @@
       "added": "{{ title }} added to cart",
       "add_error": "Couldn't add to cart. Please try again.",
       "choose_options": "Choose options"
+    },
+    "quick_view": {
+      "loading": "Loading product…",
+      "error": "Couldn't load this product.",
+      "close": "Close quick view",
+      "view_details": "View full details"
     }
   },
   "general": {

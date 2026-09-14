@@ -53,10 +53,17 @@
         </form>
       </qc-product-form>
     {% else %}
-      <a class="qc-btn qc-btn--quiet qc-product-card__options" href="{{ product.url }}">
-        {{ 'products.card.choose_options' | t }}
-        <span class="qc-visually-hidden">— {{ product.title }}</span>
-      </a>
+      <qc-quick-view
+        data-loading-label="{{ 'products.quick_view.loading' | t }}"
+        data-error-label="{{ 'products.quick_view.error' | t }}"
+        data-close-label="{{ 'products.quick_view.close' | t }}"
+        data-details-label="{{ 'products.quick_view.view_details' | t }}"
+      >
+        <a class="qc-btn qc-btn--quiet qc-product-card__options" href="{{ product.url }}">
+          {{ 'products.card.choose_options' | t }}
+          <span class="qc-visually-hidden">— {{ product.title }}</span>
+        </a>
+      </qc-quick-view>
     {% endif %}
   {% endif %}
 </article>
