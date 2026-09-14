@@ -36,4 +36,27 @@
       <span class="qc-badge">{{ 'products.product.sold_out' | t }}</span>
     {% endunless %}
   </div>
+  {% if product.available %}
+    {% if product.has_only_default_variant %}
+      <qc-product-form
+        class="qc-product-card__quick-add"
+        data-adding-label="{{ 'products.card.adding' | t }}"
+        data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+        data-error-label="{{ 'products.card.add_error' | t }}"
+      >
+        <form action="{{ routes.cart_add_url }}" method="post">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button type="submit" class="qc-btn qc-btn--outline qc-btn--full">
+            {{ 'products.product.add_to_cart' | t }}
+            <span class="qc-visually-hidden">— {{ product.title }}</span>
+          </button>
+        </form>
+      </qc-product-form>
+    {% else %}
+      <a class="qc-btn qc-btn--quiet qc-product-card__options" href="{{ product.url }}">
+        {{ 'products.card.choose_options' | t }}
+        <span class="qc-visually-hidden">— {{ product.title }}</span>
+      </a>
+    {% endif %}
+  {% endif %}
 </article>

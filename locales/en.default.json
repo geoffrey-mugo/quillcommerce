@@ -78,6 +78,12 @@
       "quantity": "Quantity",
       "add_to_cart": "Add to cart",
       "sold_out": "Sold out"
+    },
+    "card": {
+      "adding": "Adding…",
+      "added": "{{ title }} added to cart",
+      "add_error": "Couldn't add to cart. Please try again.",
+      "choose_options": "Choose options"
     }
   },
   "general": {

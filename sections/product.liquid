@@ -20,6 +20,11 @@
     {% render 'qc-price', item: product %}
     <div class="qc-prose">{{ product.description }}</div>
 
+    <qc-product-form
+      data-adding-label="{{ 'products.card.adding' | t }}"
+      data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+      data-error-label="{{ 'products.card.add_error' | t }}"
+    >
     {% form 'product', product %}
       {% assign current_variant = product.selected_or_first_available_variant %}
 
@@ -73,6 +78,7 @@
       </button>
       {{ form | payment_button }}
     {% endform %}
+    </qc-product-form>
   </div>
 </div>
 

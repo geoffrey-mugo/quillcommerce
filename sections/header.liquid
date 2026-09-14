@@ -17,9 +17,11 @@
     {% endif %}
 
     <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+      <sup>
+        <qc-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>
+          {%- if cart.item_count > 0 %}{{ cart.item_count }}{% endif -%}
+        </qc-cart-count>
+      </sup>
 
       {{ 'icon-cart.svg' | inline_asset_content }}
     </a>

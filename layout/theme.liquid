@@ -20,6 +20,7 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'qc-foundation.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'qc-cart.js' | asset_url }}" type="module"></script>
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
@@ -29,6 +30,7 @@
 
   <body>
     <a href="#qc-main" class="qc-skip-link">{{ 'accessibility.skip_to_content' | t }}</a>
+    <qc-live-region></qc-live-region>
 
     {% sections 'header-group' %}
 
