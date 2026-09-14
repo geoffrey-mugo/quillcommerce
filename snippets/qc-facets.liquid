@@ -94,6 +94,13 @@
                             {% if value.active %}checked{% endif %}
                             {% if value.count == 0 and value.active == false %}disabled{% endif %}
                           >
+                          {% if value.swatch %}
+                            <span class="qc-facets__swatch" aria-hidden="true"{% if value.swatch.color %} style="--qc-swatch: rgb({{ value.swatch.color.rgb }})"{% endif %}>
+                              {%- if value.swatch.image -%}
+                                {% render 'image', image: value.swatch.image, class: 'qc-facets__swatch-image', width: 40, height: 40, crop: 'center' %}
+                              {%- endif -%}
+                            </span>
+                          {% endif %}
                           <span>{{ value.label }}</span>
                           <span class="qc-muted qc-text-s">({{ value.count }})</span>
                         </label>

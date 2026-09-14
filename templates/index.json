@@ -1,20 +1,45 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "catnav": {
+      "type": "qc-catalog-navigator",
+      "blocks": {
+        "b1": {
+          "type": "collection",
+          "settings": {
+            "collection": "automated-collection"
+          }
+        },
+        "b2": {
+          "type": "collection",
+          "settings": {
+            "collection": "hydrogen"
+          }
+        },
+        "b3": {
+          "type": "collection",
+          "settings": {
+            "collection": "frontpage"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "heading": "Browse the catalog",
+        "layout": "tiles",
+        "show_counts": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "catnav"
   ]
 }

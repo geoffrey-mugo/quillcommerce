@@ -46,7 +46,21 @@
     "sticky_none": "Not sticky",
     "sticky_always": "Always visible",
     "sticky_scroll_up": "Show on scroll up",
-    "customer_account_menu": "Customer account menu"
+    "customer_account_menu": "Customer account menu",
+    "utility_bar": "Utility bar",
+    "utility_message": "Message",
+    "utility_link_label": "Link label",
+    "utility_link_url": "Link",
+    "catalog_navigator": "Catalog navigator",
+    "heading": "Heading",
+    "layout_tiles": "Tiles",
+    "layout_list": "List",
+    "show_counts": "Show product counts",
+    "title_override": "Title (optional)",
+    "image_override": "Image (optional)",
+    "grid_density": "Grid density",
+    "density_comfortable": "Comfortable",
+    "density_dense": "Dense"
   },
   "labels": {
     "alignment": "Alignment",

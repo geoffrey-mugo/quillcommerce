@@ -5,6 +5,7 @@
 {% endcomment %}
 
 <div class="qc-collection">
+  {% render 'qc-breadcrumbs' %}
   <header class="qc-collection__header">
     <h1>{{ collection.title }}</h1>
     {% if collection.description != blank %}
@@ -18,7 +19,7 @@
         {% render 'qc-facets', results: collection, results_url: collection.url %}
       </aside>
 
-      <div class="qc-collection__main">
+      <div class="qc-collection__main" style="--qc-card-min: {% if section.settings.density == 'dense' %}168px{% else %}220px{% endif %}">
         <p class="qc-muted qc-text-s" role="status">
           {% if collection.products_count == 1 %}
             {{ 'collections.count.one' | t: count: collection.products_count }}
@@ -199,6 +200,22 @@
     border-color: var(--qc-ink);
   }
 
+  .qc-facets__swatch {
+    inline-size: 18px;
+    block-size: 18px;
+    border-radius: var(--qc-radius-pill);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    background: var(--qc-swatch, var(--qc-surface-raised));
+    overflow: hidden;
+    flex: none;
+  }
+
+  .qc-facets__swatch-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
   @media (min-width: 990px) {
     .qc-facets__panel {
       display: block;
@@ -214,6 +231,17 @@
 {% schema %}
 {
   "name": "t:general.collection",
-  "settings": []
+  "settings": [
+    {
+      "type": "select",
+      "id": "density",
+      "label": "t:general.grid_density",
+      "default": "comfortable",
+      "options": [
+        { "value": "comfortable", "label": "t:general.density_comfortable" },
+        { "value": "dense", "label": "t:general.density_dense" }
+      ]
+    }
+  ]
 }
 {% endschema %}

@@ -84,7 +84,8 @@
     }
   },
   "accessibility": {
-    "skip_to_content": "Skip to content"
+    "skip_to_content": "Skip to content",
+    "back_to_top": "Back to top"
   },
   "products": {
     "price": {
@@ -127,5 +128,20 @@
     "price_from": "From",
     "price_to": "To",
     "remove_filter": "Remove filter"
+  },
+  "breadcrumbs": {
+    "label": "Breadcrumbs",
+    "home": "Home",
+    "products": "Products"
+  },
+  "localization": {
+    "country_label": "Country/region",
+    "language_label": "Language",
+    "update": "Update"
+  },
+  "sections": {
+    "catalog_navigator": {
+      "editor_hint": "Add collection blocks to build the navigator."
+    }
   }
 }

@@ -36,3 +36,24 @@ if (!customElements.get('qc-facets')) {
     }
   );
 }
+
+/* Generic submit-on-change wrapper (utility bar localization forms). */
+if (!customElements.get('qc-auto-form')) {
+  customElements.define(
+    'qc-auto-form',
+    class extends HTMLElement {
+      connectedCallback() {
+        this.abort = new AbortController();
+        this.querySelector('form')?.addEventListener(
+          'change',
+          (e) => e.currentTarget.submit(),
+          { signal: this.abort.signal }
+        );
+      }
+
+      disconnectedCallback() {
+        this.abort.abort();
+      }
+    }
+  );
+}

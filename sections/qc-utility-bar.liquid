@@ -1,0 +1,132 @@
+{% comment %}
+  Utility bar (SPEC-010 B): quiet single row with optional message/link and
+  Shopify localization selectors (only when multiple options exist).
+{% endcomment %}
+
+<div class="qc-utility">
+  <div class="qc-utility__row">
+    {% if section.settings.message != blank %}
+      <p class="qc-utility__message">{{ section.settings.message }}</p>
+    {% endif %}
+
+    {% if section.settings.link_label != blank and section.settings.link_url != blank %}
+      <a class="qc-utility__link" href="{{ section.settings.link_url }}">{{ section.settings.link_label }}</a>
+    {% endif %}
+
+    <div class="qc-utility__selectors">
+      {% if localization.available_countries.size > 1 %}
+        <qc-auto-form>
+          {% form 'localization', class: 'qc-utility__form' %}
+            <label class="qc-visually-hidden" for="qc-country">{{ 'localization.country_label' | t }}</label>
+            <select id="qc-country" class="qc-utility__select" name="country_code">
+              {% for country in localization.available_countries %}
+                <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                  {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                </option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="qc-btn qc-btn--quiet qc-utility__apply">{{ 'localization.update' | t }}</button>
+          {% endform %}
+        </qc-auto-form>
+      {% endif %}
+
+      {% if localization.available_languages.size > 1 %}
+        <qc-auto-form>
+          {% form 'localization', class: 'qc-utility__form' %}
+            <label class="qc-visually-hidden" for="qc-language">{{ 'localization.language_label' | t }}</label>
+            <select id="qc-language" class="qc-utility__select" name="locale_code">
+              {% for language in localization.available_languages %}
+                <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
+                  {{ language.endonym_name | capitalize }}
+                </option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="qc-btn qc-btn--quiet qc-utility__apply">{{ 'localization.update' | t }}</button>
+          {% endform %}
+        </qc-auto-form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'qc-facets.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .qc-utility {
+    background: var(--qc-surface-raised);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+    font-size: var(--qc-text-s);
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-utility__row {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-m);
+    min-block-size: 36px;
+    flex-wrap: wrap;
+    padding-block: var(--qc-space-2xs);
+  }
+
+  .qc-utility__message {
+    margin: 0;
+  }
+
+  .qc-utility__link {
+    color: inherit;
+  }
+
+  .qc-utility__selectors {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-s);
+    margin-inline-start: auto;
+  }
+
+  .qc-utility__form {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-2xs);
+  }
+
+  .qc-utility__select {
+    min-block-size: 28px;
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-control);
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    font-size: var(--qc-text-s);
+    padding-inline: var(--qc-space-2xs);
+  }
+
+  qc-auto-form:defined .qc-utility__apply {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.utility_bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "message",
+      "label": "t:general.utility_message"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:general.utility_link_label"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:general.utility_link_url"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "presets": [{ "name": "t:general.utility_bar" }]
+}
+{% endschema %}

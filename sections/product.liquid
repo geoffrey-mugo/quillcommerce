@@ -5,6 +5,7 @@
 {% endcomment %}
 
 <div class="qc-product">
+  {% render 'qc-breadcrumbs' %}
   <div class="qc-product__media">
     {% for image in product.images %}
       {% render 'image', class: 'qc-product__image', image: image %}

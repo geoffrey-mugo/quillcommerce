@@ -5,6 +5,7 @@
 {% endcomment %}
 
 <article class="qc-article">
+  {% render 'qc-breadcrumbs' %}
   {% if article.image %}
     {% render 'image', image: article.image, class: 'qc-article__lead', width: 1400 %}
   {% endif %}

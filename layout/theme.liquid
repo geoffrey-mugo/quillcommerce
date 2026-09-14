@@ -40,5 +40,12 @@
     </main>
 
     {% sections 'footer-group' %}
+
+    <qc-back-to-top class="qc-back-to-top">
+      <button type="button" class="qc-btn qc-btn--outline" aria-label="{{ 'accessibility.back_to_top' | t }}">
+        {% render 'qc-icon', name: 'chevron' %}
+      </button>
+    </qc-back-to-top>
+    <script src="{{ 'qc-back-to-top.js' | asset_url }}" type="module"></script>
   </body>
 </html>
