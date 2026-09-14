@@ -62,7 +62,21 @@
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}",
     "type_page": "Page",
-    "type_article": "Article"
+    "type_article": "Article",
+    "suggest": {
+      "hint": "Start typing to search products, pages, and articles.",
+      "loading": "Searching…",
+      "error": "Search is unavailable right now.",
+      "empty": "No suggestions found.",
+      "products": "Products",
+      "pages": "Pages",
+      "articles": "Articles",
+      "see_all": "See all results for “{{ terms }}”",
+      "count": {
+        "one": "{{ count }} suggestion",
+        "other": "{{ count }} suggestions"
+      }
+    }
   },
   "accessibility": {
     "skip_to_content": "Skip to content"

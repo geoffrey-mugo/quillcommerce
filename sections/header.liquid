@@ -111,9 +111,47 @@
       </nav>
 
       <div class="qc-header__tools">
-        <a class="qc-header__icon-btn" href="{{ routes.search_url }}" aria-label="{{ 'search.title' | t }}">
-          {% render 'qc-icon', name: 'search' %}
-        </a>
+        <qc-search
+          data-loading-label="{{ 'search.suggest.loading' | t }}"
+          data-error-label="{{ 'search.suggest.error' | t }}"
+          data-empty-label="{{ 'search.suggest.empty' | t }}"
+          data-products-label="{{ 'search.suggest.products' | t }}"
+          data-pages-label="{{ 'search.suggest.pages' | t }}"
+          data-articles-label="{{ 'search.suggest.articles' | t }}"
+          data-see-all-label="{{ 'search.suggest.see_all' | t: terms: '[terms]' }}"
+          data-count-one-label="{{ 'search.suggest.count.one' | t: count: '[count]' }}"
+          data-count-other-label="{{ 'search.suggest.count.other' | t: count: '[count]' }}"
+          data-search-url="{{ routes.search_url }}"
+          data-money-format="{{ shop.money_format | strip_html }}"
+        >
+          <a class="qc-header__icon-btn" href="{{ routes.search_url }}" aria-label="{{ 'search.title' | t }}">
+            {% render 'qc-icon', name: 'search' %}
+          </a>
+          <dialog class="qc-search-dialog" scroll-lock aria-label="{{ 'search.title' | t }}">
+            <form action="{{ routes.search_url }}" method="get" role="search" class="qc-search-dialog__form">
+              <div class="qc-field qc-search-dialog__field">
+                <label class="qc-field__label" for="qc-suggest-input">{{ 'search.title' | t }}</label>
+                <input
+                  id="qc-suggest-input"
+                  class="qc-input"
+                  type="search"
+                  name="q"
+                  placeholder="{{ 'search.placeholder' | t }}"
+                  autocomplete="off"
+                >
+              </div>
+              <button type="submit" class="qc-btn qc-btn--primary" aria-label="{{ 'search.submit' | t }}">
+                {% render 'qc-icon', name: 'search' %}
+              </button>
+              <button type="button" class="qc-btn qc-btn--outline" data-qc-search-close aria-label="{{ 'products.quick_view.close' | t }}">
+                {% render 'qc-icon', name: 'close' %}
+              </button>
+            </form>
+            <div class="qc-search-suggest" data-qc-search-results>
+              <p class="qc-muted qc-text-s">{{ 'search.suggest.hint' | t }}</p>
+            </div>
+          </dialog>
+        </qc-search>
         {% if shop.customer_accounts_enabled %}
           {% assign account_label = 'header.account' | t %}
           <shopify-account menu="{{ section.settings.customer_account_menu }}">
@@ -132,6 +170,7 @@
 </qc-header>
 
 <script src="{{ 'qc-header.js' | asset_url }}" type="module"></script>
+<script src="{{ 'qc-search.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
   .qc-header {
@@ -213,6 +252,81 @@
     font-size: 11px;
     font-weight: 700;
     padding-inline: 4px;
+  }
+
+  /* ---- predictive search dialog ---- */
+
+  .qc-search-dialog {
+    inline-size: min(38rem, calc(100% - var(--qc-space-l) * 2));
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+    padding: var(--qc-space-l);
+    margin-block-start: var(--qc-space-2xl);
+  }
+
+  .qc-search-dialog::backdrop {
+    background: rgb(0 0 0 / 45%);
+  }
+
+  .qc-search-dialog__form {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-search-dialog__field {
+    flex: 1;
+  }
+
+  .qc-search-suggest {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    margin-block-start: var(--qc-space-m);
+  }
+
+  .qc-search-suggest__group {
+    font-size: var(--qc-text-s);
+    color: var(--qc-ink-soft);
+    text-transform: none;
+    margin-block-start: var(--qc-space-xs);
+  }
+
+  .qc-search-suggest__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .qc-search-suggest__item {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-s);
+    min-block-size: 44px;
+    padding-inline: var(--qc-space-xs);
+    border-radius: var(--qc-radius-control);
+    text-decoration: none;
+    color: var(--qc-ink);
+  }
+
+  .qc-search-suggest__item:hover {
+    background: var(--qc-surface-raised);
+  }
+
+  .qc-search-suggest__item img {
+    border-radius: var(--qc-radius-control);
+    border: var(--qc-line-w) solid var(--qc-line);
+    flex: none;
+  }
+
+  .qc-search-suggest__price {
+    margin-inline-start: auto;
+    color: var(--qc-ink-soft);
+    font-size: var(--qc-text-s);
+  }
+
+  .qc-search-suggest__all {
+    align-self: flex-start;
   }
 
   /* ---- mobile drawer (details-based) ---- */
