@@ -114,7 +114,12 @@
       "break_row": "{{ quantity }}+ for {{ price }} each",
       "quantity_min": "Minimum {{ min }}",
       "quantity_increment": "Sold in increments of {{ step }}",
-      "quantity_max": "Maximum {{ max }}"
+      "quantity_max": "Maximum {{ max }}",
+      "pickup_available": "Pickup available at {{ location }}",
+      "pickup_unavailable": "Pickup currently unavailable at {{ location }}",
+      "pickup_other_locations": "Check availability at other locations",
+      "pickup_in_stock": "Pickup available",
+      "pickup_out_of_stock": "Pickup unavailable"
     },
     "card": {
       "adding": "Adding…",

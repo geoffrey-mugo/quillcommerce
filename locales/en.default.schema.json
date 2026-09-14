@@ -62,7 +62,10 @@
     "density_comfortable": "Comfortable",
     "density_dense": "Dense",
     "low_stock_threshold": "Low-stock threshold (0 = off)",
-    "enable_zoom": "Enable image zoom"
+    "enable_zoom": "Enable image zoom",
+    "pickup_availability": "Pickup availability",
+    "disclosure": "Collapsible row",
+    "page_content": "Page content"
   },
   "labels": {
     "alignment": "Alignment",

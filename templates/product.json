@@ -11,6 +11,23 @@
   "sections": {
     "main": {
       "type": "product",
+      "blocks": {
+        "shipping": {
+          "type": "disclosure",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Orders ship within 2 business days. Unworn items can be returned within 30 days of delivery.</p>"
+          }
+        },
+        "care": {
+          "type": "disclosure",
+          "settings": {
+            "heading": "Care",
+            "content": "<p>Wipe clean with a damp cloth. Store away from direct sunlight.</p>"
+          }
+        }
+      },
+      "block_order": ["shipping", "care"],
       "settings": {}
     }
   },

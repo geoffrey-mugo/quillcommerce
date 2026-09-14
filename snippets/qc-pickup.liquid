@@ -1,0 +1,52 @@
+{% doc %}
+  Pickup availability for one variant (SPEC-014). Renders nothing when the
+  store exposes no pickup-enabled locations for it.
+
+  @param {variant} variant - The variant to report on
+{% enddoc %}
+
+{%- liquid
+  assign pickup_availabilities = variant.store_availabilities | where: 'pick_up_enabled', true
+-%}
+
+{% if pickup_availabilities.size > 0 %}
+  {%- assign first_availability = pickup_availabilities.first -%}
+  <div class="qc-pickup">
+    <p class="qc-pickup__status" data-qc-pickup-state="{% if first_availability.available %}available{% else %}unavailable{% endif %}">
+      {% if first_availability.available %}
+        {% render 'qc-icon', name: 'check' %}
+        <span>
+          {{ 'products.product.pickup_available' | t: location: first_availability.location.name }}
+          {% if first_availability.pick_up_time != blank %}
+            <span class="qc-muted">· {{ first_availability.pick_up_time }}</span>
+          {% endif %}
+        </span>
+      {% else %}
+        {% render 'qc-icon', name: 'alert' %}
+        <span>{{ 'products.product.pickup_unavailable' | t: location: first_availability.location.name }}</span>
+      {% endif %}
+    </p>
+
+    {% if pickup_availabilities.size > 1 %}
+      <details class="qc-pickup__locations">
+        <summary class="qc-text-s">{{ 'products.product.pickup_other_locations' | t }}</summary>
+        <ul role="list">
+          {% for availability in pickup_availabilities %}
+            <li class="qc-text-s">
+              <strong>{{ availability.location.name }}</strong>
+              {% if availability.location.address.street != blank %}
+                <br>{{ availability.location.address.street }}, {{ availability.location.address.city }}
+              {% endif %}
+              <br>
+              {% if availability.available %}
+                {{ 'products.product.pickup_in_stock' | t }}
+              {% else %}
+                {{ 'products.product.pickup_out_of_stock' | t }}
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </details>
+    {% endif %}
+  </div>
+{% endif %}

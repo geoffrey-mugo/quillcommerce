@@ -133,6 +133,7 @@ if (!customElements.get('qc-product-page')) {
         this.qtyNote = this.querySelector('[data-qc-qty-note]');
         this.breaksEl = this.querySelector('[data-qc-breaks]');
         this.breaksList = this.querySelector('[data-qc-breaks-list]');
+        this.pickupEl = this.querySelector('[data-qc-pickup]');
 
         this.plansEl?.addEventListener('change', () => this.sync(true), { signal });
 
@@ -152,6 +153,7 @@ if (!customElements.get('qc-product-page')) {
 
       disconnectedCallback() {
         this.abort.abort();
+        this.pickupAbort?.abort();
       }
 
       get selectedOptions() {
@@ -324,10 +326,33 @@ if (!customElements.get('qc-product-page')) {
         }
 
         this.markUnavailable();
+        this.updatePickup(variant);
 
         if (fromUser && variant) {
           const state = variant.available ? this.dataset.stockIn : this.dataset.soldOutLabel;
           announce(`${variant.title} — ${state}`);
+        }
+      }
+
+      /* re-fetch pickup availability for the shown variant via the
+         Section Rendering API; keep current content on failure */
+      async updatePickup(variant) {
+        if (!this.pickupEl) return;
+        if (!variant) {
+          this.pickupEl.innerHTML = '';
+          return;
+        }
+        this.pickupAbort?.abort();
+        this.pickupAbort = new AbortController();
+        try {
+          const url = `${location.pathname}?section_id=qc-pickup-availability&variant=${variant.id}`;
+          const res = await fetch(url, { signal: this.pickupAbort.signal });
+          if (!res.ok) return;
+          const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+          const wrapper = doc.body.firstElementChild;
+          if (wrapper) this.pickupEl.innerHTML = wrapper.innerHTML;
+        } catch {
+          /* aborted or offline — keep what is shown */
         }
       }
 
