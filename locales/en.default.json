@@ -97,7 +97,12 @@
       "options_label": "Options",
       "quantity": "Quantity",
       "add_to_cart": "Add to cart",
-      "sold_out": "Sold out"
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "stock_in": "In stock",
+      "stock_low": "Low stock — {{ count }} left",
+      "media_label": "Product media",
+      "media_n_of": "Media {{ n }} of {{ total }}"
     },
     "card": {
       "adding": "Adding…",

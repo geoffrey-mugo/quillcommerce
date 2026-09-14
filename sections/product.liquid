@@ -1,97 +1,221 @@
 {% comment %}
-  Main product section: media, info, and a no-JavaScript add-to-cart form
-  built from the QuillCommerce foundation primitives (SPEC-002).
+  Main product section (SPEC-002/005/011): gallery with thumbnails, pill
+  variant picker with full state sync, price/SKU/stock, no-JS fallbacks.
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 
-<div class="qc-product">
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<qc-product-page
+  class="qc-product"
+  data-money-format="{{ shop.money_format | strip_html }}"
+  data-low-stock="{{ section.settings.low_stock_threshold }}"
+  data-buy-label="{{ 'products.product.add_to_cart' | t }}"
+  data-sold-out-label="{{ 'products.product.sold_out' | t }}"
+  data-unavailable-label="{{ 'products.product.unavailable' | t }}"
+  data-stock-in="{{ 'products.product.stock_in' | t }}"
+  data-sale-label="{{ 'products.price.sale_price' | t }}"
+  data-stock-low="{{ 'products.product.stock_low' | t: count: '[count]' }}"
+  data-stock-out="{{ 'products.product.sold_out' | t }}"
+>
   {% render 'qc-breadcrumbs' %}
-  <div class="qc-product__media">
-    {% for image in product.images %}
-      {% render 'image', class: 'qc-product__image', image: image %}
-    {% else %}
-      <div class="qc-product__image qc-product__image--empty" aria-hidden="true">
-        {% render 'qc-icon', name: 'alert' %}
-      </div>
-    {% endfor %}
-  </div>
 
-  <div class="qc-product__info">
-    <h1>{{ product.title }}</h1>
-    {% render 'qc-price', item: product %}
-    <div class="qc-prose">{{ product.description }}</div>
-
-    <qc-product-form
-      data-adding-label="{{ 'products.card.adding' | t }}"
-      data-added-label="{{ 'products.card.added' | t: title: product.title }}"
-      data-error-label="{{ 'products.card.add_error' | t }}"
-    >
-    {% form 'product', product %}
-      {% assign current_variant = product.selected_or_first_available_variant %}
-
-      {% unless product.has_only_default_variant %}
-        <div class="qc-field">
-          <label class="qc-field__label" for="qc-variant-{{ section.id }}">
-            {{ 'products.product.options_label' | t }}
-          </label>
-          <select id="qc-variant-{{ section.id }}" name="id">
-            {% for variant in product.variants %}
-              <option
-                value="{{ variant.id }}"
-                {% if variant == current_variant %}selected="selected"{% endif %}
-                {% unless variant.available %}disabled{% endunless %}
-              >
-                {{ variant.title }} — {{ variant.price | money }}
-                {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
-              </option>
-            {% endfor %}
-          </select>
-        </div>
-      {% else %}
-        <input type="hidden" name="id" value="{{ current_variant.id }}">
-      {% endunless %}
-
-      <div class="qc-field">
-        <label class="qc-field__label" for="qc-quantity-{{ section.id }}">
-          {{ 'products.product.quantity' | t }}
-        </label>
-        <input
-          id="qc-quantity-{{ section.id }}"
-          class="qc-input qc-product__quantity"
-          type="number"
-          name="quantity"
-          inputmode="numeric"
-          min="1"
-          value="1"
-        >
-      </div>
-
-      <button
-        type="submit"
-        class="qc-btn qc-btn--primary qc-btn--full"
-        {% unless product.available %}disabled{% endunless %}
-      >
-        {% if product.available %}
-          {{ 'products.product.add_to_cart' | t }}
+  <div class="qc-product__layout">
+    <qc-gallery class="qc-product__media">
+      <div class="qc-gallery__viewport">
+        {% for media in product.media %}
+          <div
+            class="qc-gallery__slide"
+            data-qc-media-id="{{ media.id }}"
+            {% unless media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}hidden{% endunless %}
+          >
+            {% case media.media_type %}
+              {% when 'image' %}
+                {% render 'image', image: media, class: 'qc-gallery__image', width: 1200 %}
+              {% when 'video', 'external_video' %}
+                {{ media | media_tag: class: 'qc-gallery__video' }}
+              {% when 'model' %}
+                {{ media | media_tag: class: 'qc-gallery__model' }}
+            {% endcase %}
+          </div>
         {% else %}
-          {{ 'products.product.sold_out' | t }}
+          <div class="qc-gallery__slide qc-product__image--empty" aria-hidden="true">
+            {% render 'qc-icon', name: 'alert' %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if product.media.size > 1 %}
+        <div class="qc-gallery__thumbs" role="group" aria-label="{{ 'products.product.media_label' | t }}">
+          {% for media in product.media %}
+            {% assign thumb_label = 'products.product.media_n_of' | t: n: forloop.index, total: product.media.size %}
+            <button
+              type="button"
+              class="qc-gallery__thumb"
+              data-qc-thumb="{{ media.id }}"
+              aria-label="{{ thumb_label }}"
+              {% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}aria-current="true"{% endif %}
+            >
+              {% render 'image', image: media.preview_image, class: 'qc-gallery__thumb-image', width: 120, height: 120, crop: 'center' %}
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </qc-gallery>
+
+    <div class="qc-product__info">
+      <h1>{{ product.title }}</h1>
+
+      <div class="qc-price" data-qc-price>
+        {% if current_variant.compare_at_price > current_variant.price %}
+          <span class="qc-visually-hidden">{{ 'products.price.sale_price' | t }}</span>
+          <span>{{ current_variant.price | money }}</span>
+          <s class="qc-price__compare">{{ current_variant.compare_at_price | money }}</s>
+        {% else %}
+          <span>{{ current_variant.price | money }}</span>
         {% endif %}
-      </button>
-      {{ form | payment_button }}
-    {% endform %}
-    </qc-product-form>
+      </div>
+
+      <p class="qc-text-s qc-muted" data-qc-sku {% if current_variant.sku == blank %}hidden{% endif %}>
+        {{- current_variant.sku -}}
+      </p>
+
+      {%- liquid
+        assign stock_state = 'in'
+        if current_variant.available == false
+          assign stock_state = 'out'
+        elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= section.settings.low_stock_threshold and section.settings.low_stock_threshold > 0
+          assign stock_state = 'low'
+        endif
+      -%}
+      <p class="qc-product__stock" data-qc-stock data-qc-stock-state="{{ stock_state }}">
+        {%- case stock_state -%}
+          {%- when 'out' -%}{{ 'products.product.sold_out' | t }}
+          {%- when 'low' -%}{{ 'products.product.stock_low' | t: count: current_variant.inventory_quantity }}
+          {%- else -%}{{ 'products.product.stock_in' | t }}
+        {%- endcase -%}
+      </p>
+
+      <div class="qc-prose">{{ product.description }}</div>
+
+      <qc-product-form
+        data-adding-label="{{ 'products.card.adding' | t }}"
+        data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+        data-error-label="{{ 'products.card.add_error' | t }}"
+      >
+      {% form 'product', product %}
+        {% unless product.has_only_default_variant %}
+          {% for option in product.options_with_values %}
+            <fieldset class="qc-product__option" data-qc-option hidden>
+              <legend class="qc-field__label">{{ option.name }}</legend>
+              <div class="qc-product__pills">
+                {% for value in option.values %}
+                  <label class="qc-pill">
+                    <input
+                      type="radio"
+                      name="qc-option-{{ option.position }}"
+                      value="{{ value | escape }}"
+                      {% if option.selected_value == value %}checked{% endif %}
+                    >
+                    <span>{{ value }}</span>
+                    <span class="qc-visually-hidden" data-qc-unavailable-note> — {{ 'products.product.unavailable' | t }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </fieldset>
+          {% endfor %}
+
+          <div class="qc-field" data-qc-fallback-picker>
+            <label class="qc-field__label" for="qc-variant-{{ section.id }}">
+              {{ 'products.product.options_label' | t }}
+            </label>
+            <select id="qc-variant-{{ section.id }}" name="id">
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == current_variant %}selected="selected"{% endif %}
+                  {% unless variant.available %}disabled{% endunless %}
+                >
+                  {{ variant.title }} — {{ variant.price | money }}
+                  {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {% endunless %}
+
+        <div class="qc-field">
+          <label class="qc-field__label" for="qc-quantity-{{ section.id }}">
+            {{ 'products.product.quantity' | t }}
+          </label>
+          <input
+            id="qc-quantity-{{ section.id }}"
+            class="qc-input qc-product__quantity"
+            type="number"
+            name="quantity"
+            inputmode="numeric"
+            min="1"
+            value="1"
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="qc-btn qc-btn--primary qc-btn--full"
+          data-qc-buy
+          {% unless current_variant.available %}disabled{% endunless %}
+        >
+          {% if current_variant.available %}
+            {{ 'products.product.add_to_cart' | t }}
+          {% else %}
+            {{ 'products.product.sold_out' | t }}
+          {% endif %}
+        </button>
+        {{ form | payment_button }}
+      {% endform %}
+      </qc-product-form>
+    </div>
   </div>
-</div>
+
+  <script type="application/json" data-qc-variants>
+    [
+      {% for variant in product.variants %}
+        {
+          "id": {{ variant.id }},
+          "title": {{ variant.title | json }},
+          "options": {{ variant.options | json }},
+          "available": {{ variant.available }},
+          "price": {{ variant.price | json }},
+          "compare_at_price": {{ variant.compare_at_price | default: 0 | json }},
+          "sku": {{ variant.sku | json }},
+          "managed": {% if variant.inventory_management == 'shopify' %}true{% else %}false{% endif %},
+          "qty": {{ variant.inventory_quantity | json }},
+          "media_id": {{ variant.featured_media.id | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  </script>
+</qc-product-page>
+
+<script src="{{ 'qc-product.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
   .qc-product {
-    display: grid;
-    gap: var(--qc-space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
     padding-block: var(--qc-space-xl);
   }
 
+  .qc-product__layout {
+    display: grid;
+    gap: var(--qc-space-xl);
+  }
+
   @media (min-width: 750px) {
-    .qc-product {
+    .qc-product__layout {
       grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
       align-items: start;
     }
@@ -102,24 +226,136 @@
     gap: var(--qc-space-s);
   }
 
-  .qc-product__image {
-    inline-size: 100%;
+  .qc-gallery__viewport {
     border-radius: var(--qc-radius-surface);
+    border: var(--qc-line-w) solid var(--qc-line);
+    background: var(--qc-surface-raised);
+    overflow: hidden;
+  }
+
+  .qc-gallery__slide {
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+  }
+
+  .qc-gallery__image,
+  .qc-gallery__video,
+  .qc-gallery__model {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
   }
 
   .qc-product__image--empty {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 1;
-    background: var(--qc-surface-raised);
     color: var(--qc-ink-soft);
+  }
+
+  .qc-gallery__thumbs {
+    display: flex;
+    gap: var(--qc-space-xs);
+    overflow-x: auto;
+    padding-block: var(--qc-space-2xs);
+  }
+
+  .qc-gallery__thumb {
+    inline-size: 64px;
+    block-size: 64px;
+    flex: none;
+    padding: 0;
     border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-control);
+    background: var(--qc-surface);
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  .qc-gallery__thumb[aria-current='true'] {
+    border-color: var(--qc-accent);
+    outline: var(--qc-line-w) solid var(--qc-accent);
+  }
+
+  .qc-gallery__thumb-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
   }
 
   .qc-product__info {
     display: flex;
     flex-direction: column;
     gap: var(--qc-space-m);
+  }
+
+  .qc-product__stock[data-qc-stock-state='low'] {
+    color: var(--qc-warn);
+    font-weight: 600;
+  }
+
+  .qc-product__stock[data-qc-stock-state='out'] {
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-product__info form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-product__option {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-product__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+    padding-inline: var(--qc-space-m);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    border-radius: var(--qc-radius-control);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .qc-pill input {
+    position: absolute;
+    opacity: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  .qc-pill:has(input:checked) {
+    background: var(--qc-ink);
+    border-color: var(--qc-ink);
+    color: var(--qc-surface);
+  }
+
+  .qc-pill:has(input:focus-visible) {
+    outline: var(--qc-focus-w) solid var(--qc-ink);
+    outline-offset: var(--qc-focus-offset);
+  }
+
+  .qc-pill[data-qc-unavailable] > span:first-of-type {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .qc-pill:not([data-qc-unavailable]) [data-qc-unavailable-note] {
+    display: none;
   }
 
   .qc-product__quantity {
@@ -130,7 +366,17 @@
 {% schema %}
 {
   "name": "t:general.product",
-  "settings": [],
+  "settings": [
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "label": "t:general.low_stock_threshold",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

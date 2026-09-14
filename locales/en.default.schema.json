@@ -60,7 +60,8 @@
     "image_override": "Image (optional)",
     "grid_density": "Grid density",
     "density_comfortable": "Comfortable",
-    "density_dense": "Dense"
+    "density_dense": "Dense",
+    "low_stock_threshold": "Low-stock threshold (0 = off)"
   },
   "labels": {
     "alignment": "Alignment",

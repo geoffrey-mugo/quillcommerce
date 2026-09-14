@@ -4,6 +4,12 @@
 
 /* ---- global type ---- */
 
+/* author display rules (e.g. .qc-field's flex) must never resurrect
+   [hidden] content */
+[hidden] {
+  display: none !important;
+}
+
 body {
   font-size: var(--qc-text-m);
   line-height: var(--qc-leading);
