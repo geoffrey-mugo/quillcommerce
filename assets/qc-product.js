@@ -127,6 +127,14 @@ if (!customElements.get('qc-product-page')) {
         this.stockEl = this.querySelector('[data-qc-stock]');
         this.buyBtn = this.querySelector('[data-qc-buy]');
         this.gallery = document.querySelector('qc-gallery');
+        this.plansEl = this.querySelector('[data-qc-plans]');
+        this.unitEl = this.querySelector('[data-qc-unit-price]');
+        this.qtyInput = this.querySelector('input[name="quantity"]');
+        this.qtyNote = this.querySelector('[data-qc-qty-note]');
+        this.breaksEl = this.querySelector('[data-qc-breaks]');
+        this.breaksList = this.querySelector('[data-qc-breaks-list]');
+
+        this.plansEl?.addEventListener('change', () => this.sync(true), { signal });
 
         /* upgrade: reveal pills, hide the fallback select's field */
         if (this.fieldsets.length > 0) {
@@ -139,6 +147,7 @@ if (!customElements.get('qc-product-page')) {
         );
 
         this.markUnavailable();
+        this.syncPlans(this.currentVariant());
       }
 
       disconnectedCallback() {
@@ -155,34 +164,115 @@ if (!customElements.get('qc-product-page')) {
         return this.variants.find((v) => v.options.every((o, i) => o === options[i]));
       }
 
+      currentVariant() {
+        return this.fieldsets.length > 0
+          ? this.findVariant(this.selectedOptions)
+          : this.variants[0];
+      }
+
       money(cents) {
         const fmt = this.dataset.moneyFormat || '{{amount}}';
         return fmt.replace(/\{\{\s*amount[^}]*\}\}/, (cents / 100).toFixed(2));
       }
 
+      /* mark plans without an allocation for this variant; fall back when
+         the checked one no longer applies. Returns the active plan. */
+      syncPlans(variant) {
+        if (!this.plansEl) return null;
+        const radios = [...this.plansEl.querySelectorAll('input[name="selling_plan"]')];
+        radios.forEach((radio) => {
+          if (radio.value === '') return; /* one-time is always offered */
+          const applies = Boolean(
+            variant?.plans?.some((p) => String(p.id) === radio.value)
+          );
+          radio.disabled = !applies;
+          radio.closest('label')?.toggleAttribute('data-qc-unavailable', !applies);
+        });
+        let checked = radios.find((r) => r.checked);
+        if (checked?.disabled) {
+          const fallback = radios.find((r) => !r.disabled);
+          if (fallback) {
+            fallback.checked = true;
+            checked = fallback;
+            const label = fallback.closest('label')?.querySelector('span')?.textContent.trim();
+            if (label) announce(label);
+          }
+        }
+        const planId = checked?.value || '';
+        return planId ? variant?.plans?.find((p) => String(p.id) === planId) ?? null : null;
+      }
+
       sync(fromUser) {
-        const variant = this.findVariant(this.selectedOptions);
+        const variant = this.currentVariant();
+        const plan = this.syncPlans(variant);
+        const shownPrice = plan ? plan.price : variant?.price;
+        const shownCompare = plan ? plan.compare_at_price : variant?.compare_at_price;
 
         if (this.idSelect && variant) this.idSelect.value = variant.id;
 
         if (this.priceEl) {
           if (!variant) {
             this.priceEl.textContent = '';
-          } else if (variant.compare_at_price > variant.price) {
+          } else if (shownCompare > shownPrice) {
             this.priceEl.innerHTML = '';
             const srLabel = document.createElement('span');
             srLabel.className = 'qc-visually-hidden';
             srLabel.textContent = this.dataset.saleLabel || '';
             this.priceEl.append(srLabel);
             const sale = document.createElement('span');
-            sale.textContent = this.money(variant.price);
+            sale.textContent = this.money(shownPrice);
             const compare = document.createElement('s');
             compare.className = 'qc-price__compare';
-            compare.textContent = this.money(variant.compare_at_price);
+            compare.textContent = this.money(shownCompare);
             this.priceEl.append(sale, ' ', compare);
           } else {
-            this.priceEl.textContent = variant.price != null ? this.money(variant.price) : '';
+            this.priceEl.textContent = shownPrice != null ? this.money(shownPrice) : '';
           }
+        }
+
+        if (this.unitEl) {
+          const unitPrice = plan?.unit_price ?? variant?.unit_price;
+          const refUnit = variant?.unit_ref_unit;
+          if (unitPrice != null && refUnit) {
+            const refValue = variant.unit_ref_value === 1 ? '' : variant.unit_ref_value;
+            this.unitEl.textContent = `${this.money(unitPrice)} / ${refValue}${refUnit}`;
+            this.unitEl.hidden = false;
+          } else {
+            this.unitEl.hidden = true;
+            this.unitEl.textContent = '';
+          }
+        }
+
+        if (this.qtyInput && variant?.qty_rule) {
+          const rule = variant.qty_rule;
+          this.qtyInput.min = rule.min;
+          this.qtyInput.step = rule.inc;
+          if (rule.max != null) this.qtyInput.max = rule.max;
+          else this.qtyInput.removeAttribute('max');
+          const current = Number(this.qtyInput.value) || 0;
+          if (current < rule.min) this.qtyInput.value = rule.min;
+          else if (rule.max != null && current > rule.max) this.qtyInput.value = rule.max;
+          if (this.qtyNote) {
+            const parts = [];
+            if (rule.min > 1) parts.push((this.dataset.qtyMin || '').replace('[n]', rule.min));
+            if (rule.inc > 1) parts.push((this.dataset.qtyInc || '').replace('[n]', rule.inc));
+            if (rule.max != null) parts.push((this.dataset.qtyMax || '').replace('[n]', rule.max));
+            this.qtyNote.textContent = parts.join(' · ');
+            this.qtyNote.hidden = parts.length === 0;
+          }
+        }
+
+        if (this.breaksEl && this.breaksList) {
+          const breaks = variant?.breaks || [];
+          this.breaksList.innerHTML = '';
+          breaks.forEach((b) => {
+            const li = document.createElement('li');
+            li.textContent = (this.dataset.breakRow || '')
+              .replace('[qty]', b.q)
+              .replace('[price]', this.money(b.p));
+            this.breaksList.append(li);
+          });
+          this.breaksEl.hidden = breaks.length === 0;
         }
 
         if (this.skuEl) {
@@ -227,6 +317,9 @@ if (!customElements.get('qc-product-page')) {
         if (variant) {
           const url = new URL(location.href);
           url.searchParams.set('variant', variant.id);
+          const planId = this.plansEl?.querySelector('input[name="selling_plan"]:checked')?.value;
+          if (planId) url.searchParams.set('selling_plan', planId);
+          else url.searchParams.delete('selling_plan');
           history.replaceState({}, '', url);
         }
 

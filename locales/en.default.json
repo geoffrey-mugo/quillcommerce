@@ -107,7 +107,14 @@
       "lightbox_label": "Full-size media",
       "lightbox_close": "Close full-size view",
       "lightbox_prev": "Previous image",
-      "lightbox_next": "Next image"
+      "lightbox_next": "Next image",
+      "purchase_options": "Purchase options",
+      "one_time": "One-time purchase",
+      "volume_pricing": "Volume pricing",
+      "break_row": "{{ quantity }}+ for {{ price }} each",
+      "quantity_min": "Minimum {{ min }}",
+      "quantity_increment": "Sold in increments of {{ step }}",
+      "quantity_max": "Maximum {{ max }}"
     },
     "card": {
       "adding": "Adding…",

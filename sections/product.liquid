@@ -15,6 +15,10 @@
   data-unavailable-label="{{ 'products.product.unavailable' | t }}"
   data-stock-in="{{ 'products.product.stock_in' | t }}"
   data-sale-label="{{ 'products.price.sale_price' | t }}"
+  data-break-row="{{ 'products.product.break_row' | t: quantity: '[qty]', price: '[price]' }}"
+  data-qty-min="{{ 'products.product.quantity_min' | t: min: '[n]' }}"
+  data-qty-inc="{{ 'products.product.quantity_increment' | t: step: '[n]' }}"
+  data-qty-max="{{ 'products.product.quantity_max' | t: max: '[n]' }}"
   data-stock-low="{{ 'products.product.stock_low' | t: count: '[count]' }}"
   data-stock-out="{{ 'products.product.sold_out' | t }}"
 >
@@ -130,15 +134,34 @@
     <div class="qc-product__info">
       <h1>{{ product.title }}</h1>
 
+      {%- liquid
+        assign shown_price = current_variant.price
+        assign shown_compare = current_variant.compare_at_price
+        assign selected_alloc = current_variant.selected_selling_plan_allocation
+        if selected_alloc
+          assign shown_price = selected_alloc.price
+          assign shown_compare = selected_alloc.compare_at_price
+        endif
+      -%}
       <div class="qc-price" data-qc-price>
-        {% if current_variant.compare_at_price > current_variant.price %}
+        {% if shown_compare > shown_price %}
           <span class="qc-visually-hidden">{{ 'products.price.sale_price' | t }}</span>
-          <span>{{ current_variant.price | money }}</span>
-          <s class="qc-price__compare">{{ current_variant.compare_at_price | money }}</s>
+          <span>{{ shown_price | money }}</span>
+          <s class="qc-price__compare">{{ shown_compare | money }}</s>
         {% else %}
-          <span>{{ current_variant.price | money }}</span>
+          <span>{{ shown_price | money }}</span>
         {% endif %}
       </div>
+
+      <p class="qc-text-s qc-muted" data-qc-unit-price {% unless current_variant.unit_price_measurement.reference_unit %}hidden{% endunless %}>
+        {%- if current_variant.unit_price_measurement.reference_unit -%}
+          {{ current_variant.unit_price | money }} /
+          {% if current_variant.unit_price_measurement.reference_value != 1 -%}
+            {{ current_variant.unit_price_measurement.reference_value }}
+          {%- endif -%}
+          {{ current_variant.unit_price_measurement.reference_unit }}
+        {%- endif -%}
+      </p>
 
       <p class="qc-text-s qc-muted" data-qc-sku {% if current_variant.sku == blank %}hidden{% endif %}>
         {{- current_variant.sku -}}
@@ -210,6 +233,55 @@
           <input type="hidden" name="id" value="{{ current_variant.id }}">
         {% endunless %}
 
+        {% if product.selling_plan_groups.size > 0 %}
+          {%- liquid
+            assign default_plan_id = 0
+            if product.requires_selling_plan and product.selected_selling_plan == nil
+              assign default_plan_id = product.selling_plan_groups.first.selling_plans.first.id
+            endif
+          -%}
+          <fieldset class="qc-product__plans" data-qc-plans>
+            <legend class="qc-field__label">{{ 'products.product.purchase_options' | t }}</legend>
+            {% unless product.requires_selling_plan %}
+              <label class="qc-plan">
+                <input
+                  type="radio"
+                  name="selling_plan"
+                  value=""
+                  {% unless product.selected_selling_plan %}checked{% endunless %}
+                >
+                <span>{{ 'products.product.one_time' | t }}</span>
+                <span class="qc-visually-hidden" data-qc-plan-note> — {{ 'products.product.unavailable' | t }}</span>
+              </label>
+            {% endunless %}
+            {% for group in product.selling_plan_groups %}
+              {% if product.selling_plan_groups.size > 1 %}
+                <p class="qc-text-s qc-muted qc-product__plan-group">{{ group.name }}</p>
+              {% endif %}
+              {% for plan in group.selling_plans %}
+                <label class="qc-plan">
+                  <input
+                    type="radio"
+                    name="selling_plan"
+                    value="{{ plan.id }}"
+                    {% if product.selected_selling_plan.id == plan.id or plan.id == default_plan_id %}checked{% endif %}
+                  >
+                  <span>{{ plan.name }}</span>
+                  {% if plan.description != blank %}
+                    <span class="qc-text-s qc-muted qc-plan__description">{{ plan.description }}</span>
+                  {% endif %}
+                  <span class="qc-visually-hidden" data-qc-plan-note> — {{ 'products.product.unavailable' | t }}</span>
+                </label>
+              {% endfor %}
+            {% endfor %}
+          </fieldset>
+        {% endif %}
+
+        {%- liquid
+          assign qty_rule = current_variant.quantity_rule
+          assign qty_min = qty_rule.min | default: 1
+          assign qty_inc = qty_rule.increment | default: 1
+        -%}
         <div class="qc-field">
           <label class="qc-field__label" for="qc-quantity-{{ section.id }}">
             {{ 'products.product.quantity' | t }}
@@ -220,9 +292,45 @@
             type="number"
             name="quantity"
             inputmode="numeric"
-            min="1"
-            value="1"
+            min="{{ qty_min }}"
+            step="{{ qty_inc }}"
+            {% if qty_rule.max %}max="{{ qty_rule.max }}"{% endif %}
+            value="{{ qty_min }}"
           >
+          {%- liquid
+            assign rule_parts = ''
+            if qty_min > 1
+              assign part = 'products.product.quantity_min' | t: min: qty_min
+              assign rule_parts = rule_parts | append: part
+            endif
+            if qty_inc > 1
+              assign part = 'products.product.quantity_increment' | t: step: qty_inc
+              if rule_parts != ''
+                assign rule_parts = rule_parts | append: ' · '
+              endif
+              assign rule_parts = rule_parts | append: part
+            endif
+            if qty_rule.max
+              assign part = 'products.product.quantity_max' | t: max: qty_rule.max
+              if rule_parts != ''
+                assign rule_parts = rule_parts | append: ' · '
+              endif
+              assign rule_parts = rule_parts | append: part
+            endif
+          -%}
+          <p class="qc-text-s qc-muted" data-qc-qty-note {% if rule_parts == '' %}hidden{% endif %}>
+            {{- rule_parts -}}
+          </p>
+        </div>
+
+        <div data-qc-breaks {% if current_variant.quantity_price_breaks.size == 0 %}hidden{% endif %}>
+          <p class="qc-field__label">{{ 'products.product.volume_pricing' | t }}</p>
+          <ul class="qc-product__breaks qc-text-s" role="list" data-qc-breaks-list>
+            {% for break in current_variant.quantity_price_breaks %}
+              {%- assign break_price = break.price | money -%}
+              <li>{{ 'products.product.break_row' | t: quantity: break.minimum_quantity, price: break_price }}</li>
+            {% endfor %}
+          </ul>
         </div>
 
         <button
@@ -238,6 +346,7 @@
           {% endif %}
         </button>
         {{ form | payment_button }}
+        {{ form | payment_terms }}
       {% endform %}
       </qc-product-form>
     </div>
@@ -256,7 +365,30 @@
           "sku": {{ variant.sku | json }},
           "managed": {% if variant.inventory_management == 'shopify' %}true{% else %}false{% endif %},
           "qty": {{ variant.inventory_quantity | json }},
-          "media_id": {{ variant.featured_media.id | json }}
+          "media_id": {{ variant.featured_media.id | json }},
+          "unit_price": {{ variant.unit_price | json }},
+          "unit_ref_value": {{ variant.unit_price_measurement.reference_value | json }},
+          "unit_ref_unit": {{ variant.unit_price_measurement.reference_unit | json }},
+          "qty_rule": {
+            "min": {{ variant.quantity_rule.min | default: 1 }},
+            "max": {{ variant.quantity_rule.max | json }},
+            "inc": {{ variant.quantity_rule.increment | default: 1 }}
+          },
+          "breaks": [
+            {% for break in variant.quantity_price_breaks %}
+              {"q": {{ break.minimum_quantity }}, "p": {{ break.price | json }}}{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ],
+          "plans": [
+            {% for alloc in variant.selling_plan_allocations %}
+              {
+                "id": {{ alloc.selling_plan.id | json }},
+                "price": {{ alloc.price | json }},
+                "compare_at_price": {{ alloc.compare_at_price | json }},
+                "unit_price": {{ alloc.unit_price | json }}
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
         }{% unless forloop.last %},{% endunless %}
       {% endfor %}
     ]
@@ -499,6 +631,58 @@
 
   .qc-product__quantity {
     max-inline-size: 8rem;
+  }
+
+  .qc-product__plans {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-product__plan-group {
+    margin-block: var(--qc-space-2xs) 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .qc-plan {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--qc-space-xs);
+    align-items: baseline;
+    cursor: pointer;
+  }
+
+  .qc-plan input {
+    cursor: pointer;
+  }
+
+  .qc-plan__description {
+    grid-column: 2;
+  }
+
+  .qc-plan:has(input:disabled) {
+    cursor: not-allowed;
+  }
+
+  .qc-plan[data-qc-unavailable] > span:first-of-type {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .qc-plan:not([data-qc-unavailable]) [data-qc-plan-note] {
+    display: none;
+  }
+
+  .qc-product__breaks {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-2xs);
   }
 {% endstylesheet %}
 
