@@ -94,5 +94,10 @@
   },
   "general": {
     "pagination": "Pagination"
+  },
+  "header": {
+    "menu": "Menu",
+    "account": "Account",
+    "cart": "Cart"
   }
 }

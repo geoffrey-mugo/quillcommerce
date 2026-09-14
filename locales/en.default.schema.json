@@ -38,7 +38,15 @@
     "corner_sharp": "Sharp",
     "corner_soft": "Soft",
     "corner_rounded": "Rounded",
-    "cart_show_note": "Show order note field"
+    "cart_show_note": "Show order note field",
+    "logo": "Logo",
+    "logo_width": "Logo width",
+    "menu": "Menu",
+    "sticky_header": "Sticky header",
+    "sticky_none": "Not sticky",
+    "sticky_always": "Always visible",
+    "sticky_scroll_up": "Show on scroll up",
+    "customer_account_menu": "Customer account menu"
   },
   "labels": {
     "alignment": "Alignment",
