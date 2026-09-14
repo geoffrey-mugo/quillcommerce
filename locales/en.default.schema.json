@@ -61,7 +61,8 @@
     "grid_density": "Grid density",
     "density_comfortable": "Comfortable",
     "density_dense": "Dense",
-    "low_stock_threshold": "Low-stock threshold (0 = off)"
+    "low_stock_threshold": "Low-stock threshold (0 = off)",
+    "enable_zoom": "Enable image zoom"
   },
   "labels": {
     "alignment": "Alignment",

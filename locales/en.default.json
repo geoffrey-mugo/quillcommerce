@@ -102,7 +102,12 @@
       "stock_in": "In stock",
       "stock_low": "Low stock — {{ count }} left",
       "media_label": "Product media",
-      "media_n_of": "Media {{ n }} of {{ total }}"
+      "media_n_of": "Media {{ n }} of {{ total }}",
+      "zoom": "View full-size image",
+      "lightbox_label": "Full-size media",
+      "lightbox_close": "Close full-size view",
+      "lightbox_prev": "Previous image",
+      "lightbox_next": "Next image"
     },
     "card": {
       "adding": "Adding…",

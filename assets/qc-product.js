@@ -11,17 +11,82 @@ if (!customElements.get('qc-gallery')) {
     class extends HTMLElement {
       connectedCallback() {
         this.abort = new AbortController();
+        const { signal } = this.abort;
         this.slides = [...this.querySelectorAll('[data-qc-media-id]')];
         this.thumbs = [...this.querySelectorAll('[data-qc-thumb]')];
         this.thumbs.forEach((btn) =>
-          btn.addEventListener('click', () => this.show(btn.dataset.qcThumb), {
-            signal: this.abort.signal,
-          })
+          btn.addEventListener('click', () => this.show(btn.dataset.qcThumb), { signal })
         );
+
+        this.lightbox = this.querySelector('[data-qc-lightbox]');
+        if (this.lightbox) {
+          this.lightbox.setAttribute('scroll-lock', '');
+          this.lbSlides = [...this.lightbox.querySelectorAll('[data-qc-lightbox-slide]')];
+          this.lbCounter = this.lightbox.querySelector('[data-qc-lightbox-counter]');
+          this.lbIndex = 0;
+          this.querySelectorAll('[data-qc-zoom]').forEach((link) =>
+            link.addEventListener(
+              'click',
+              (e) => {
+                e.preventDefault();
+                this.openLightbox(link.dataset.qcZoom);
+              },
+              { signal }
+            )
+          );
+          this.lightbox
+            .querySelector('[data-qc-lightbox-close]')
+            ?.addEventListener('click', () => this.lightbox.close(), { signal });
+          this.lightbox
+            .querySelector('[data-qc-lightbox-prev]')
+            ?.addEventListener('click', () => this.stepLightbox(-1), { signal });
+          this.lightbox
+            .querySelector('[data-qc-lightbox-next]')
+            ?.addEventListener('click', () => this.stepLightbox(1), { signal });
+          this.lightbox.addEventListener(
+            'click',
+            (e) => {
+              if (e.target === this.lightbox) this.lightbox.close();
+            },
+            { signal }
+          );
+          this.lightbox.addEventListener(
+            'keydown',
+            (e) => {
+              if (e.key === 'ArrowLeft') this.stepLightbox(-1);
+              if (e.key === 'ArrowRight') this.stepLightbox(1);
+            },
+            { signal }
+          );
+        }
       }
 
       disconnectedCallback() {
         this.abort.abort();
+      }
+
+      openLightbox(mediaId) {
+        const index = this.lbSlides.findIndex(
+          (s) => s.dataset.qcLightboxSlide === String(mediaId)
+        );
+        this.setLightboxSlide(Math.max(0, index), false);
+        if (!this.lightbox.open) this.lightbox.showModal();
+      }
+
+      stepLightbox(delta) {
+        if (this.lbSlides.length < 2) return;
+        const next = (this.lbIndex + delta + this.lbSlides.length) % this.lbSlides.length;
+        this.setLightboxSlide(next, true);
+      }
+
+      setLightboxSlide(index, announceChange) {
+        this.lbIndex = index;
+        this.lbSlides.forEach((s, i) => (s.hidden = i !== index));
+        const label = (this.lightbox.dataset.qcCounterTemplate || '')
+          .replace('[n]', index + 1)
+          .replace('[total]', this.lbSlides.length);
+        if (this.lbCounter) this.lbCounter.textContent = label;
+        if (announceChange && label) announce(label);
       }
 
       show(mediaId) {

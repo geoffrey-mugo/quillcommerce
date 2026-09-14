@@ -31,7 +31,18 @@
           >
             {% case media.media_type %}
               {% when 'image' %}
-                {% render 'image', image: media, class: 'qc-gallery__image', width: 1200 %}
+                {% if section.settings.enable_zoom %}
+                  <a
+                    class="qc-gallery__zoom"
+                    href="{{ media | image_url: width: 2048 }}"
+                    data-qc-zoom="{{ media.id }}"
+                    aria-label="{{ 'products.product.zoom' | t }}"
+                  >
+                    {% render 'image', image: media, class: 'qc-gallery__image', width: 1200 %}
+                  </a>
+                {% else %}
+                  {% render 'image', image: media, class: 'qc-gallery__image', width: 1200 %}
+                {% endif %}
               {% when 'video', 'external_video' %}
                 {{ media | media_tag: class: 'qc-gallery__video' }}
               {% when 'model' %}
@@ -60,6 +71,59 @@
             </button>
           {% endfor %}
         </div>
+      {% endif %}
+
+      {% liquid
+        assign image_media = product.media | where: 'media_type', 'image'
+      %}
+      {% if section.settings.enable_zoom and image_media.size > 0 %}
+        <dialog
+          class="qc-lightbox"
+          data-qc-lightbox
+          aria-label="{{ 'products.product.lightbox_label' | t }}"
+          data-qc-counter-template="{{ 'products.product.media_n_of' | t: n: '[n]', total: '[total]' }}"
+        >
+          <button
+            type="button"
+            class="qc-btn qc-lightbox__close"
+            data-qc-lightbox-close
+            aria-label="{{ 'products.product.lightbox_close' | t }}"
+          >
+            {% render 'qc-icon', name: 'close' %}
+          </button>
+
+          <div class="qc-lightbox__viewport">
+            {% for media in image_media %}
+              <div
+                class="qc-lightbox__slide"
+                data-qc-lightbox-slide="{{ media.id }}"
+                {% unless forloop.first %}hidden{% endunless %}
+              >
+                {{ media | image_url: width: 2048 | image_tag: class: 'qc-lightbox__image', loading: 'lazy' }}
+              </div>
+            {% endfor %}
+          </div>
+
+          {% if image_media.size > 1 %}
+            <button
+              type="button"
+              class="qc-btn qc-lightbox__nav qc-lightbox__nav--prev"
+              data-qc-lightbox-prev
+              aria-label="{{ 'products.product.lightbox_prev' | t }}"
+            >
+              {% render 'qc-icon', name: 'chevron' %}
+            </button>
+            <button
+              type="button"
+              class="qc-btn qc-lightbox__nav qc-lightbox__nav--next"
+              data-qc-lightbox-next
+              aria-label="{{ 'products.product.lightbox_next' | t }}"
+            >
+              {% render 'qc-icon', name: 'chevron' %}
+            </button>
+            <p class="qc-lightbox__counter qc-text-s" data-qc-lightbox-counter></p>
+          {% endif %}
+        </dialog>
       {% endif %}
     </qc-gallery>
 
@@ -281,6 +345,81 @@
     object-fit: cover;
   }
 
+  .qc-gallery__zoom {
+    display: block;
+    cursor: zoom-in;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .qc-lightbox {
+    inline-size: min(100rem, calc(100% - var(--qc-space-l) * 2));
+    max-block-size: calc(100% - var(--qc-space-l) * 2);
+    border: 0;
+    border-radius: var(--qc-radius-surface);
+    padding: var(--qc-space-l);
+    background: var(--qc-surface);
+  }
+
+  .qc-lightbox::backdrop {
+    background: rgb(0 0 0 / 65%);
+  }
+
+  .qc-lightbox__viewport {
+    display: grid;
+    place-items: center;
+  }
+
+  .qc-lightbox__image {
+    max-inline-size: 100%;
+    max-block-size: calc(100vb - var(--qc-space-l) * 6);
+    inline-size: auto;
+    block-size: auto;
+    object-fit: contain;
+  }
+
+  .qc-lightbox__close,
+  .qc-lightbox__nav {
+    position: absolute;
+    min-inline-size: 44px;
+    min-block-size: 44px;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .qc-lightbox__close {
+    inset-block-start: var(--qc-space-xs);
+    inset-inline-end: var(--qc-space-xs);
+  }
+
+  .qc-lightbox__nav {
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+  }
+
+  .qc-lightbox__nav--prev {
+    inset-inline-start: var(--qc-space-xs);
+  }
+
+  .qc-lightbox__nav--prev .qc-icon {
+    transform: rotate(90deg);
+  }
+
+  .qc-lightbox__nav--next {
+    inset-inline-end: var(--qc-space-xs);
+  }
+
+  .qc-lightbox__nav--next .qc-icon {
+    transform: rotate(-90deg);
+  }
+
+  .qc-lightbox__counter {
+    margin-block: var(--qc-space-s) 0;
+    text-align: center;
+    color: var(--qc-ink-soft);
+  }
+
   .qc-product__info {
     display: flex;
     flex-direction: column;
@@ -367,6 +506,12 @@
 {
   "name": "t:general.product",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "t:general.enable_zoom",
+      "default": true
+    },
     {
       "type": "range",
       "id": "low_stock_threshold",
