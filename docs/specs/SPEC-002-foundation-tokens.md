@@ -1,6 +1,6 @@
 # SPEC-002 · Design tokens & foundation primitives
 
-Status: Approved
+Status: Implemented (verified 2026-09-14 on saasquill-app-dev)
 Phase: 1 (foundation), slice 1
 Provenance: Original QuillCommerce design decisions (guide §5, §8). No external
 theme referenced; values authored for this spec.
