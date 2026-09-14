@@ -37,7 +37,8 @@
     "corner_style": "Corner style",
     "corner_sharp": "Sharp",
     "corner_soft": "Soft",
-    "corner_rounded": "Rounded"
+    "corner_rounded": "Rounded",
+    "cart_show_note": "Show order note field"
   },
   "labels": {
     "alignment": "Alignment",

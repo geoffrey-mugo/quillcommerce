@@ -1,37 +1,226 @@
 {% comment %}
-  This section is used in the cart template to render /cart page with an
-  overview of the items in customer's cart.
-
+  Cart page (SPEC-003): semantic line list, no-JS quantity/remove/checkout,
+  order note, discounts, and a summary region. Ajax arrives in Phase 2 via
+  the data-qc-* hooks without markup changes.
   https://shopify.dev/docs/storefronts/themes/architecture/templates/cart
 {% endcomment %}
 
-<h1>{{ 'cart.title' | t }}</h1>
+<div class="qc-cart section-padding">
+  <h1>{{ 'cart.title' | t }}</h1>
 
-<form action="{{ routes.cart_url }}" method="post">
-  <table>
-    {% for item in cart.items %}
-      <tr>
-        <td>
-          {% render 'image', image: item.image, url: item.url %}
-        </td>
-        <td>
-          <p>{{ item.product.title }}</p>
-          {{ 'cart.remove' | t | link_to: item.url_to_remove }}
-        </td>
-        <td>
-          <input type="text" name="updates[]" value="{{ item.quantity }}">
-          <input type="submit" value="{{ 'cart.update' | t }}">
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+  {% if cart.item_count == 0 %}
+    <div class="qc-cart__empty">
+      <p>{{ 'cart.empty' | t }}</p>
+      <a class="qc-btn qc-btn--primary" href="{{ routes.all_products_collection_url }}">
+        {{ 'cart.continue_shopping' | t }}
+      </a>
+    </div>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post" class="qc-cart__form">
+      <ul class="qc-cart__lines" role="list">
+        {% for line in cart.items %}
+          {% render 'qc-cart-line', line: line, index: forloop.index %}
+        {% endfor %}
+      </ul>
 
-  <input type="submit" name="checkout" value="{{ 'cart.checkout' | t }}">
-</form>
+      <aside class="qc-cart__summary" aria-labelledby="qc-cart-summary-heading">
+        <h2 id="qc-cart-summary-heading" class="qc-cart__summary-heading">
+          {{ 'cart.summary' | t }}
+        </h2>
+
+        {% if section.settings.show_note %}
+          <div class="qc-field">
+            <label class="qc-field__label" for="qc-cart-note">{{ 'cart.note_label' | t }}</label>
+            <textarea id="qc-cart-note" name="note" rows="3">{{ cart.note }}</textarea>
+          </div>
+        {% endif %}
+
+        {% for discount in cart.cart_level_discount_applications %}
+          <p class="qc-cart__summary-row">
+            <span class="qc-badge qc-badge--accent">
+              {% render 'qc-icon', name: 'check' %}
+              {{ discount.title }}
+            </span>
+            <span>−{{ discount.total_allocated_amount | money }}</span>
+          </p>
+        {% endfor %}
+
+        <p class="qc-cart__summary-row qc-cart__subtotal" data-qc-cart-total>
+          <span>{{ 'cart.subtotal' | t: count: cart.item_count }}</span>
+          <strong>{{ cart.total_price | money }}</strong>
+        </p>
+
+        <p class="qc-text-s qc-muted">
+          {% if cart.taxes_included %}
+            {{ 'cart.taxes_included_shipping_at_checkout' | t }}
+          {% else %}
+            {{ 'cart.taxes_and_shipping_at_checkout' | t }}
+          {% endif %}
+        </p>
+
+        <div class="qc-cart__actions">
+          <button type="submit" class="qc-btn qc-btn--outline">
+            {{ 'cart.update' | t }}
+          </button>
+          <button type="submit" name="checkout" class="qc-btn qc-btn--primary">
+            {{ 'cart.checkout' | t }}
+          </button>
+        </div>
+      </aside>
+    </form>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .qc-cart {
+    padding-block: var(--qc-space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+  }
+
+  .qc-cart__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-cart__form {
+    display: grid;
+    gap: var(--qc-space-xl);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .qc-cart__form {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+    }
+  }
+
+  .qc-cart__lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .qc-cart-line {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-l);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-cart-line__image {
+    inline-size: 96px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--qc-radius-surface);
+    border: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-cart-line__image--empty {
+    display: grid;
+    place-items: center;
+    background: var(--qc-surface-raised);
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-cart-line__details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--qc-space-2xs);
+  }
+
+  .qc-cart-line__title {
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .qc-cart-line__title:hover {
+    text-decoration: underline;
+  }
+
+  .qc-cart-line__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-m);
+    margin-block-start: var(--qc-space-xs);
+  }
+
+  .qc-cart-line__quantity .qc-input {
+    inline-size: 5.5rem;
+  }
+
+  .qc-cart-line__price {
+    font-weight: 600;
+    text-align: end;
+  }
+
+  .qc-cart__summary {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding: var(--qc-space-l);
+    background: var(--qc-surface-raised);
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+  }
+
+  .qc-cart__summary-heading {
+    font-size: var(--qc-text-xl);
+  }
+
+  .qc-cart__summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-cart__subtotal {
+    font-size: var(--qc-text-l);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+    padding-block-start: var(--qc-space-m);
+  }
+
+  .qc-cart__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+  }
+
+  @media (max-width: 599px) {
+    .qc-cart-line {
+      grid-template-columns: 72px minmax(0, 1fr);
+    }
+
+    .qc-cart-line__image {
+      inline-size: 72px;
+    }
+
+    .qc-cart-line__price {
+      grid-column: 2;
+      text-align: start;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.cart",
-  "settings": []
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "t:general.cart_show_note",
+      "default": true
+    }
+  ]
 }
 {% endschema %}
