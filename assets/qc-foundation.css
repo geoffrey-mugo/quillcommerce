@@ -253,6 +253,108 @@ main {
   font-weight: 400;
 }
 
+/* ---- canonical product card (SPEC-004) ---- */
+
+.qc-product-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-xs);
+  min-inline-size: 0;
+}
+
+.qc-product-card__link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-xs);
+  text-decoration: none;
+  color: inherit;
+}
+
+.qc-product-card__media {
+  overflow: hidden;
+  border-radius: var(--qc-radius-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
+  background: var(--qc-surface-raised);
+}
+
+.qc-product-card__image {
+  inline-size: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  transition: transform var(--qc-dur-2) var(--qc-ease);
+}
+
+.qc-product-card__link:hover .qc-product-card__image {
+  transform: scale(1.03);
+}
+
+.qc-product-card__image--empty {
+  display: grid;
+  place-items: center;
+  color: var(--qc-ink-soft);
+}
+
+.qc-product-card__title {
+  font-family: inherit;
+  font-size: var(--qc-text-m);
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.qc-product-card__link:hover .qc-product-card__title {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.qc-product-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--qc-space-xs);
+  flex-wrap: wrap;
+}
+
+.qc-product-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: var(--qc-space-l) var(--qc-space-m);
+}
+
+/* ---- pagination (SPEC-004 §9): styles default_pagination output ---- */
+
+.qc-pagination {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--qc-space-l);
+}
+
+.qc-pagination span,
+.qc-pagination a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding-inline: var(--qc-space-xs);
+  text-decoration: none;
+}
+
+.qc-pagination .current {
+  font-weight: 700;
+  border-block-end: 2px solid var(--qc-accent);
+}
+
+.qc-pagination a:hover {
+  color: var(--qc-accent);
+}
+
 /* ---- icon primitive ---- */
 
 .qc-icon {

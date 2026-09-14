@@ -11,7 +11,8 @@
     "comment_form_email": "Email",
     "comment_form_name": "Name",
     "comment_form_submit": "Post",
-    "comment_form_title": "Add a comment"
+    "comment_form_title": "Add a comment",
+    "read_article": "Read article"
   },
   "cart": {
     "checkout": "Checkout",
@@ -39,7 +40,8 @@
     }
   },
   "collections": {
-    "title": "Collections"
+    "title": "Collections",
+    "empty": "There are no products in this collection yet."
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -58,7 +60,9 @@
     "placeholder": "Search articles, pages, or products",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "results_for_html": "{{ count }} results found for {{ terms }}",
+    "type_page": "Page",
+    "type_article": "Article"
   },
   "accessibility": {
     "skip_to_content": "Skip to content"
@@ -75,5 +79,8 @@
       "add_to_cart": "Add to cart",
       "sold_out": "Sold out"
     }
+  },
+  "general": {
+    "pagination": "Pagination"
   }
 }
