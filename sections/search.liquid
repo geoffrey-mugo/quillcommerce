@@ -27,6 +27,9 @@
   </form>
 
   {% if search.performed %}
+    {% assign search_clear_url = routes.search_url | append: '?q=' | append: search.terms | url_encode %}
+    {% render 'qc-facets', results: search, results_url: search_clear_url, query: search.terms %}
+
     {% if search.results_count == 0 %}
       <p role="status">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
     {% else %}
@@ -78,6 +81,8 @@
     {% endif %}
   {% endif %}
 </div>
+
+<script src="{{ 'qc-facets.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
   .qc-search {
