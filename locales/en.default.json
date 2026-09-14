@@ -119,7 +119,16 @@
       "pickup_unavailable": "Pickup currently unavailable at {{ location }}",
       "pickup_other_locations": "Check availability at other locations",
       "pickup_in_stock": "Pickup available",
-      "pickup_out_of_stock": "Pickup unavailable"
+      "pickup_out_of_stock": "Pickup unavailable",
+      "sticky_bar_label": "Purchase bar",
+      "gift": {
+        "label": "Send as a gift",
+        "email": "Recipient email",
+        "name": "Recipient name (optional)",
+        "message": "Message (optional)",
+        "max_chars": "{{ max }} characters max",
+        "send_on": "Send on (optional)"
+      }
     },
     "card": {
       "adding": "Adding…",

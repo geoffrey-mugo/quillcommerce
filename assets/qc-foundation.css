@@ -438,7 +438,8 @@ main {
 
 .qc-back-to-top {
   position: fixed;
-  inset-block-end: var(--qc-space-l);
+  /* --qc-sticky-offset lifts it above the product sticky bar when shown */
+  inset-block-end: calc(var(--qc-space-l) + var(--qc-sticky-offset, 0px));
   inset-inline-end: var(--qc-space-l);
   z-index: 15;
   opacity: 0;

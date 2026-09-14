@@ -65,7 +65,8 @@
     "enable_zoom": "Enable image zoom",
     "pickup_availability": "Pickup availability",
     "disclosure": "Collapsible row",
-    "page_content": "Page content"
+    "page_content": "Page content",
+    "enable_sticky_bar": "Show sticky purchase bar"
   },
   "labels": {
     "alignment": "Alignment",

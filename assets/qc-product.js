@@ -106,6 +106,98 @@ if (!customElements.get('qc-gallery')) {
   );
 }
 
+if (!customElements.get('qc-sticky-bar')) {
+  customElements.define(
+    'qc-sticky-bar',
+    class extends HTMLElement {
+      connectedCallback() {
+        /* deferred + re-entrant so load-time DOM churn can't strand a
+           stale listener set */
+        clearTimeout(this.setupTimer);
+        this.setupTimer = setTimeout(() => this.setup(), 0);
+      }
+
+      /* geometry check instead of IntersectionObserver: an instant jump
+         (scrollTo, anchor, keyboard Home/End) can move the buy button
+         from above the viewport to below it with no intersecting state
+         in between, which an observer never reports */
+      setup() {
+        this.teardown?.();
+        const buy = document.querySelector('[data-qc-buy]');
+        if (!buy) return;
+        const controller = new AbortController();
+        this.teardown = () => {
+          controller.abort();
+          cancelAnimationFrame(this.raf);
+          this.raf = 0;
+        };
+        const check = () => {
+          this.raf = 0;
+          /* show only once the buy button has been scrolled past (above
+             the viewport) — never while it is still below the fold */
+          this.toggle(buy.getBoundingClientRect().bottom < 0);
+        };
+        const schedule = () => {
+          if (!this.raf) this.raf = requestAnimationFrame(check);
+        };
+        addEventListener('scroll', schedule, { passive: true, signal: controller.signal });
+        addEventListener('resize', schedule, { passive: true, signal: controller.signal });
+        check();
+      }
+
+      disconnectedCallback() {
+        clearTimeout(this.setupTimer);
+        this.teardown?.();
+        document.documentElement.style.removeProperty('--qc-sticky-offset');
+      }
+
+      toggle(show) {
+        this.hidden = !show;
+        document.documentElement.style.setProperty(
+          '--qc-sticky-offset',
+          show ? `${this.offsetHeight}px` : '0px'
+        );
+      }
+    }
+  );
+}
+
+if (!customElements.get('qc-gift-recipient')) {
+  customElements.define(
+    'qc-gift-recipient',
+    class extends HTMLElement {
+      connectedCallback() {
+        this.abort = new AbortController();
+        this.toggleBox = this.querySelector('[data-qc-gift-toggle]');
+        this.fields = this.querySelector('[data-qc-gift-fields]');
+        this.offset = this.querySelector('[data-qc-gift-offset]');
+        this.email = this.querySelector('input[type="email"]');
+        if (!this.toggleBox || !this.fields) return;
+        this.toggleBox.addEventListener('change', () => this.update(), {
+          signal: this.abort.signal,
+        });
+        this.update();
+      }
+
+      disconnectedCallback() {
+        this.abort.abort();
+      }
+
+      update() {
+        const active = this.toggleBox.checked;
+        this.fields.hidden = !active;
+        this.fields
+          .querySelectorAll('input, textarea')
+          .forEach((el) => (el.disabled = !active));
+        if (this.email) this.email.required = active;
+        if (this.offset && active) {
+          this.offset.value = new Date().getTimezoneOffset().toString();
+        }
+      }
+    }
+  );
+}
+
 if (!customElements.get('qc-product-page')) {
   customElements.define(
     'qc-product-page',
@@ -304,14 +396,26 @@ if (!customElements.get('qc-product-page')) {
           this.stockEl.dataset.qcStockState = key;
         }
 
-        if (this.buyBtn) {
+        {
           const ok = Boolean(variant?.available);
-          this.buyBtn.disabled = !ok;
-          this.buyBtn.textContent = variant
+          const label = variant
             ? ok
               ? this.dataset.buyLabel
               : this.dataset.soldOutLabel
             : this.dataset.unavailableLabel;
+          if (this.buyBtn) {
+            this.buyBtn.disabled = !ok;
+            this.buyBtn.textContent = label;
+          }
+          const stickyBuy = document.querySelector('[data-qc-sticky-buy]');
+          if (stickyBuy) {
+            stickyBuy.disabled = !ok;
+            stickyBuy.textContent = label;
+          }
+          const stickyPrice = document.querySelector('[data-qc-sticky-price]');
+          if (stickyPrice) {
+            stickyPrice.textContent = shownPrice != null ? this.money(shownPrice) : '';
+          }
         }
 
         if (variant?.media_id) this.gallery?.show(variant.media_id);

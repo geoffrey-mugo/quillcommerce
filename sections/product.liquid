@@ -183,40 +183,13 @@
         {%- endcase -%}
       </p>
 
-      <div data-qc-pickup>
-        {% render 'qc-pickup', variant: current_variant %}
-      </div>
-
-      <div class="qc-prose">{{ product.description }}</div>
-
-      {% if section.blocks.size > 0 %}
-        <div class="qc-product__disclosures">
-          {% for block in section.blocks %}
-            {% case block.type %}
-              {% when 'disclosure' %}
-                <details class="qc-disclosure" {{ block.shopify_attributes }}>
-                  <summary>
-                    <span>{{ block.settings.heading }}</span>
-                    {% render 'qc-icon', name: 'chevron' %}
-                  </summary>
-                  <div class="qc-prose qc-disclosure__content">
-                    {{ block.settings.content }}
-                    {% if block.settings.page != blank %}
-                      {{ block.settings.page.content }}
-                    {% endif %}
-                  </div>
-                </details>
-            {% endcase %}
-          {% endfor %}
-        </div>
-      {% endif %}
-
+      {%- assign product_form_id = 'qc-product-form-' | append: section.id -%}
       <qc-product-form
         data-adding-label="{{ 'products.card.adding' | t }}"
         data-added-label="{{ 'products.card.added' | t: title: product.title }}"
         data-error-label="{{ 'products.card.add_error' | t }}"
       >
-      {% form 'product', product %}
+      {% form 'product', product, id: product_form_id %}
         {% unless product.has_only_default_variant %}
           {% for option in product.options_with_values %}
             <fieldset class="qc-product__option" data-qc-option hidden>
@@ -247,7 +220,6 @@
                 <option
                   value="{{ variant.id }}"
                   {% if variant == current_variant %}selected="selected"{% endif %}
-                  {% unless variant.available %}disabled{% endunless %}
                 >
                   {{ variant.title }} — {{ variant.price | money }}
                   {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
@@ -349,6 +321,70 @@
           </p>
         </div>
 
+        {% if product.gift_card? %}
+          <qc-gift-recipient class="qc-gift">
+            <label class="qc-gift__toggle">
+              <input type="checkbox" name="properties[__shopify_send_gift_card_to_recipient]" data-qc-gift-toggle>
+              <span>{{ 'products.product.gift.label' | t }}</span>
+            </label>
+            <div class="qc-gift__fields" data-qc-gift-fields>
+              <div class="qc-field">
+                <label class="qc-field__label" for="qc-gift-email-{{ section.id }}">
+                  {{ 'products.product.gift.email' | t }}
+                </label>
+                <input
+                  class="qc-input"
+                  id="qc-gift-email-{{ section.id }}"
+                  type="email"
+                  name="properties[Recipient email]"
+                  autocomplete="email"
+                >
+              </div>
+              <div class="qc-field">
+                <label class="qc-field__label" for="qc-gift-name-{{ section.id }}">
+                  {{ 'products.product.gift.name' | t }}
+                </label>
+                <input
+                  class="qc-input"
+                  id="qc-gift-name-{{ section.id }}"
+                  type="text"
+                  name="properties[Recipient name]"
+                  autocomplete="name"
+                >
+              </div>
+              <div class="qc-field">
+                <label class="qc-field__label" for="qc-gift-message-{{ section.id }}">
+                  {{ 'products.product.gift.message' | t }}
+                </label>
+                <textarea
+                  class="qc-input"
+                  id="qc-gift-message-{{ section.id }}"
+                  name="properties[Message]"
+                  rows="3"
+                  maxlength="200"
+                ></textarea>
+                <p class="qc-text-s qc-muted">{{ 'products.product.gift.max_chars' | t: max: 200 }}</p>
+              </div>
+              <div class="qc-field">
+                <label class="qc-field__label" for="qc-gift-send-on-{{ section.id }}">
+                  {{ 'products.product.gift.send_on' | t }}
+                </label>
+                {%- assign gift_min = 'now' | date: '%Y-%m-%d' -%}
+                {%- assign gift_max = 'now' | date: '%s' | plus: 7776000 | date: '%Y-%m-%d' -%}
+                <input
+                  class="qc-input"
+                  id="qc-gift-send-on-{{ section.id }}"
+                  type="date"
+                  name="properties[Send on]"
+                  min="{{ gift_min }}"
+                  max="{{ gift_max }}"
+                >
+              </div>
+              <input type="hidden" name="properties[__shopify_offset]" value="" disabled data-qc-gift-offset>
+            </div>
+          </qc-gift-recipient>
+        {% endif %}
+
         <div data-qc-breaks {% if current_variant.quantity_price_breaks.size == 0 %}hidden{% endif %}>
           <p class="qc-field__label">{{ 'products.product.volume_pricing' | t }}</p>
           <ul class="qc-product__breaks qc-text-s" role="list" data-qc-breaks-list>
@@ -375,8 +411,61 @@
         {{ form | payment_terms }}
       {% endform %}
       </qc-product-form>
+
+      <div data-qc-pickup>
+        {% render 'qc-pickup', variant: current_variant %}
+      </div>
+
+      <div class="qc-prose">{{ product.description }}</div>
+
+      {% if section.blocks.size > 0 %}
+        <div class="qc-product__disclosures">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'disclosure' %}
+                <details class="qc-disclosure" {{ block.shopify_attributes }}>
+                  <summary>
+                    <span>{{ block.settings.heading }}</span>
+                    {% render 'qc-icon', name: 'chevron' %}
+                  </summary>
+                  <div class="qc-prose qc-disclosure__content">
+                    {{ block.settings.content }}
+                    {% if block.settings.page != blank %}
+                      {{ block.settings.page.content }}
+                    {% endif %}
+                  </div>
+                </details>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
   </div>
+
+  {% if section.settings.enable_sticky_bar %}
+    <qc-sticky-bar
+      class="qc-sticky-bar"
+      role="region"
+      aria-label="{{ 'products.product.sticky_bar_label' | t }}"
+      hidden
+    >
+      <span class="qc-sticky-bar__title">{{ product.title }}</span>
+      <span class="qc-sticky-bar__price" data-qc-sticky-price>{{ shown_price | money }}</span>
+      <button
+        type="submit"
+        form="{{ product_form_id }}"
+        class="qc-btn qc-btn--primary"
+        data-qc-sticky-buy
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        {% if current_variant.available %}
+          {{ 'products.product.add_to_cart' | t }}
+        {% else %}
+          {{ 'products.product.sold_out' | t }}
+        {% endif %}
+      </button>
+    </qc-sticky-bar>
+  {% endif %}
 
   <script type="application/json" data-qc-variants>
     [
@@ -779,6 +868,55 @@
   .qc-disclosure__content {
     padding-block-end: var(--qc-space-m);
   }
+
+  .qc-sticky-bar {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-m);
+    padding: var(--qc-space-xs) var(--qc-space-m);
+    background: var(--qc-surface);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+    box-shadow: var(--qc-shadow-2);
+  }
+
+  .qc-sticky-bar__title {
+    flex: 1;
+    min-inline-size: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+  }
+
+  .qc-sticky-bar__price {
+    flex: none;
+  }
+
+  .qc-gift {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-s);
+  }
+
+  .qc-gift__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--qc-space-xs);
+    min-block-size: 44px;
+    cursor: pointer;
+  }
+
+  .qc-gift__fields {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-inline-start: var(--qc-space-m);
+    border-inline-start: var(--qc-line-w) solid var(--qc-line);
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -814,6 +952,12 @@
       "type": "checkbox",
       "id": "enable_zoom",
       "label": "t:general.enable_zoom",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_bar",
+      "label": "t:general.enable_sticky_bar",
       "default": true
     },
     {

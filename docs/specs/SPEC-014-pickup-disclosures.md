@@ -1,6 +1,6 @@
 # SPEC-014 · Product page: pickup availability & disclosures
 
-Status: Implemented (verified 2026-09-14 on saasquill-app-dev — see docs/qa/PHASE4-SLICE4-VERIFICATION.md; pickup content structural pending store fixture)
+Status: Implemented (fully live-verified 2026-09-14 — pickup content verified after enabling Local Pickup + adding the Shop location street address; see docs/qa/PHASE4-SLICE5-VERIFICATION.md)
 Phase: 4, slice 4
 Provenance: Original QuillCommerce design; Shopify `store_availability`
 object, Section Rendering API, and section-block conventions.
