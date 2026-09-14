@@ -26,3 +26,12 @@ expected to be rewritten against the new token system).
 Demo CSVs referencing picsum/Unsplash-derived image URLs (v1, v2, image-fix)
 deleted; `ftv-demo-products-v3.csv` (owned, PIL-generated gradient images,
 authored in-repo) is the sole canonical demo catalog.
+
+## D-005 · 2026-09-14 · Token architecture (SPEC-002)
+Single `--qc-` custom-property system emitted from theme settings in
+`snippets/css-variables.liquid`; derived color roles via `color-mix(in oklab)`
+so three merchant colors (surface/ink/accent) produce a coherent palette;
+fluid clamped type scale; corner-style setting maps to control/surface radii;
+global `:focus-visible` treatment components may not remove. Primitives live
+in `assets/qc-foundation.css`; per-section styles use Skeleton's
+`{% stylesheet %}` tag.

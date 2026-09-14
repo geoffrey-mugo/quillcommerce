@@ -1,18 +1,98 @@
+{% doc %}
+  Emits the QuillCommerce design-token system (SPEC-002) as CSS custom
+  properties, derived from theme settings. Rendered once in the <head>.
+{% enddoc %}
 {% style %}
-  {% # Loads all font variantions with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.type_display_font | font_face: font_display: 'swap' }}
+  {{ settings.type_display_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
 
   :root {
+    /* ---- fonts ---- */
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
+    --qc-font-display: {{ settings.type_display_font.family }}, {{ settings.type_display_font.fallback_families }};
+    --qc-font-display-weight: {{ settings.type_display_font.weight | at_least: 500 }};
+
+    /* ---- layout ---- */
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
+
+    /* ---- color roles (merchant inputs) ---- */
     --color-background: {{ settings.background_color }};
     --color-foreground: {{ settings.foreground_color }};
-    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --qc-surface: {{ settings.background_color }};
+    --qc-ink: {{ settings.foreground_color }};
+    --qc-accent: {{ settings.accent_color }};
+
+    /* ---- color roles (derived, palette-agnostic) ---- */
+    --qc-ink-soft: color-mix(in oklab, var(--qc-ink) 68%, var(--qc-surface));
+    --qc-line: color-mix(in oklab, var(--qc-ink) 18%, var(--qc-surface));
+    --qc-line-strong: color-mix(in oklab, var(--qc-ink) 40%, var(--qc-surface));
+    --qc-surface-raised: color-mix(in oklab, var(--qc-ink) 4%, var(--qc-surface));
+    --qc-accent-ink: color-mix(in oklab, var(--qc-accent) 8%, white);
+    --qc-accent-tint: color-mix(in oklab, var(--qc-accent) 10%, var(--qc-surface));
+    --qc-ok: color-mix(in oklab, #2E7D4F 85%, var(--qc-ink));
+    --qc-warn: color-mix(in oklab, #9A6B15 85%, var(--qc-ink));
+    --qc-danger: color-mix(in oklab, #B3372B 85%, var(--qc-ink));
+
+    /* ---- spacing scale (SPEC-002 §3) ---- */
+    --qc-space-2xs: 0.25rem;
+    --qc-space-xs: 0.5rem;
+    --qc-space-s: 0.75rem;
+    --qc-space-m: 1rem;
+    --qc-space-l: 1.5rem;
+    --qc-space-xl: 2.25rem;
+    --qc-space-2xl: 3.5rem;
+    --qc-space-3xl: 5.5rem;
+
+    /* ---- fluid type scale ---- */
+    --qc-text-s: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
+    --qc-text-m: 1rem;
+    --qc-text-l: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    --qc-text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+    --qc-text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+    --qc-text-3xl: clamp(1.9rem, 1.5rem + 2vw, 2.75rem);
+    --qc-leading-tight: 1.15;
+    --qc-leading: 1.55;
+    --qc-measure: 65ch;
+
+    /* ---- corners ---- */
+    {%- case settings.corner_style %}
+    {%- when 'sharp' %}
+    --qc-radius-control: 0px;
+    --qc-radius-surface: 0px;
+    {%- when 'rounded' %}
+    --qc-radius-control: 12px;
+    --qc-radius-surface: 18px;
+    {%- else %}
+    --qc-radius-control: 6px;
+    --qc-radius-surface: 10px;
+    {%- endcase %}
+    --qc-radius-pill: 999px;
+    --style-border-radius-inputs: var(--qc-radius-control);
+
+    /* ---- lines, elevation, motion ---- */
+    --qc-line-w: 1px;
+    --qc-shadow-1: 0 1px 2px color-mix(in oklab, var(--qc-ink) 10%, transparent);
+    --qc-shadow-2: 0 6px 24px -8px color-mix(in oklab, var(--qc-ink) 22%, transparent);
+    --qc-dur-1: 120ms;
+    --qc-dur-2: 240ms;
+    --qc-ease: cubic-bezier(0.2, 0, 0.2, 1);
+
+    /* ---- focus ---- */
+    --qc-focus-w: 2px;
+    --qc-focus-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --qc-dur-1: 0ms;
+      --qc-dur-2: 0ms;
+    }
   }
 {% endstyle %}

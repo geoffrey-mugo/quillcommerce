@@ -31,7 +31,13 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "type_display_font": "Display font (headings)",
+    "accent_color": "Accent",
+    "corner_style": "Corner style",
+    "corner_sharp": "Sharp",
+    "corner_soft": "Soft",
+    "corner_rounded": "Rounded"
   },
   "labels": {
     "alignment": "Alignment",
@@ -72,6 +78,6 @@
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
-    },
+    }
   }
 }

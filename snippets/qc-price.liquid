@@ -1,0 +1,45 @@
+{% doc %}
+  QuillCommerce price primitive (SPEC-002 §11).
+
+  Renders regular, sale, and unit price for a product or variant with
+  screen-reader labels for sale state.
+
+  @param {object} item - product or variant object (required)
+  @param {string} [class] - extra classes for the wrapper
+{% enddoc %}
+{%- liquid
+  # a variant exposes its parent as item.product; a product does not
+  if item.product
+    assign qc_unit_variant = item
+  else
+    assign qc_unit_variant = item.selected_or_first_available_variant
+  endif
+  assign qc_price = item.price
+  assign qc_compare = item.compare_at_price
+  assign qc_on_sale = false
+  if qc_compare > qc_price
+    assign qc_on_sale = true
+  endif
+-%}
+<div class="qc-price {{ class }}">
+  {%- if qc_on_sale -%}
+    <span class="qc-visually-hidden">{{ 'products.price.sale_price' | t }}</span>
+    <span class="qc-price__current">{{ qc_price | money }}</span>
+    <span class="qc-visually-hidden">{{ 'products.price.regular_price' | t }}</span>
+    <s class="qc-price__compare">{{ qc_compare | money }}</s>
+  {%- else -%}
+    <span class="qc-visually-hidden">{{ 'products.price.regular_price' | t }}</span>
+    <span class="qc-price__current">{{ qc_price | money }}</span>
+  {%- endif -%}
+  {%- if qc_unit_variant.unit_price_measurement -%}
+    <span class="qc-price__unit">
+      <span class="qc-visually-hidden">{{ 'products.price.unit_price' | t }}</span>
+      {{ qc_unit_variant.unit_price | money }}
+      /
+      {%- if qc_unit_variant.unit_price_measurement.reference_value != 1 -%}
+        {{ qc_unit_variant.unit_price_measurement.reference_value }}
+      {%- endif -%}
+      {{ qc_unit_variant.unit_price_measurement.reference_unit }}
+    </span>
+  {%- endif -%}
+</div>

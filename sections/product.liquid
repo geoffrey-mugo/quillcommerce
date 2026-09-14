@@ -1,45 +1,124 @@
 {% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
-
+  Main product section: media, info, and a no-JavaScript add-to-cart form
+  built from the QuillCommerce foundation primitives (SPEC-002).
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
+<div class="qc-product">
+  <div class="qc-product__media">
+    {% for image in product.images %}
+      {% render 'image', class: 'qc-product__image', image: image %}
+    {% else %}
+      <div class="qc-product__image qc-product__image--empty" aria-hidden="true">
+        {% render 'qc-icon', name: 'alert' %}
+      </div>
+    {% endfor %}
+  </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+  <div class="qc-product__info">
+    <h1>{{ product.title }}</h1>
+    {% render 'qc-price', item: product %}
+    <div class="qc-prose">{{ product.description }}</div>
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+    {% form 'product', product %}
+      {% assign current_variant = product.selected_or_first_available_variant %}
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
+      {% unless product.has_only_default_variant %}
+        <div class="qc-field">
+          <label class="qc-field__label" for="qc-variant-{{ section.id }}">
+            {{ 'products.product.options_label' | t }}
+          </label>
+          <select id="qc-variant-{{ section.id }}" name="id">
+            {% for variant in product.variants %}
+              <option
+                value="{{ variant.id }}"
+                {% if variant == current_variant %}selected="selected"{% endif %}
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }} — {{ variant.price | money }}
+                {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% else %}
+        <input type="hidden" name="id" value="{{ current_variant.id }}">
+      {% endunless %}
+
+      <div class="qc-field">
+        <label class="qc-field__label" for="qc-quantity-{{ section.id }}">
+          {{ 'products.product.quantity' | t }}
+        </label>
+        <input
+          id="qc-quantity-{{ section.id }}"
+          class="qc-input qc-product__quantity"
+          type="number"
+          name="quantity"
+          inputmode="numeric"
+          min="1"
+          value="1"
         >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+      </div>
 
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+      <button
+        type="submit"
+        class="qc-btn qc-btn--primary qc-btn--full"
+        {% unless product.available %}disabled{% endunless %}
+      >
+        {% if product.available %}
+          {{ 'products.product.add_to_cart' | t }}
+        {% else %}
+          {{ 'products.product.sold_out' | t }}
+        {% endif %}
+      </button>
+      {{ form | payment_button }}
+    {% endform %}
+  </div>
 </div>
+
+{% stylesheet %}
+  .qc-product {
+    display: grid;
+    gap: var(--qc-space-xl);
+    padding-block: var(--qc-space-xl);
+  }
+
+  @media (min-width: 750px) {
+    .qc-product {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      align-items: start;
+    }
+  }
+
+  .qc-product__media {
+    display: grid;
+    gap: var(--qc-space-s);
+  }
+
+  .qc-product__image {
+    inline-size: 100%;
+    border-radius: var(--qc-radius-surface);
+  }
+
+  .qc-product__image--empty {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    background: var(--qc-surface-raised);
+    color: var(--qc-ink-soft);
+    border: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-product__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-product__quantity {
+    max-inline-size: 8rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {

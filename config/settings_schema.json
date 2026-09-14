@@ -19,6 +19,12 @@
         "id": "type_primary_font",
         "default": "work_sans_n4",
         "label": "t:general.primary"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_display_font",
+        "label": "t:general.type_display_font",
+        "default": "assistant_n4"
       }
     ]
   },
@@ -69,6 +75,12 @@
         "label": "t:labels.foreground"
       },
       {
+        "type": "color",
+        "id": "accent_color",
+        "label": "t:general.accent_color",
+        "default": "#1E4A3C"
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
@@ -77,6 +89,26 @@
         "unit": "px",
         "label": "t:labels.input_corner_radius",
         "default": 4
+      },
+      {
+        "type": "select",
+        "id": "corner_style",
+        "label": "t:general.corner_style",
+        "default": "soft",
+        "options": [
+          {
+            "value": "sharp",
+            "label": "t:general.corner_sharp"
+          },
+          {
+            "value": "soft",
+            "label": "t:general.corner_soft"
+          },
+          {
+            "value": "rounded",
+            "label": "t:general.corner_rounded"
+          }
+        ]
       }
     ]
   }

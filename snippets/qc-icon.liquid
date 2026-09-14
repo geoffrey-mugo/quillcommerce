@@ -1,0 +1,41 @@
+{% doc %}
+  QuillCommerce icon primitive (SPEC-002 §12). Original 24×24 stroke set.
+
+  @param {string} name - one of: cart, account, search, chevron, close, plus,
+    minus, check, alert, arrow
+  @param {string} [label] - accessible name; omitted = decorative (aria-hidden)
+  @param {string} [class] - extra classes
+{% enddoc %}
+<svg
+  class="qc-icon {{ class }}"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  {% if label %}role="img" aria-label="{{ label | escape }}"{% else %}aria-hidden="true"{% endif %}
+>
+  {%- case name -%}
+    {%- when 'cart' -%}
+      <path d="M4.5 8.5h15l-1.4 9.2a2 2 0 0 1-2 1.8H7.9a2 2 0 0 1-2-1.8L4.5 8.5Z"/><path d="M8.5 8.5v-2a3.5 3.5 0 0 1 7 0v2"/>
+    {%- when 'account' -%}
+      <circle cx="12" cy="8.2" r="3.6"/><path d="M5 20c1.2-3.6 3.8-5.4 7-5.4s5.8 1.8 7 5.4"/>
+    {%- when 'search' -%}
+      <circle cx="10.8" cy="10.8" r="6.3"/><path d="m20 20-4.7-4.7"/>
+    {%- when 'chevron' -%}
+      <path d="m6.5 9.5 5.5 5.5 5.5-5.5"/>
+    {%- when 'close' -%}
+      <path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>
+    {%- when 'plus' -%}
+      <path d="M12 5.5v13M5.5 12h13"/>
+    {%- when 'minus' -%}
+      <path d="M5.5 12h13"/>
+    {%- when 'check' -%}
+      <path d="m5.5 12.5 4.2 4.2 8.8-9.4"/>
+    {%- when 'alert' -%}
+      <circle cx="12" cy="12" r="8.5"/><path d="M12 7.8v5"/><path d="M12 16.2h.01"/>
+    {%- when 'arrow' -%}
+      <path d="M4.5 12h15M14 6.5l5.5 5.5L14 17.5"/>
+  {%- endcase -%}
+</svg>
