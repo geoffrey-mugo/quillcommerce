@@ -1,16 +1,19 @@
 Demo imagery: Pexels (https://www.pexels.com/license/) — free for
 commercial use, no attribution required. Photo IDs:
-  qc-dry-fly-assortment.jpg = pexels.com/photo/6478086
-  qc-local-favorites-box.jpg = pexels.com/photo/19862769
-  qc-tapered-leader.jpg = pexels.com/photo/35569763
-  qc-signature-fly-rod.jpg = pexels.com/photo/29190869
-  qc-creek-pack-rod.jpg = pexels.com/photo/13248965
-  qc-explorer-fly-reel.jpg = pexels.com/photo/8945510
-  qc-signature-fly-reel.jpg = pexels.com/photo/36028067
-  qc-nymph-assortment.jpg = pexels.com/photo/12349154
-  qc-guide-cap.jpg = pexels.com/photo/31162881
-  qc-shop-logo-tee.jpg = pexels.com/photo/14428671
-  qc-hero-cast.jpg = pexels.com/photo/2131904
+  qc-dry-fly-assortment-2.jpg = pexels.com/photo/5396318
+  qc-nymph-assortment-2.jpg = pexels.com/photo/6739265
+  qc-local-favorites-box-2.jpg = pexels.com/photo/6738842
+  qc-tapered-leader-2.jpg = pexels.com/photo/6478249
+  qc-signature-fly-rod-2.jpg = pexels.com/photo/11143767
+  qc-explorer-fly-rod-2.jpg = pexels.com/photo/4329690
+  qc-starter-fly-rod-2.jpg = pexels.com/photo/36917549
+  qc-creek-pack-rod-2.jpg = pexels.com/photo/27033591
+  qc-signature-fly-reel-2.jpg = pexels.com/photo/8983970
+  qc-explorer-fly-reel-2.jpg = pexels.com/photo/6739266
+  qc-starter-fly-reel-2.jpg = pexels.com/photo/21855895
+  qc-guide-cap-2.jpg = pexels.com/photo/9558604
+  qc-shop-logo-tee-2.jpg = pexels.com/photo/9558597
+  qc-hero-cast-2.jpg = pexels.com/photo/27207261
   qc-story-stream.jpg = pexels.com/photo/39147908
   qc-waterproof-fly-box.jpg = pexels.com/photo/5411949
   qc-streamer-selection.jpg = pexels.com/photo/6739264
@@ -19,7 +22,14 @@ commercial use, no attribution required. Photo IDs:
   qc-fly-tying-kit.jpg = pexels.com/photo/3690705
   qc-dubbing-dispenser.jpg = pexels.com/photo/37955302
   qc-river-hoodie.jpg = pexels.com/photo/11340657
-  qc-starter-fly-reel.jpg = pexels.com/photo/14438483
   qc-magnetic-net-release.jpg = pexels.com/photo/14438490
-  qc-explorer-fly-rod.jpg = pexels.com/photo/14438489
-  qc-starter-fly-rod.jpg = pexels.com/photo/32542970
+
+Retired (2026-09-15 copyright/branding audit — detached from all
+products; superseded by the *-2 files above): qc-dry-fly-assortment,
+qc-nymph-assortment, qc-local-favorites-box, qc-tapered-leader,
+qc-signature-fly-rod, qc-explorer-fly-rod, qc-starter-fly-rod,
+qc-creek-pack-rod, qc-signature-fly-reel, qc-explorer-fly-reel,
+qc-starter-fly-reel, qc-guide-cap, qc-shop-logo-tee, qc-hero-cast.
+Reasons: legible third-party trademarks/IP (Sage, R.L. Winston,
+Xplorer, branded caps, anime-print tees) or wrong subject from an
+early blind assignment.

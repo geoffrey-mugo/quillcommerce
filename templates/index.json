@@ -3,7 +3,7 @@
     "hero": {
       "type": "qc-hero",
       "settings": {
-        "image": "shopify://shop_images/qc-hero-cast.jpg",
+        "image": "shopify://shop_images/qc-hero-cast-2.jpg",
         "overlay": 45,
         "heading": "Gear for the water ahead",
         "heading_is_h1": true,
