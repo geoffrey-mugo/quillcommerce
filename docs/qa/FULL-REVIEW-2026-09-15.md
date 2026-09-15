@@ -84,3 +84,17 @@ dialogs, tab-reveal on tucked header) remains outstanding.
 `loading`/`fetchpriority` strategy → pill contrast token → editor
 placeholders → heading levels → (owner) saasquill.com DNS →
 optional second/third theme style.
+
+## Remediation status (same day)
+
+Items 1–7 of the fix order are implemented, pushed, and verified
+(commit referenced below): @app block on the product section; favicon
+setting + guarded icon link; qc-contact section + page.contact template
+(store Contact page already carried the template assignment and renders
+the form); image `loading`/`fetchpriority` strategy (collection
+offscreen-images audit now passes, hero and first gallery image
+prioritized); `--qc-ink-soft` raised to 76% and unavailable-pill states
+retinted (PDP accessibility 100, collection accessibility 100);
+featured-collection editor placeholder tiles; visually-hidden results
+`<h2>` on collection and search. Outstanding: saasquill.com DNS (owner)
+and optional extra theme styles.

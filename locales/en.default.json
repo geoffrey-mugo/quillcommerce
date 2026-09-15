@@ -55,7 +55,8 @@
       "other": "{{ count }} products"
     },
     "empty_filtered": "No products match these filters.",
-    "view_all": "View all"
+    "view_all": "View all",
+    "products_heading": "Products"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -92,7 +93,8 @@
         "one": "{{ count }} suggestion",
         "other": "{{ count }} suggestions"
       }
-    }
+    },
+    "results_heading": "Search results"
   },
   "accessibility": {
     "skip_to_content": "Skip to content",
@@ -310,5 +312,12 @@
       "hint": "Enter a new password for {{ email }}.",
       "submit": "Reset password"
     }
+  },
+  "contact": {
+    "success": "Thanks for reaching out. We'll get back to you soon.",
+    "name_label": "Name",
+    "email_label": "Email",
+    "message_label": "Message",
+    "submit": "Send message"
   }
 }

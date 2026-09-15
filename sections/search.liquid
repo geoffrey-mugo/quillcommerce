@@ -46,6 +46,7 @@
         %}
 
         {% if has_products %}
+          <h2 class="qc-visually-hidden">{{ 'search.results_heading' | t }}</h2>
           <ul class="qc-product-grid" role="list">
             {% for result in search.results %}
               {% if result.object_type == 'product' %}

@@ -30,7 +30,8 @@
     --qc-accent: {{ settings.accent_color }};
 
     /* ---- color roles (derived, palette-agnostic) ---- */
-    --qc-ink-soft: color-mix(in oklab, var(--qc-ink) 68%, var(--qc-surface));
+    {%- comment -%} 76% keeps derived muted text at or above 4.5:1 on the surface {%- endcomment -%}
+    --qc-ink-soft: color-mix(in oklab, var(--qc-ink) 76%, var(--qc-surface));
     --qc-line: color-mix(in oklab, var(--qc-ink) 18%, var(--qc-surface));
     --qc-line-strong: color-mix(in oklab, var(--qc-ink) 40%, var(--qc-surface));
     --qc-surface-raised: color-mix(in oklab, var(--qc-ink) 4%, var(--qc-surface));

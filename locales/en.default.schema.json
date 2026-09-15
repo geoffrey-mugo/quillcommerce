@@ -118,7 +118,10 @@
     "button_text_color": "Button text",
     "card_background_color": "Cards and panels",
     "border_color": "Borders and lines",
-    "critical_color": "Errors and alerts"
+    "critical_color": "Errors and alerts",
+    "favicon": "Favicon",
+    "favicon_info": "Scaled down to 32 × 32 px",
+    "contact_form": "Contact form"
   },
   "labels": {
     "alignment": "Alignment",

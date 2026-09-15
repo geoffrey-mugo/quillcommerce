@@ -13,6 +13,8 @@
   @param {number} [width] - The highest resolution width of the image to be rendered
   @param {number} [height] - The highest resolution height of the image to be rendered
   @param {string} [crop] - The crop position of the image
+  @param {string} [loading] - 'lazy' (default) or 'eager' for above-the-fold images
+  @param {string} [fetchpriority] - e.g. 'high' for the LCP image
 
   @example
   {% render 'image', image: product.featured_image %}
@@ -32,6 +34,8 @@
     assign width = width | default: image.width
   endunless
 
+  assign loading = loading | default: 'lazy'
+
   if url
     assign wrapper = 'a'
   else
@@ -45,7 +49,11 @@
     href="{{ url }}"
   {% endif %}
 >
-  {{ image | image_url: width: width, height: height, crop: crop | image_tag }}
+  {% if fetchpriority %}
+    {{ image | image_url: width: width, height: height, crop: crop | image_tag: loading: loading, fetchpriority: fetchpriority }}
+  {% else %}
+    {{ image | image_url: width: width, height: height, crop: crop | image_tag: loading: loading }}
+  {% endif %}
 </{{ wrapper }}>
 
 {% stylesheet %}

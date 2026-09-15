@@ -31,7 +31,25 @@
     </ul>
   </section>
 {% elsif request.design_mode %}
-  <p class="qc-muted section-padding">{{ 'general.pick_collection_hint' | t }}</p>
+  <section class="qc-featured section-padding">
+    {% if heading != blank %}
+      <div class="qc-featured__head">
+        <h2 class="qc-featured__heading">{{ heading }}</h2>
+      </div>
+    {% endif %}
+    <ul class="qc-product-grid" role="list">
+      {% for i in (1..4) %}
+        <li>
+          <div class="qc-product-card">
+            <div class="qc-product-card__media">
+              {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'qc-product-card__image' }}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="qc-muted">{{ 'general.pick_collection_hint' | t }}</p>
+  </section>
 {% endif %}
 
 {% stylesheet %}
