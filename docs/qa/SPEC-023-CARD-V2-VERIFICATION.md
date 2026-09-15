@@ -14,3 +14,10 @@ push approved by the user with --allow-live)
 | Shared contexts | Card is the single snippet — collection verified live; search verified live; recommendations/recently-viewed render the same snippet |
 
 Gates: Theme Check 75 files / 0 offenses; provenance clean.
+
+## Consistency pass — dialogs & disabled states (same day)
+| Surface | Result |
+|---|---|
+| Quick view, sold out | PASS — grey disabled "Sold out" button replaces the old text badge; "View details" is now the ink button (full width) |
+| Cart drawer | PASS — Checkout stays accent primary; "View cart" now ink (matching the card pair); close/quiet unchanged |
+| PDP / sticky bar disabled buy | PASS — `.qc-btn--primary:disabled` now renders the solid muted grey at full opacity (verified on the M/Slate dead combination; re-enabling restores accent); transient `aria-busy` adds keep the busy treatment instead of flashing grey |

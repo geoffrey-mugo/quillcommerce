@@ -378,6 +378,18 @@ main {
   color: var(--qc-surface);
 }
 
+/* sold-out/disabled commerce buttons share the muted grey everywhere
+   (PDP buy, sticky bar, quick view); transient aria-busy adds keep the
+   busy treatment instead of flashing grey */
+.qc-btn--primary:disabled:not([aria-busy='true']),
+.qc-btn--muted:disabled {
+  background: color-mix(in oklab, var(--qc-ink) 35%, var(--qc-surface));
+  border-color: transparent;
+  color: var(--qc-surface);
+  opacity: 1;
+  cursor: not-allowed;
+}
+
 .qc-product-grid {
   list-style: none;
   margin: 0;

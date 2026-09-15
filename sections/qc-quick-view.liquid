@@ -77,10 +77,12 @@
         {% endform %}
       </qc-product-form>
     {% else %}
-      <p><span class="qc-badge">{{ 'products.product.sold_out' | t }}</span></p>
+      <button type="button" class="qc-btn qc-btn--muted qc-btn--full" disabled>
+        {{ 'products.product.sold_out' | t }}
+      </button>
     {% endif %}
 
-    <a class="qc-btn qc-btn--quiet" href="{{ product.url }}">
+    <a class="qc-btn qc-btn--ink qc-btn--full" href="{{ product.url }}">
       {{ 'products.quick_view.view_details' | t }}
       {% render 'qc-icon', name: 'arrow' %}
     </a>
