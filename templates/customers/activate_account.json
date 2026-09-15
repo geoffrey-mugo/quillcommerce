@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "qc-activate-account",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

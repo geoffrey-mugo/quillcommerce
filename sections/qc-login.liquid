@@ -1,0 +1,98 @@
+{% comment %}
+  Customer login + recovery (SPEC-022 §1). The #recover fragment toggles
+  the two forms via CSS :target — no JS.
+{% endcomment %}
+
+<div class="qc-account section-padding qc-login">
+  <div id="recover-toggle" class="qc-login__panes">
+    <div class="qc-login__pane qc-login__pane--login">
+      <h1>{{ 'customer.login.title' | t }}</h1>
+
+      {% comment %} recover_customer_password is a documented login-template global {% endcomment %}
+      {% # theme-check-disable UndefinedObject %}
+  {% if recover_customer_password.success %}
+        <p class="qc-account__notice" role="status">
+          {% render 'qc-icon', name: 'check' %}
+          {{ 'customer.recover.success' | t }}
+        </p>
+      {% endif %}
+      {% # theme-check-enable UndefinedObject %}
+
+      {% form 'customer_login', class: 'qc-account__form' %}
+        {% render 'qc-form-errors', form: form %}
+        <div class="qc-field">
+          <label class="qc-field__label" for="qc-login-email">{{ 'customer.fields.email' | t }}</label>
+          <input class="qc-input" id="qc-login-email" type="email" name="customer[email]" autocomplete="email" required>
+        </div>
+        <div class="qc-field">
+          <label class="qc-field__label" for="qc-login-password">{{ 'customer.fields.password' | t }}</label>
+          <input class="qc-input" id="qc-login-password" type="password" name="customer[password]" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="qc-btn qc-btn--primary">{{ 'customer.login.submit' | t }}</button>
+      {% endform %}
+
+      <div class="qc-account__links">
+        <a href="#recover">{{ 'customer.login.forgot' | t }}</a>
+        <a href="{{ routes.account_register_url }}">{{ 'customer.login.create' | t }}</a>
+      </div>
+
+      {% if shop.checkout.guest_login %}
+        <h2 class="qc-login__guest-heading">{{ 'customer.login.guest_title' | t }}</h2>
+        {% form 'guest_login' %}
+          <button type="submit" class="qc-btn qc-btn--outline">{{ 'customer.login.guest_submit' | t }}</button>
+        {% endform %}
+      {% endif %}
+    </div>
+
+    <div class="qc-login__pane qc-login__pane--recover" id="recover">
+      <h1>{{ 'customer.recover.title' | t }}</h1>
+      <p class="qc-muted">{{ 'customer.recover.hint' | t }}</p>
+
+      {% form 'recover_customer_password', class: 'qc-account__form' %}
+        {% render 'qc-form-errors', form: form %}
+        <div class="qc-field">
+          <label class="qc-field__label" for="qc-recover-email">{{ 'customer.fields.email' | t }}</label>
+          <input class="qc-input" id="qc-recover-email" type="email" name="email" autocomplete="email" required>
+        </div>
+        <button type="submit" class="qc-btn qc-btn--primary">{{ 'customer.recover.submit' | t }}</button>
+      {% endform %}
+
+      <div class="qc-account__links">
+        <a href="#recover-toggle">{{ 'customer.recover.cancel' | t }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .qc-login__pane--recover {
+    display: none;
+  }
+
+  .qc-login__panes:has(#recover:target) .qc-login__pane--login {
+    display: none;
+  }
+
+  .qc-login__panes:has(#recover:target) .qc-login__pane--recover {
+    display: flex;
+  }
+
+  .qc-login__pane {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    align-items: flex-start;
+  }
+
+  .qc-login__guest-heading {
+    margin-block-start: var(--qc-space-l);
+    font-size: var(--qc-text-l);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.login",
+  "settings": []
+}
+{% endschema %}

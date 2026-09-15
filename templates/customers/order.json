@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "qc-order",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

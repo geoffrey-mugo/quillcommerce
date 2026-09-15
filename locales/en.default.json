@@ -219,5 +219,93 @@
     "email_placeholder": "Email address",
     "submit": "Subscribe",
     "success": "Thanks for subscribing — you're on the list."
+  },
+  "customer": {
+    "errors_heading": "Please correct the following:",
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "password_confirm": "Confirm password",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "company": "Company",
+      "address1": "Address",
+      "address2": "Apartment, suite, etc.",
+      "city": "City",
+      "zip": "Postal/ZIP code",
+      "country": "Country/region",
+      "province": "State/province",
+      "phone": "Phone"
+    },
+    "login": {
+      "title": "Log in",
+      "submit": "Log in",
+      "forgot": "Forgot your password?",
+      "create": "Create account",
+      "guest_title": "Continue as a guest",
+      "guest_submit": "Continue"
+    },
+    "recover": {
+      "title": "Reset your password",
+      "hint": "Enter your email and we'll send you a link to reset your password.",
+      "submit": "Send reset link",
+      "cancel": "Back to log in",
+      "success": "If that email is registered, you'll receive a password reset link shortly."
+    },
+    "register": {
+      "title": "Create account",
+      "submit": "Create account",
+      "have_account": "Already have an account? Log in"
+    },
+    "account": {
+      "title": "Account",
+      "log_out": "Log out",
+      "greeting": "Hello, {{ name }}.",
+      "orders": "Order history",
+      "view_addresses": "View addresses ({{ count }})"
+    },
+    "orders": {
+      "number": "Order",
+      "date": "Date",
+      "payment": "Payment status",
+      "fulfillment": "Fulfillment status",
+      "total": "Total",
+      "none": "You haven't placed any orders yet."
+    },
+    "order": {
+      "title": "Order {{ name }}",
+      "back": "Back to account",
+      "items": "Order items",
+      "product": "Product",
+      "sku": "SKU",
+      "quantity": "Quantity",
+      "line_total": "Total",
+      "shipping": "Shipping",
+      "total": "Total",
+      "billing": "Billing address",
+      "shipping_address": "Shipping address",
+      "cancelled": "Order cancelled on {{ date }}"
+    },
+    "addresses": {
+      "title": "Addresses",
+      "add": "Add address",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save address",
+      "default": "Default",
+      "set_default": "Set as default address",
+      "none": "No addresses saved yet."
+    },
+    "activate": {
+      "title": "Activate account",
+      "hint": "Create your password to activate your account.",
+      "submit": "Activate account",
+      "decline": "Decline invitation"
+    },
+    "reset": {
+      "title": "Reset password",
+      "hint": "Enter a new password for {{ email }}.",
+      "submit": "Reset password"
+    }
   }
 }

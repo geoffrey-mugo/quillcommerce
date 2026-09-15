@@ -668,3 +668,159 @@ main {
   display: inline-grid;
   place-items: center;
 }
+
+/* ---- customer account surfaces (SPEC-022) ---- */
+
+.qc-account {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-l);
+  padding-block: var(--qc-space-xl);
+  align-items: flex-start;
+  max-inline-size: 52rem;
+}
+
+.qc-account__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--qc-space-m);
+  inline-size: 100%;
+  flex-wrap: wrap;
+}
+
+.qc-account__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-m);
+  inline-size: min(28rem, 100%);
+  align-items: flex-start;
+}
+
+.qc-account__form .qc-field {
+  inline-size: 100%;
+}
+
+.qc-account__form-row {
+  display: flex;
+  gap: var(--qc-space-s);
+  inline-size: 100%;
+}
+
+.qc-account__form-row .qc-field {
+  flex: 1;
+}
+
+.qc-account__errors {
+  border: var(--qc-line-w) solid var(--qc-danger);
+  border-radius: var(--qc-radius-surface);
+  padding: var(--qc-space-s) var(--qc-space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-2xs);
+  inline-size: 100%;
+}
+
+.qc-account__errors ul {
+  margin: 0;
+  padding-inline-start: var(--qc-space-l);
+}
+
+.qc-account__notice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qc-space-xs);
+  margin: 0;
+  font-weight: 600;
+  color: var(--qc-ok);
+}
+
+.qc-account__links {
+  display: flex;
+  gap: var(--qc-space-l);
+  flex-wrap: wrap;
+}
+
+.qc-account__table-scroll {
+  inline-size: 100%;
+  overflow-x: auto;
+}
+
+.qc-account__table {
+  border-collapse: collapse;
+  min-inline-size: 100%;
+}
+
+.qc-account__table th,
+.qc-account__table td {
+  padding: var(--qc-space-s) var(--qc-space-m);
+  border-block-end: var(--qc-line-w) solid var(--qc-line);
+  text-align: start;
+  vertical-align: top;
+}
+
+.qc-account__table thead th,
+.qc-account__table tfoot th {
+  font-size: var(--qc-text-s);
+  color: var(--qc-ink-soft);
+}
+
+.qc-account__addresses {
+  display: grid;
+  gap: var(--qc-space-xl);
+  inline-size: 100%;
+}
+
+@media (min-width: 700px) {
+  .qc-account__addresses {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.qc-account__address-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-l);
+  inline-size: 100%;
+}
+
+.qc-account__address {
+  border: var(--qc-line-w) solid var(--qc-line);
+  border-radius: var(--qc-radius-surface);
+  padding: var(--qc-space-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-s);
+  align-items: flex-start;
+}
+
+.qc-account__address-actions {
+  display: flex;
+  gap: var(--qc-space-s);
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.qc-account__disclosure summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.qc-account__disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.qc-account__disclosure-body {
+  padding-block: var(--qc-space-m);
+}
+
+.qc-account__default-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qc-space-xs);
+  min-block-size: 44px;
+  cursor: pointer;
+}

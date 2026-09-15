@@ -1,0 +1,26 @@
+{% doc %}
+  Form error summary (SPEC-022 §7): one alert list above any customer
+  form. Renders nothing without errors.
+
+  @param {object} form - the form object inside a form tag (required)
+{% enddoc %}
+{% if form.errors %}
+  <div class="qc-account__errors" role="alert">
+    <p class="qc-field__error">
+      {% render 'qc-icon', name: 'alert' %}
+      {{ 'customer.errors_heading' | t }}
+    </p>
+    <ul class="qc-text-s" role="list">
+      {% for field in form.errors %}
+        <li>
+          {%- if field == 'form' -%}
+            {{ form.errors.messages[field] }}
+          {%- else -%}
+            {{ form.errors.translated_fields[field] | capitalize }}
+            {{ form.errors.messages[field] }}
+          {%- endif -%}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

@@ -106,7 +106,14 @@
     "newsletter": "Newsletter signup",
     "multi_column": "Multi-column",
     "social_media": "Social media",
-    "footer_blurb": "Text"
+    "footer_blurb": "Text",
+    "login": "Login",
+    "register": "Registration",
+    "account": "Account",
+    "order": "Order",
+    "addresses": "Addresses",
+    "activate_account": "Account activation",
+    "reset_password": "Password reset"
   },
   "labels": {
     "alignment": "Alignment",

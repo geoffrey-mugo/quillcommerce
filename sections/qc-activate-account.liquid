@@ -1,0 +1,29 @@
+{% comment %} Account activation (SPEC-022 §6). {% endcomment %}
+
+<div class="qc-account section-padding">
+  <h1>{{ 'customer.activate.title' | t }}</h1>
+  <p class="qc-muted">{{ 'customer.activate.hint' | t }}</p>
+
+  {% form 'activate_customer_password', class: 'qc-account__form' %}
+    {% render 'qc-form-errors', form: form %}
+    <div class="qc-field">
+      <label class="qc-field__label" for="qc-activate-password">{{ 'customer.fields.password' | t }}</label>
+      <input class="qc-input" id="qc-activate-password" type="password" name="customer[password]" autocomplete="new-password" required>
+    </div>
+    <div class="qc-field">
+      <label class="qc-field__label" for="qc-activate-confirm">{{ 'customer.fields.password_confirm' | t }}</label>
+      <input class="qc-input" id="qc-activate-confirm" type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+    </div>
+    <div class="qc-account__form-row">
+      <button type="submit" class="qc-btn qc-btn--primary">{{ 'customer.activate.submit' | t }}</button>
+      <button type="submit" class="qc-btn qc-btn--outline" name="decline">{{ 'customer.activate.decline' | t }}</button>
+    </div>
+  {% endform %}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.activate_account",
+  "settings": []
+}
+{% endschema %}
