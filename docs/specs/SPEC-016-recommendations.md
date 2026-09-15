@@ -1,6 +1,6 @@
 # SPEC-016 · Product page: related & complementary products
 
-Status: Implemented (verified 2026-09-14 on saasquill-app-dev — see docs/qa/PHASE4-SLICE6-VERIFICATION.md; complementary render structural pending an S&D pairing fixture)
+Status: Implemented (fully live-verified 2026-09-14, both intents — see docs/qa/PHASE4-SLICE6-VERIFICATION.md)
 Phase: 4, slice 6 (final)
 Provenance: Original QuillCommerce design; Shopify Product
 Recommendations API (`routes.product_recommendations_url`, `intent`
