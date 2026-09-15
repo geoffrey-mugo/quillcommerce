@@ -29,9 +29,27 @@
       },
       "block_order": ["shipping", "care"],
       "settings": {}
+    },
+    "complementary": {
+      "type": "qc-recommendations",
+      "settings": {
+        "heading": "Pairs well with",
+        "intent": "complementary",
+        "limit": 4
+      }
+    },
+    "related": {
+      "type": "qc-recommendations",
+      "settings": {
+        "heading": "You may also like",
+        "intent": "related",
+        "limit": 4
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "complementary",
+    "related"
   ]
 }
