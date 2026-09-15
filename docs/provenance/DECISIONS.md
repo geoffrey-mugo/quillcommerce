@@ -38,7 +38,7 @@ in `assets/qc-foundation.css`; per-section styles use Skeleton's
 
 ## D-005 · Skeleton demo sections retired (2026-09-14)
 `sections/hello-world.liquid` and `sections/custom-section.liquid`
-(Shopify Skeleton demo content, MIT) deleted in Phase 6 slice 1; the
+(Shopify Skeleton demo content, Shopify theme license) deleted in Phase 6 slice 1; the
 home template is now composed from original QuillCommerce merchandising
 sections (SPEC-020). No Skeleton demo markup remains in rendered
 output; Skeleton structural files (layout, config, image snippet,

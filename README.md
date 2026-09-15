@@ -1,8 +1,11 @@
 # QuillCommerce
 
+Copyright © 2026 Saas Quill. Original work proprietary; Skeleton
+portions © Shopify Inc. — see `LICENSE.md`.
+
 An original Shopify Online Store 2.0 theme by Saas Quill. Built
 clean-room on the [Shopify Skeleton theme](https://github.com/Shopify/skeleton-theme)
-foundation (MIT — see `THIRD_PARTY_NOTICES.md`) with an original design
+foundation (Shopify's theme license — see `THIRD_PARTY_NOTICES.md`) with an original design
 system, components, and merchandising toolkit.
 
 - **Design system**: three merchant colors expand into a full derived
