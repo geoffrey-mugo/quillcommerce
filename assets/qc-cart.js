@@ -7,12 +7,17 @@
 const EVT_UPDATED = 'qc:cart-updated';
 const EVT_ANNOUNCE = 'qc:announce';
 
+/* Locale-aware endpoints (window.qcRoutes is emitted by layout/theme.liquid) */
+function qcRoute(name, fallback) {
+  return (window.qcRoutes && window.qcRoutes[name]) || fallback;
+}
+
 function announce(message) {
   document.dispatchEvent(new CustomEvent(EVT_ANNOUNCE, { detail: { message } }));
 }
 
 async function readCart() {
-  const res = await fetch('/cart.js', { headers: { Accept: 'application/json' } });
+  const res = await fetch(`${qcRoute('cart', '/cart')}.js`, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error('cart read failed');
   return res.json();
 }
@@ -219,7 +224,7 @@ if (!customElements.get('qc-cart-lines')) {
         this.busy = true;
         this.setAttribute('aria-busy', 'true');
         try {
-          const res = await fetch('/cart/change.js', {
+          const res = await fetch(`${qcRoute('cartChange', '/cart/change')}.js`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ id: key, quantity }),
@@ -243,7 +248,7 @@ if (!customElements.get('qc-cart-lines')) {
 
       async saveNote(note) {
         try {
-          const res = await fetch('/cart/update.js', {
+          const res = await fetch(`${qcRoute('cartUpdate', '/cart/update')}.js`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ note }),

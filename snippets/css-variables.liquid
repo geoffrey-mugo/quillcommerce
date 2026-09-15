@@ -40,6 +40,20 @@
     --qc-warn: color-mix(in oklab, #9A6B15 85%, var(--qc-ink));
     --qc-danger: color-mix(in oklab, #B3372B 85%, var(--qc-ink));
 
+    /* ---- optional merchant overrides of derived roles ---- */
+    {%- if settings.button_text_color != blank %}
+    --qc-accent-ink: {{ settings.button_text_color }};
+    {%- endif %}
+    {%- if settings.card_background_color != blank %}
+    --qc-surface-raised: {{ settings.card_background_color }};
+    {%- endif %}
+    {%- if settings.border_color != blank %}
+    --qc-line: {{ settings.border_color }};
+    {%- endif %}
+    {%- if settings.critical_color != blank %}
+    --qc-danger: {{ settings.critical_color }};
+    {%- endif %}
+
     /* ---- spacing scale (SPEC-002 §3) ---- */
     --qc-space-2xs: 0.25rem;
     --qc-space-xs: 0.5rem;

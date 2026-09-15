@@ -76,7 +76,8 @@ if (!customElements.get('qc-search')) {
         this.inflight = new AbortController();
         this.results.textContent = this.dataset.loadingLabel || '';
 
-        const url = new URL('/search/suggest.json', location.origin);
+        const suggestBase = (window.qcRoutes && window.qcRoutes.predictiveSearch) || '/search/suggest';
+        const url = new URL(`${suggestBase}.json`, location.origin);
         url.searchParams.set('q', q);
         url.searchParams.set('resources[type]', 'product,page,article');
         url.searchParams.set('resources[limit]', '4');
@@ -157,7 +158,10 @@ if (!customElements.get('qc-search')) {
       appendSeeAll(q) {
         const a = document.createElement('a');
         a.className = 'qc-btn qc-btn--quiet qc-search-suggest__all';
-        const url = new URL(this.dataset.searchUrl || '/search', location.origin);
+        const searchBase = this.dataset.searchUrl
+          || (window.qcRoutes && window.qcRoutes.search)
+          || '/search';
+        const url = new URL(searchBase, location.origin);
         url.searchParams.set('q', q);
         a.href = url;
         a.textContent = (this.dataset.seeAllLabel || '').replace('[terms]', q);

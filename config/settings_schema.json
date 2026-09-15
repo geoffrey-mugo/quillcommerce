@@ -81,6 +81,30 @@
         "default": "#1E4A3C"
       },
       {
+        "type": "paragraph",
+        "content": "t:general.colors_derived_note"
+      },
+      {
+        "type": "color",
+        "id": "button_text_color",
+        "label": "t:general.button_text_color"
+      },
+      {
+        "type": "color",
+        "id": "card_background_color",
+        "label": "t:general.card_background_color"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "t:general.border_color"
+      },
+      {
+        "type": "color",
+        "id": "critical_color",
+        "label": "t:general.critical_color"
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,

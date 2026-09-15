@@ -113,7 +113,12 @@
     "order": "Order",
     "addresses": "Addresses",
     "activate_account": "Account activation",
-    "reset_password": "Password reset"
+    "reset_password": "Password reset",
+    "colors_derived_note": "The colors below are optional. Leave them unset and the theme derives them automatically from the three colors above.",
+    "button_text_color": "Button text",
+    "card_background_color": "Cards and panels",
+    "border_color": "Borders and lines",
+    "critical_color": "Errors and alerts"
   },
   "labels": {
     "alignment": "Alignment",
