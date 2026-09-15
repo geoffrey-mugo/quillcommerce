@@ -14,7 +14,8 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "",
+        "menu": "main-menu",
+        "blurb": "<p>Original gear for people who use it. Built by Saas Quill.</p>",
         "show_payment_icons": true
       }
     }

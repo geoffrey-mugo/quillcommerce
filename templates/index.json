@@ -54,11 +54,49 @@
           }
         }
       },
-      "block_order": ["b1", "b2", "b3"],
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
       "settings": {
         "heading": "Browse the catalog",
         "layout": "tiles",
         "show_counts": true
+      }
+    },
+    "values": {
+      "type": "qc-multi-column",
+      "blocks": {
+        "v1": {
+          "type": "column",
+          "settings": {
+            "heading": "Chosen, not listed",
+            "body": "<p>Every item earns its place in the catalog by being used first.</p>"
+          }
+        },
+        "v2": {
+          "type": "column",
+          "settings": {
+            "heading": "Straight answers",
+            "body": "<p>Honest stock levels, honest pricing, and pickup you can count on.</p>"
+          }
+        },
+        "v3": {
+          "type": "column",
+          "settings": {
+            "heading": "Here after the sale",
+            "body": "<p>Questions, repairs, or returns — reach a person, not a queue.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "heading": "Why shop with us"
       }
     },
     "story": {
@@ -70,7 +108,23 @@
         "cta_label": "Read the field notes",
         "cta_link": "/blogs/news"
       }
+    },
+    "signup": {
+      "type": "qc-newsletter",
+      "settings": {
+        "heading": "Stay in the loop",
+        "subheading": "New arrivals, field notes, and offers — no noise.",
+        "alignment": "center"
+      }
     }
   },
-  "order": ["hero", "intro", "featured", "catnav", "story"]
+  "order": [
+    "hero",
+    "intro",
+    "featured",
+    "catnav",
+    "values",
+    "story",
+    "signup"
+  ]
 }

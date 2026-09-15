@@ -1,0 +1,97 @@
+{% comment %}
+  Multi-column value props (SPEC-021 §2): up to six text columns on the
+  shared auto-fill grid. Pure Liquid.
+{% endcomment %}
+
+<div class="qc-multicol section-padding">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-multicol__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  {% if section.blocks.size > 0 %}
+    <ul class="qc-multicol__grid" role="list">
+      {% for block in section.blocks %}
+        <li class="qc-multicol__col" {{ block.shopify_attributes }}>
+          {% if block.settings.heading != blank %}
+            <h3 class="qc-multicol__col-heading">{{ block.settings.heading }}</h3>
+          {% endif %}
+          {% if block.settings.body != blank %}
+            <div class="qc-text-s">{{ block.settings.body }}</div>
+          {% endif %}
+          {% if block.settings.link_label != blank %}
+            <a class="qc-btn qc-btn--quiet" href="{{ block.settings.link | default: '#' }}">
+              {{ block.settings.link_label }}
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .qc-multicol {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-multicol__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-multicol__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+    gap: var(--qc-space-l);
+  }
+
+  .qc-multicol__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    align-items: flex-start;
+  }
+
+  .qc-multicol__col-heading {
+    margin: 0;
+    font-size: var(--qc-text-l);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.multi_column",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Why shop with us" }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "t:general.column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Add a heading" },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "t:general.content",
+          "default": "<p>Pair a short value proposition with the products it supports.</p>"
+        },
+        { "type": "text", "id": "link_label", "label": "t:general.cta_1_label" },
+        { "type": "url", "id": "link", "label": "t:general.cta_1_link" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "t:general.multi_column",
+      "blocks": [{ "type": "column" }, { "type": "column" }, { "type": "column" }]
+    }
+  ]
+}
+{% endschema %}

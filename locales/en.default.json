@@ -173,7 +173,17 @@
   },
   "general": {
     "pagination": "Pagination",
-    "pick_collection_hint": "Pick a collection to feature."
+    "pick_collection_hint": "Pick a collection to feature.",
+    "footer_nav_label": "Footer",
+    "payment_methods": "Payment methods accepted",
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "x": "X",
+      "youtube": "YouTube",
+      "tiktok": "TikTok",
+      "pinterest": "Pinterest"
+    }
   },
   "header": {
     "menu": "Menu",
@@ -203,5 +213,11 @@
     "catalog_navigator": {
       "editor_hint": "Add collection blocks to build the navigator."
     }
+  },
+  "newsletter": {
+    "email_label": "Email address",
+    "email_placeholder": "Email address",
+    "submit": "Subscribe",
+    "success": "Thanks for subscribing — you're on the list."
   }
 }

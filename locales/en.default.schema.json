@@ -102,7 +102,11 @@
     "image_position": "Image position",
     "show_view_all": "Show \"View all\" link",
     "heading_is_h1": "Use as page heading (H1)",
-    "heading_is_h1_info": "Enable on exactly one section per page."
+    "heading_is_h1_info": "Enable on exactly one section per page.",
+    "newsletter": "Newsletter signup",
+    "multi_column": "Multi-column",
+    "social_media": "Social media",
+    "footer_blurb": "Text"
   },
   "labels": {
     "alignment": "Alignment",
