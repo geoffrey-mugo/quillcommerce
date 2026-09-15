@@ -100,10 +100,12 @@ if (!customElements.get('qc-product-form')) {
         btn.toggleAttribute('disabled', busy);
         btn.setAttribute('aria-busy', busy ? 'true' : 'false');
         if (busy) {
-          this.idleLabel = btn.textContent;
+          /* innerHTML round-trip: textContent restore would flatten the
+             visually-hidden product-name suffix into visible text */
+          this.idleHTML = btn.innerHTML;
           btn.textContent = this.dataset.addingLabel || btn.textContent;
-        } else if (this.idleLabel) {
-          btn.textContent = this.idleLabel;
+        } else if (this.idleHTML) {
+          btn.innerHTML = this.idleHTML;
         }
       }
 
