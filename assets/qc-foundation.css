@@ -262,6 +262,7 @@ main {
 /* ---- canonical product card v2, one bounding box (SPEC-023) ---- */
 
 .qc-product-card {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--qc-space-s);
@@ -337,13 +338,30 @@ main {
 
 .qc-product-card__actions {
   margin-block-start: auto;
+  /* always one row of two equal buttons; they shrink, never wrap or
+     overflow the card */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: var(--qc-space-xs);
 }
 
+.qc-product-card__actions > * {
+  min-inline-size: 0;
+}
+
 .qc-product-card__actions .qc-btn {
-  padding-inline: var(--qc-space-s);
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding-inline: var(--qc-space-2xs);
+  font-size: var(--qc-text-s);
+  white-space: nowrap;
+}
+
+/* dense-grid guard: buttons keep fitting even on very narrow cards */
+@container (max-width: 200px) {
+  .qc-product-card__actions .qc-btn {
+    font-size: 0.75rem;
+  }
 }
 
 .qc-product-card__quick-add form {
