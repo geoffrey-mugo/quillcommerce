@@ -1,13 +1,27 @@
 {% doc %}
-  Canonical QuillCommerce product card, v1 (SPEC-004 §1). The single card
-  used by collection, search, recommendations, and merchandising contexts.
-  Phase 2 extends it (quick add) via the data hook without markup changes.
+  Canonical QuillCommerce product card, v2 (SPEC-023): one bounding box —
+  compare toggle, media (with sold-out overlay), price, title, and a
+  Quick view / Add to cart action row. The single card used by
+  collection, search, recommendations, recently-viewed, and
+  merchandising contexts.
 
   @param {object} product - product object (required)
   @param {boolean} [show_vendor] - render vendor line above the title
 {% enddoc %}
 <article class="qc-product-card" data-qc-product-card="{{ product.handle }}">
-  <a class="qc-product-card__link" href="{{ product.url }}">
+  {% if settings.enable_compare %}
+    <label class="qc-compare-toggle qc-text-s" hidden>
+      <input
+        type="checkbox"
+        data-qc-compare-id="{{ product.id }}"
+        data-qc-compare-handle="{{ product.handle }}"
+      >
+      <span>{{ 'products.compare.label' | t }}</span>
+      <span class="qc-visually-hidden">— {{ product.title }}</span>
+    </label>
+  {% endif %}
+
+  <a class="qc-product-card__media-link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     <div class="qc-product-card__media">
       {% if product.featured_image %}
         {% render 'image',
@@ -22,59 +36,74 @@
           {% render 'qc-icon', name: 'alert' %}
         </div>
       {% endif %}
-    </div>
-    <div class="qc-product-card__body">
-      {% if show_vendor and product.vendor != blank %}
-        <p class="qc-text-s qc-muted">{{ product.vendor }}</p>
-      {% endif %}
-      <h3 class="qc-product-card__title">{{ product.title }}</h3>
+      {% unless product.available %}
+        <span class="qc-product-card__sold-out" aria-hidden="true">
+          {{- 'products.product.sold_out' | t -}}
+        </span>
+      {% endunless %}
     </div>
   </a>
+
   <div class="qc-product-card__footer">
     {% render 'qc-price', item: product %}
-    {% unless product.available %}
-      <span class="qc-badge">{{ 'products.product.sold_out' | t }}</span>
-    {% endunless %}
   </div>
-  {% if product.available %}
-    {% if product.has_only_default_variant %}
-      <qc-product-form
-        class="qc-product-card__quick-add"
-        data-adding-label="{{ 'products.card.adding' | t }}"
-        data-added-label="{{ 'products.card.added' | t: title: product.title }}"
-        data-error-label="{{ 'products.card.add_error' | t }}"
-      >
-        <form action="{{ routes.cart_add_url }}" method="post">
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-          <button type="submit" class="qc-btn qc-btn--outline qc-btn--full">
+
+  <div class="qc-product-card__body">
+    {% if show_vendor and product.vendor != blank %}
+      <p class="qc-text-s qc-muted">{{ product.vendor }}</p>
+    {% endif %}
+    <h3 class="qc-product-card__title">
+      <a class="qc-product-card__link" href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+  </div>
+
+  <div class="qc-product-card__actions">
+    <qc-quick-view
+      data-loading-label="{{ 'products.quick_view.loading' | t }}"
+      data-error-label="{{ 'products.quick_view.error' | t }}"
+      data-close-label="{{ 'products.quick_view.close' | t }}"
+      data-details-label="{{ 'products.quick_view.view_details' | t }}"
+    >
+      <a class="qc-btn qc-btn--ink" href="{{ product.url }}">
+        {{ 'products.card.quick_view' | t }}
+        <span class="qc-visually-hidden">— {{ product.title }}</span>
+      </a>
+    </qc-quick-view>
+
+    {% if product.available %}
+      {% if product.has_only_default_variant %}
+        <qc-product-form
+          class="qc-product-card__quick-add"
+          data-adding-label="{{ 'products.card.adding' | t }}"
+          data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+          data-error-label="{{ 'products.card.add_error' | t }}"
+        >
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
+              {{ 'products.product.add_to_cart' | t }}
+              <span class="qc-visually-hidden">— {{ product.title }}</span>
+            </button>
+          </form>
+        </qc-product-form>
+      {% else %}
+        <qc-quick-view
+          data-loading-label="{{ 'products.quick_view.loading' | t }}"
+          data-error-label="{{ 'products.quick_view.error' | t }}"
+          data-close-label="{{ 'products.quick_view.close' | t }}"
+          data-details-label="{{ 'products.quick_view.view_details' | t }}"
+        >
+          <a class="qc-btn qc-btn--primary" href="{{ product.url }}">
             {{ 'products.product.add_to_cart' | t }}
             <span class="qc-visually-hidden">— {{ product.title }}</span>
-          </button>
-        </form>
-      </qc-product-form>
+          </a>
+        </qc-quick-view>
+      {% endif %}
     {% else %}
-      <qc-quick-view
-        data-loading-label="{{ 'products.quick_view.loading' | t }}"
-        data-error-label="{{ 'products.quick_view.error' | t }}"
-        data-close-label="{{ 'products.quick_view.close' | t }}"
-        data-details-label="{{ 'products.quick_view.view_details' | t }}"
-      >
-        <a class="qc-btn qc-btn--quiet qc-product-card__options" href="{{ product.url }}">
-          {{ 'products.card.choose_options' | t }}
-          <span class="qc-visually-hidden">— {{ product.title }}</span>
-        </a>
-      </qc-quick-view>
+      <button type="button" class="qc-btn qc-btn--muted" disabled>
+        {{ 'products.product.sold_out' | t }}
+        <span class="qc-visually-hidden">— {{ product.title }}</span>
+      </button>
     {% endif %}
-  {% endif %}
-  {% if settings.enable_compare %}
-    <label class="qc-compare-toggle qc-text-s" hidden>
-      <input
-        type="checkbox"
-        data-qc-compare-id="{{ product.id }}"
-        data-qc-compare-handle="{{ product.handle }}"
-      >
-      <span>{{ 'products.compare.label' | t }}</span>
-      <span class="qc-visually-hidden">— {{ product.title }}</span>
-    </label>
-  {% endif %}
+  </div>
 </article>
