@@ -60,7 +60,12 @@ if (!customElements.get('qc-header')) {
               this.lastY = y;
               this.header.classList.toggle('qc-header--stuck', y > this.header.offsetHeight);
               if (goingDown && y > this.header.offsetHeight * 2) {
-                if (!this.header.contains(document.activeElement)) {
+                /* never tuck while focus or an open disclosure (menu,
+                   nested nav) lives in the header */
+                if (
+                  !this.header.contains(document.activeElement) &&
+                  !this.querySelector('details[open]')
+                ) {
                   this.header.classList.add('qc-header--tucked');
                 }
               } else if (!goingDown) {
