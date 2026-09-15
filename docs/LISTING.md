@@ -61,9 +61,14 @@ value speed and clarity.
 | 08-search-desktop | Search results |
 | 09–11 mobile | Home / product / collection |
 
+## Demo imagery
+Rights-clean stock photography from Pexels (free for commercial use, no
+attribution required) — see docs/DEMO-IMAGE-CREDITS.txt for photo IDs.
+Hero, image-with-text, and 10 fixture products are imaged; screenshots
+re-shot with the imagery in place. Per merchant direction, no
+photography from the merchant's own stores is used.
+
 ## Before submission
-- Replace dev-store fixtures with listing-grade demo content and real
-  photography (hero + image-with-text are un-imaged today).
-- Re-shoot on the demo store; current set uses saasquill-app-dev
-  fixtures and Shopify sample products.
 - Demo store URL and support contact for the listing form.
+- Optional: image the remaining fixtures (tying tools, hoodie, fly box)
+  with matching stock or original photography.

@@ -1,0 +1,14 @@
+Demo imagery: Pexels (https://www.pexels.com/license/) — free for
+commercial use, no attribution required. Photo IDs:
+  qc-dry-fly-assortment.jpg = pexels.com/photo/6478086
+  qc-local-favorites-box.jpg = pexels.com/photo/19862769
+  qc-tapered-leader.jpg = pexels.com/photo/35569763
+  qc-signature-fly-rod.jpg = pexels.com/photo/29190869
+  qc-creek-pack-rod.jpg = pexels.com/photo/13248965
+  qc-explorer-fly-reel.jpg = pexels.com/photo/8945510
+  qc-signature-fly-reel.jpg = pexels.com/photo/36028067
+  qc-nymph-assortment.jpg = pexels.com/photo/12349154
+  qc-guide-cap.jpg = pexels.com/photo/31162881
+  qc-shop-logo-tee.jpg = pexels.com/photo/14428671
+  qc-hero-cast.jpg = pexels.com/photo/2131904
+  qc-story-stream.jpg = pexels.com/photo/39147908

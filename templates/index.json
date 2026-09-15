@@ -3,6 +3,8 @@
     "hero": {
       "type": "qc-hero",
       "settings": {
+        "image": "shopify://shop_images/qc-hero-cast.jpg",
+        "overlay": 45,
         "heading": "Gear for the water ahead",
         "heading_is_h1": true,
         "subheading": "Original equipment and everyday essentials, built to be used hard and kept for seasons.",
@@ -102,6 +104,7 @@
     "story": {
       "type": "qc-image-with-text",
       "settings": {
+        "image": "shopify://shop_images/qc-story-stream.jpg",
         "image_position": "end",
         "heading": "Field-tested, not focus-grouped",
         "body": "<p>We carry what we use. Read the field notes for what held up, what didn't, and what earned a permanent place in the kit.</p>",
