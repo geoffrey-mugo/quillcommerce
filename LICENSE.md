@@ -2,15 +2,15 @@
 
 ## Original work
 
-Copyright (c) 2026 Saas Quill. All rights reserved.
+Copyright (c) 2026 SaaSQuill. All rights reserved.
 
 All QuillCommerce code, design, and assets original to this theme — the
 `--qc-` design-token system, all `qc-` prefixed sections, snippets,
 stylesheets, scripts, and icons, the documentation, and the demo copy —
-are the proprietary work of Saas Quill. They may not be copied,
+are the proprietary work of SaaSQuill. They may not be copied,
 modified, redistributed, or resold except as permitted by the license a
 merchant receives when acquiring this theme through the Shopify Theme
-Store, or by a separate written agreement with Saas Quill.
+Store, or by a separate written agreement with SaaSQuill.
 
 Demo photography is licensed stock (see docs/DEMO-IMAGE-CREDITS.txt)
 and is not covered by the grant above.

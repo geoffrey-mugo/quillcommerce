@@ -11,5 +11,5 @@ No other third-party code or assets are distributed with this theme.
 Demo photography is licensed Pexels stock — see
 docs/DEMO-IMAGE-CREDITS.txt.
 
-All other code, design, and assets are Copyright (c) 2026 Saas Quill —
+All other code, design, and assets are Copyright (c) 2026 SaaSQuill —
 see LICENSE.md.
