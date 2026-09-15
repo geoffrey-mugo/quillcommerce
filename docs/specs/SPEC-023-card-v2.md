@@ -1,6 +1,6 @@
 # SPEC-023 · Canonical product card v2 (boxed)
 
-Status: Approved
+Status: Implemented (verified 2026-09-14 live on saasquill-app-dev)
 Phase: post-qualification design revision (merchant direction)
 Provenance: Original QuillCommerce implementation of a merchant-supplied
 layout reference (screenshot of their existing store's card): everything
