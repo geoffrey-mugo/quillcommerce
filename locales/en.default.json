@@ -62,7 +62,9 @@
     "card": "Gift card",
     "expired": "This gift card has expired",
     "expires_on": "Expires on {{ expires_on }}",
-    "use_at_checkout": "Use this gift card at checkout"
+    "use_at_checkout": "Use this gift card at checkout",
+    "shop_link": "Continue shopping",
+    "print": "Print"
   },
   "password": {
     "title": "This shop is private",
