@@ -1,4 +1,4 @@
-# QuillCommerce — Merchant Guide (Skeleton line, 1.0.0-alpha)
+# QuillCommerce — Merchant Guide (1.0.0-beta.1)
 
 QuillCommerce is an original Shopify Online Store 2.0 theme. Everything
 below is configurable from the Theme Editor — no code required.
@@ -7,12 +7,21 @@ below is configurable from the Theme Editor — no code required.
 
 | Group | What it controls |
 |---|---|
-| Typography | Primary and display fonts (system fonts by default — fastest) |
-| Layout | Page width and margins |
-| Colors | Background, foreground, one accent color, input corner radius, corner style (sharp / soft / round). All other colors are derived automatically with accessible contrast. |
+| Typography | Primary and display fonts (Work Sans / Assistant by default) |
+| Layout | Favicon, page width, and margins |
+| Colors | Background, text, and accent, plus four optional overrides (button text, cards and panels, borders, errors). Everything you leave unset derives automatically with accessible contrast. Corner style and input radius live here too. |
 | Cart | Cart type: **Drawer** (slide-in panel after every add — default) or **Page only** |
 | Catalog | **Enable product compare** (card checkboxes + side-by-side table, up to 4 products) |
 | Social media | Six profile URL fields; filled ones appear as footer icons |
+
+## Theme styles
+
+Three ready-made styles ship with the theme — **Headwater** (deep
+green on white), **Driftwood** (serif display on warm paper with
+copper), and **Slate** (condensed headings on cool grey with steel
+blue). Pick one at install or from Theme settings; every style is just
+the six brand settings above, so you can start from any of them and
+keep tuning.
 
 ## Sections you can add
 
@@ -32,6 +41,9 @@ below is configurable from the Theme Editor — no code required.
   uses your Search & Discovery pairings.
 - **Recently viewed** — each shopper's own history; private to their
   browser.
+- **Contact form** — name, email, and message posted to your store's
+  contact email; used by the Contact page template and addable to any
+  page.
 - **Utility bar** — announcement text plus country/currency and
   language selectors when your store has more than one.
 
