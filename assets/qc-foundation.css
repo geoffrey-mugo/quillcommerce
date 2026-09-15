@@ -406,6 +406,17 @@ main {
   gap: var(--qc-space-l) var(--qc-space-m);
 }
 
+/* uniform card heights: each li fills its grid row and the card fills
+   the li, so the auto-margin action row pins to a shared bottom edge */
+.qc-product-grid > li {
+  display: flex;
+  min-inline-size: 0;
+}
+
+.qc-product-grid .qc-product-card {
+  flex: 1;
+}
+
 /* ---- pagination (SPEC-004 §9): styles default_pagination output ---- */
 
 .qc-pagination {
@@ -438,6 +449,7 @@ main {
 
 .qc-quick-view {
   inline-size: min(52rem, calc(100% - var(--qc-space-l) * 2));
+  max-inline-size: 100%;
   border: var(--qc-line-w) solid var(--qc-line);
   border-radius: var(--qc-radius-surface);
   padding: var(--qc-space-l);
@@ -705,6 +717,7 @@ main {
 
 .qc-compare__dialog {
   inline-size: min(64rem, calc(100% - var(--qc-space-l) * 2));
+  max-inline-size: 100%;
   max-block-size: calc(100% - var(--qc-space-l) * 2);
   border: var(--qc-line-w) solid var(--qc-line);
   border-radius: var(--qc-radius-surface);
