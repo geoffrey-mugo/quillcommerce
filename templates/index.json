@@ -1,8 +1,36 @@
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "hero": {
+      "type": "qc-hero",
+      "settings": {
+        "heading": "Gear for the water ahead",
+        "heading_is_h1": true,
+        "subheading": "Original equipment and everyday essentials, built to be used hard and kept for seasons.",
+        "cta_1_label": "Shop the catalog",
+        "cta_1_link": "/collections/all",
+        "cta_2_label": "Our story",
+        "cta_2_link": "/pages/about",
+        "alignment": "start",
+        "height": "medium",
+        "overlay": 35
+      }
+    },
+    "intro": {
+      "type": "qc-rich-text",
+      "settings": {
+        "heading": "Made to be out there",
+        "body": "<p>Every product in the catalog is chosen for one reason: it works. Simple materials, honest construction, and prices that respect the people using them.</p>",
+        "alignment": "center"
+      }
+    },
+    "featured": {
+      "type": "qc-featured-collection",
+      "settings": {
+        "heading": "Featured gear",
+        "collection": "automated-collection",
+        "limit": 4,
+        "show_view_all": true
+      }
     },
     "catnav": {
       "type": "qc-catalog-navigator",
@@ -26,20 +54,23 @@
           }
         }
       },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3"
-      ],
+      "block_order": ["b1", "b2", "b3"],
       "settings": {
         "heading": "Browse the catalog",
         "layout": "tiles",
         "show_counts": true
       }
+    },
+    "story": {
+      "type": "qc-image-with-text",
+      "settings": {
+        "image_position": "end",
+        "heading": "Field-tested, not focus-grouped",
+        "body": "<p>We carry what we use. Read the field notes for what held up, what didn't, and what earned a permanent place in the kit.</p>",
+        "cta_label": "Read the field notes",
+        "cta_link": "/blogs/news"
+      }
     }
   },
-  "order": [
-    "main",
-    "catnav"
-  ]
+  "order": ["hero", "intro", "featured", "catnav", "story"]
 }

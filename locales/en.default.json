@@ -54,7 +54,8 @@
       "one": "{{ count }} product",
       "other": "{{ count }} products"
     },
-    "empty_filtered": "No products match these filters."
+    "empty_filtered": "No products match these filters.",
+    "view_all": "View all"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -171,7 +172,8 @@
     }
   },
   "general": {
-    "pagination": "Pagination"
+    "pagination": "Pagination",
+    "pick_collection_hint": "Pick a collection to feature."
   },
   "header": {
     "menu": "Menu",
