@@ -1,6 +1,6 @@
 # SPEC-021 · Merchandising sections II: newsletter, multi-column, footer
 
-Status: Implemented (verified 2026-09-14 on saasquill-app-dev — see docs/qa/PHASE6-SLICE2-VERIFICATION.md; newsletter submit environment-limited, human pass pending)
+Status: Implemented (fully verified 2026-09-14 incl. human newsletter submit through the captcha challenge — see docs/qa/PHASE6-SLICE2-VERIFICATION.md)
 Phase: 6, slice 2
 Provenance: Original QuillCommerce design (including original simplified
 social glyphs); Shopify customer form, link_list, payment type icons.
