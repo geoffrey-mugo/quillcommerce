@@ -58,6 +58,7 @@ if (!customElements.get('qc-header')) {
               const y = window.scrollY;
               const goingDown = y > this.lastY;
               this.lastY = y;
+              this.header.classList.toggle('qc-header--stuck', y > this.header.offsetHeight);
               if (goingDown && y > this.header.offsetHeight * 2) {
                 if (!this.header.contains(document.activeElement)) {
                   this.header.classList.add('qc-header--tucked');

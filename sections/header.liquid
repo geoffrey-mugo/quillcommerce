@@ -178,11 +178,21 @@
     border-block-end: var(--qc-line-w) solid var(--qc-line);
   }
 
-  .qc-header--sticky {
+  /* the SECTION WRAPPER must carry the sticky position: a sticky
+     .qc-header can only stick within its own wrapper (exactly its own
+     height), so the scroll-up reveal never showed mid-page */
+  .shopify-section:has(> qc-header .qc-header--sticky) {
     position: sticky;
     inset-block-start: 0;
     z-index: 20;
-    transition: transform var(--qc-dur-2) var(--qc-ease);
+  }
+
+  .qc-header--sticky {
+    transition: transform var(--qc-dur-2) var(--qc-ease), box-shadow var(--qc-dur-2) var(--qc-ease);
+  }
+
+  .qc-header--sticky.qc-header--stuck {
+    box-shadow: var(--qc-shadow-1);
   }
 
   .qc-header--sticky.qc-header--tucked {
