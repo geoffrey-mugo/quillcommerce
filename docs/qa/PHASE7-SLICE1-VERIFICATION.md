@@ -2,14 +2,20 @@
 
 Date: 2026-09-14 · Theme: #149206040653 (skeleton) on saasquill-app-dev
 
-## Store constraint
+## Store constraint (final)
 The dev store uses **new customer accounts** — `/account/login`
-redirects to Shopify-hosted auth, so classic account pages cannot be
-exercised in place. Verification below is via Section Rendering API
-(real server renders of each section) plus static gates. Full
-functional passes (login errors, address CRUD, order history) require a
-classic-accounts store — flagged for release qualification, and the
-user can switch the dev store to legacy accounts if desired.
+redirects to Shopify-hosted auth. Switching to legacy was attempted
+with user approval and is **not possible**: Shopify removed the
+legacy-accounts chooser for newly created stores, and this store's
+admin exposes no such control anywhere (Customer accounts page,
+Authentication subpage, Checkout settings all inspected in full; only a
+vestigial "Legacy customer accounts are no longer maintained" dialog
+remains in the page bundle). Verification below is therefore via the
+Section Rendering API (real server renders of each section) plus
+static gates. Functional passes (login errors, address CRUD, order
+history) can only happen on a store that still has classic accounts —
+e.g. Theme Store review environments; flagged in release
+qualification.
 
 ## Results (section renders)
 
