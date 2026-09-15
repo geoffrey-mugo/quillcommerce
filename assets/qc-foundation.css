@@ -600,3 +600,71 @@ main {
     font-size: var(--qc-text-xl);
     margin: 0;
   }
+
+/* ---- compare toggle, tray & dialog (SPEC-019) ---- */
+
+.qc-compare-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--qc-space-2xs);
+  min-block-size: 44px;
+  cursor: pointer;
+  color: var(--qc-ink-soft);
+}
+
+.qc-compare-toggle:hover {
+  color: var(--qc-ink);
+}
+
+.qc-compare-tray {
+  position: fixed;
+  inset-block-end: calc(var(--qc-space-l) + var(--qc-sticky-offset, 0px));
+  inset-inline-start: var(--qc-space-l);
+  z-index: 14;
+  display: flex;
+  gap: var(--qc-space-xs);
+  padding: var(--qc-space-xs);
+  background: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
+  border-radius: var(--qc-radius-surface);
+  box-shadow: var(--qc-shadow-2);
+}
+
+.qc-compare__dialog {
+  inline-size: min(64rem, calc(100% - var(--qc-space-l) * 2));
+  max-block-size: calc(100% - var(--qc-space-l) * 2);
+  border: var(--qc-line-w) solid var(--qc-line);
+  border-radius: var(--qc-radius-surface);
+  padding: var(--qc-space-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-m);
+}
+
+.qc-compare__dialog:not([open]) {
+  display: none;
+}
+
+.qc-compare__dialog::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+.qc-compare__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--qc-space-s);
+}
+
+.qc-compare__heading {
+  margin: 0;
+  font-size: var(--qc-text-xl);
+}
+
+.qc-compare__close {
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+}

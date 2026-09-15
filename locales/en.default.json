@@ -149,6 +149,25 @@
       "error": "Couldn't load this product.",
       "close": "Close quick view",
       "view_details": "View full details"
+    },
+    "compare": {
+      "label": "Compare",
+      "title": "Compare products",
+      "count": "Compare ({{ count }})",
+      "clear": "Clear",
+      "close": "Close compare",
+      "full": "Compare is full — up to 4 products",
+      "added": "Added to compare",
+      "removed": "Removed from compare",
+      "cleared": "Compare cleared",
+      "error": "Comparison could not load. Please try again.",
+      "price": "Price",
+      "availability": "Availability",
+      "type": "Type",
+      "vendor": "Vendor",
+      "options": "Options",
+      "available": "In stock",
+      "product_column": "Product"
     }
   },
   "general": {

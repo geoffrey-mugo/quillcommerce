@@ -66,4 +66,15 @@
       </qc-quick-view>
     {% endif %}
   {% endif %}
+  {% if settings.enable_compare %}
+    <label class="qc-compare-toggle qc-text-s" hidden>
+      <input
+        type="checkbox"
+        data-qc-compare-id="{{ product.id }}"
+        data-qc-compare-handle="{{ product.handle }}"
+      >
+      <span>{{ 'products.compare.label' | t }}</span>
+      <span class="qc-visually-hidden">— {{ product.title }}</span>
+    </label>
+  {% endif %}
 </article>

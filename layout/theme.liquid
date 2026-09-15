@@ -43,6 +43,42 @@
 
     {% section 'qc-cart-drawer' %}
 
+    {% if settings.enable_compare %}
+      <qc-compare-tray
+        class="qc-compare-tray"
+        hidden
+        data-search-url="{{ routes.search_url }}"
+        data-count-label="{{ 'products.compare.count' | t: count: '[n]' }}"
+        data-full-label="{{ 'products.compare.full' | t }}"
+        data-added-label="{{ 'products.compare.added' | t }}"
+        data-removed-label="{{ 'products.compare.removed' | t }}"
+        data-cleared-label="{{ 'products.compare.cleared' | t }}"
+        data-error-label="{{ 'products.compare.error' | t }}"
+      >
+        <button type="button" class="qc-btn qc-btn--primary" data-qc-compare-open>
+          <span data-qc-compare-count></span>
+        </button>
+        <button type="button" class="qc-btn qc-btn--outline" data-qc-compare-clear>
+          {{ 'products.compare.clear' | t }}
+        </button>
+        <dialog class="qc-compare__dialog" aria-label="{{ 'products.compare.title' | t }}">
+          <div class="qc-compare__head">
+            <h2 class="qc-compare__heading">{{ 'products.compare.title' | t }}</h2>
+            <button
+              type="button"
+              class="qc-btn qc-btn--quiet qc-compare__close"
+              data-qc-compare-close
+              aria-label="{{ 'products.compare.close' | t }}"
+            >
+              {% render 'qc-icon', name: 'close' %}
+            </button>
+          </div>
+          <div data-qc-compare-content></div>
+        </dialog>
+      </qc-compare-tray>
+      <script src="{{ 'qc-compare.js' | asset_url }}" type="module"></script>
+    {% endif %}
+
     <qc-back-to-top class="qc-back-to-top">
       <button type="button" class="qc-btn qc-btn--outline" aria-label="{{ 'accessibility.back_to_top' | t }}">
         {% render 'qc-icon', name: 'chevron' %}

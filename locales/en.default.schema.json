@@ -76,7 +76,10 @@
     "cart_type_drawer": "Drawer",
     "cart_type_page": "Page only",
     "cart_drawer": "Cart drawer",
-    "recently_viewed": "Recently viewed"
+    "recently_viewed": "Recently viewed",
+    "catalog": "Catalog",
+    "enable_compare": "Enable product compare",
+    "compare": "Product compare"
   },
   "labels": {
     "alignment": "Alignment",

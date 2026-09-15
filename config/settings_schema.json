@@ -132,5 +132,16 @@
         "default": "drawer"
       }
     ]
+  },
+  {
+    "name": "t:general.catalog",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_compare",
+        "label": "t:general.enable_compare",
+        "default": true
+      }
+    ]
   }
 ]
