@@ -1,6 +1,6 @@
 {% doc %}
   Canonical QuillCommerce product card, v2 (SPEC-023): one bounding box —
-  compare toggle, media (with sold-out overlay), price, title, and a
+  compare toggle, media, price, title, and a
   Quick view / Add to cart action row. The single card used by
   collection, search, recommendations, recently-viewed, and
   merchandising contexts.
@@ -36,11 +36,6 @@
           {% render 'qc-icon', name: 'alert' %}
         </div>
       {% endif %}
-      {% unless product.available %}
-        <span class="qc-product-card__sold-out" aria-hidden="true">
-          {{- 'products.product.sold_out' | t -}}
-        </span>
-      {% endunless %}
     </div>
   </a>
 

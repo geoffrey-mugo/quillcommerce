@@ -300,17 +300,6 @@ main {
   color: var(--qc-ink-soft);
 }
 
-.qc-product-card__sold-out {
-  position: absolute;
-  inset-block-end: 0;
-  inset-inline-start: 0;
-  background: var(--qc-ink);
-  color: var(--qc-surface);
-  font-size: var(--qc-text-s);
-  font-weight: 600;
-  padding: var(--qc-space-2xs) var(--qc-space-s);
-}
-
 .qc-product-card__footer {
   display: flex;
   align-items: center;

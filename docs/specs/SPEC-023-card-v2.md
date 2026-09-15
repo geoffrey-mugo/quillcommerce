@@ -22,12 +22,10 @@ carry over unchanged.
    `tabindex="-1" aria-hidden` — the title is the accessible link);
    price row (price enlarged to `--qc-text-l`); linked title; actions
    row.
-3. **Sold-out treatment** (second merchant reference): a solid ink
-   label reading "Sold out" overlaid on the image's bottom-left corner
-   (inverted text — never color alone, the text is the meaning), plus
-   the Add-to-cart slot rendered as a grey disabled "Sold out" button.
-   The label is aria-hidden (the disabled button announces the state);
-   no badge beside the price anymore.
+3. **Sold-out treatment** (merchant-revised): the Add-to-cart slot
+   renders as a grey disabled "Sold out" button — the single indicator
+   (text carries the meaning; the button announces the state). No image
+   overlay, no badge beside the price.
 4. **Actions row** (always present):
    - **Quick view** — an ink-filled button (`.qc-btn--ink`, new
      foundation modifier) opening the existing quick-view dialog;
