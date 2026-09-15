@@ -585,3 +585,18 @@ main {
       text-align: start;
     }
   }
+
+/* ---- recommendations / recently-viewed strip (SPEC-016/018) ---- */
+
+  .qc-recs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-recs__heading {
+    font-size: var(--qc-text-xl);
+    margin: 0;
+  }

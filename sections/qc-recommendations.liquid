@@ -28,21 +28,6 @@
   <script src="{{ 'qc-recommendations.js' | asset_url }}" type="module"></script>
 {% endif %}
 
-{% stylesheet %}
-  .qc-recs {
-    display: flex;
-    flex-direction: column;
-    gap: var(--qc-space-m);
-    padding-block: var(--qc-space-xl);
-    border-block-start: var(--qc-line-w) solid var(--qc-line);
-  }
-
-  .qc-recs__heading {
-    font-size: var(--qc-text-xl);
-    margin: 0;
-  }
-{% endstylesheet %}
-
 {% schema %}
 {
   "name": "t:general.recommendations",

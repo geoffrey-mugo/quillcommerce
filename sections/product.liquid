@@ -8,6 +8,8 @@
 
 <qc-product-page
   class="qc-product"
+  data-product-id="{{ product.id }}"
+  data-product-handle="{{ product.handle }}"
   data-money-format="{{ shop.money_format | strip_html }}"
   data-low-stock="{{ section.settings.low_stock_threshold }}"
   data-buy-label="{{ 'products.product.add_to_cart' | t }}"

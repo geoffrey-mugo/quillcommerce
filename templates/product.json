@@ -45,11 +45,19 @@
         "intent": "related",
         "limit": 4
       }
+    },
+    "recently": {
+      "type": "qc-recently-viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "limit": 4
+      }
     }
   },
   "order": [
     "main",
     "complementary",
-    "related"
+    "related",
+    "recently"
   ]
 }

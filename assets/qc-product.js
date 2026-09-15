@@ -241,6 +241,24 @@ if (!customElements.get('qc-product-page')) {
 
         this.markUnavailable();
         this.syncPlans(this.currentVariant());
+        this.recordView();
+      }
+
+      /* SPEC-018: head of the local recently-viewed list, deduped, cap 12 */
+      recordView() {
+        const id = Number(this.dataset.productId);
+        const handle = this.dataset.productHandle;
+        if (!id || !handle) return;
+        try {
+          const key = 'qc:recently-viewed';
+          const list = JSON.parse(localStorage.getItem(key) || '[]').filter(
+            (entry) => entry && entry.id !== id
+          );
+          list.unshift({ id, handle });
+          localStorage.setItem(key, JSON.stringify(list.slice(0, 12)));
+        } catch {
+          /* storage unavailable — feature silently absent */
+        }
       }
 
       disconnectedCallback() {
