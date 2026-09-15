@@ -12,3 +12,14 @@ commercial use, no attribution required. Photo IDs:
   qc-shop-logo-tee.jpg = pexels.com/photo/14428671
   qc-hero-cast.jpg = pexels.com/photo/2131904
   qc-story-stream.jpg = pexels.com/photo/39147908
+  qc-waterproof-fly-box.jpg = pexels.com/photo/5411949
+  qc-streamer-selection.jpg = pexels.com/photo/6739264
+  qc-tying-thread.jpg = pexels.com/photo/15470478
+  qc-rotary-vise.jpg = pexels.com/photo/15018887
+  qc-fly-tying-kit.jpg = pexels.com/photo/3690705
+  qc-dubbing-dispenser.jpg = pexels.com/photo/37955302
+  qc-river-hoodie.jpg = pexels.com/photo/11340657
+  qc-starter-fly-reel.jpg = pexels.com/photo/14438483
+  qc-magnetic-net-release.jpg = pexels.com/photo/14438490
+  qc-explorer-fly-rod.jpg = pexels.com/photo/14438489
+  qc-starter-fly-rod.jpg = pexels.com/photo/32542970
