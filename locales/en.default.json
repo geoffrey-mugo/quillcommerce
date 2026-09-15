@@ -29,7 +29,15 @@
     },
     "quantity_for": "Quantity for {{ product }}",
     "taxes_included_shipping_at_checkout": "Taxes included. Shipping calculated at checkout.",
-    "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout."
+    "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout.",
+    "view_cart": "View cart",
+    "close": "Close cart",
+    "updated": "Cart updated",
+    "note_saved": "Note saved",
+    "items_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    }
   },
   "customers": {
     "login": {

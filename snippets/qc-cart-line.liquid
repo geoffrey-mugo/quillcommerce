@@ -5,6 +5,7 @@
 
   @param {object} line - cart line_item (required)
   @param {number} index - forloop.index for input association (required)
+  @param {string} [prefix] - id prefix so drawer + page inputs never collide
 {% enddoc %}
 <li class="qc-cart-line" data-qc-cart-line="{{ line.key }}">
   <div class="qc-cart-line__media">
@@ -47,11 +48,11 @@
 
     <div class="qc-cart-line__controls">
       <div class="qc-cart-line__quantity">
-        <label class="qc-visually-hidden" for="qc-line-qty-{{ index }}">
+        <label class="qc-visually-hidden" for="qc-line-qty-{{ prefix }}{{ index }}">
           {{ 'cart.quantity_for' | t: product: line.product.title }}
         </label>
         <input
-          id="qc-line-qty-{{ index }}"
+          id="qc-line-qty-{{ prefix }}{{ index }}"
           class="qc-input"
           type="number"
           name="updates[]"

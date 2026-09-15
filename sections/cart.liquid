@@ -8,6 +8,12 @@
 <div class="qc-cart section-padding">
   <h1>{{ 'cart.title' | t }}</h1>
 
+  <qc-cart-lines
+    data-section-id="{{ section.id }}"
+    data-updated-label="{{ 'cart.updated' | t }}"
+    data-note-saved-label="{{ 'cart.note_saved' | t }}"
+    data-error-label="{{ 'products.card.add_error' | t }}"
+  >
   {% if cart.item_count == 0 %}
     <div class="qc-cart__empty">
       <p>{{ 'cart.empty' | t }}</p>
@@ -31,7 +37,7 @@
         {% if section.settings.show_note %}
           <div class="qc-field">
             <label class="qc-field__label" for="qc-cart-note">{{ 'cart.note_label' | t }}</label>
-            <textarea id="qc-cart-note" name="note" rows="3">{{ cart.note }}</textarea>
+            <textarea id="qc-cart-note" name="note" rows="3" data-qc-cart-note>{{ cart.note }}</textarea>
           </div>
         {% endif %}
 
@@ -59,7 +65,7 @@
         </p>
 
         <div class="qc-cart__actions">
-          <button type="submit" class="qc-btn qc-btn--outline">
+          <button type="submit" class="qc-btn qc-btn--outline" data-qc-cart-update>
             {{ 'cart.update' | t }}
           </button>
           <button type="submit" name="checkout" class="qc-btn qc-btn--primary">
@@ -69,6 +75,7 @@
       </aside>
     </form>
   {% endif %}
+  </qc-cart-lines>
 </div>
 
 {% stylesheet %}
@@ -99,69 +106,6 @@
     }
   }
 
-  .qc-cart__lines {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .qc-cart-line {
-    display: grid;
-    grid-template-columns: 96px minmax(0, 1fr) auto;
-    gap: var(--qc-space-m);
-    padding-block: var(--qc-space-l);
-    border-block-end: var(--qc-line-w) solid var(--qc-line);
-  }
-
-  .qc-cart-line__image {
-    inline-size: 96px;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: var(--qc-radius-surface);
-    border: var(--qc-line-w) solid var(--qc-line);
-  }
-
-  .qc-cart-line__image--empty {
-    display: grid;
-    place-items: center;
-    background: var(--qc-surface-raised);
-    color: var(--qc-ink-soft);
-  }
-
-  .qc-cart-line__details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--qc-space-2xs);
-  }
-
-  .qc-cart-line__title {
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .qc-cart-line__title:hover {
-    text-decoration: underline;
-  }
-
-  .qc-cart-line__controls {
-    display: flex;
-    align-items: center;
-    gap: var(--qc-space-m);
-    margin-block-start: var(--qc-space-xs);
-  }
-
-  .qc-cart-line__quantity .qc-input {
-    inline-size: 5.5rem;
-  }
-
-  .qc-cart-line__price {
-    font-weight: 600;
-    text-align: end;
-  }
-
   .qc-cart__summary {
     display: flex;
     flex-direction: column;
@@ -176,13 +120,6 @@
     font-size: var(--qc-text-xl);
   }
 
-  .qc-cart__summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--qc-space-m);
-  }
-
   .qc-cart__subtotal {
     font-size: var(--qc-text-l);
     border-block-start: var(--qc-line-w) solid var(--qc-line);
@@ -195,20 +132,6 @@
     gap: var(--qc-space-xs);
   }
 
-  @media (max-width: 599px) {
-    .qc-cart-line {
-      grid-template-columns: 72px minmax(0, 1fr);
-    }
-
-    .qc-cart-line__image {
-      inline-size: 72px;
-    }
-
-    .qc-cart-line__price {
-      grid-column: 2;
-      text-align: start;
-    }
-  }
 {% endstylesheet %}
 
 {% schema %}

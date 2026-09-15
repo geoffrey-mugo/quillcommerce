@@ -158,7 +158,7 @@
             {% render 'qc-icon', name: 'account', label: account_label %}
           </shopify-account>
         {% endif %}
-        <a class="qc-header__icon-btn qc-header__cart" href="{{ routes.cart_url }}" aria-label="{{ 'header.cart' | t }}">
+        <a class="qc-header__icon-btn qc-header__cart" href="{{ routes.cart_url }}" aria-label="{{ 'header.cart' | t }}" {% if settings.cart_type == 'drawer' %}data-qc-cart-open{% endif %}>
           {% render 'qc-icon', name: 'cart' %}
           <qc-cart-count class="qc-header__count" {% if cart.item_count == 0 %}hidden{% endif %}>
             {%- if cart.item_count > 0 %}{{ cart.item_count }}{% endif -%}

@@ -111,5 +111,26 @@
         ]
       }
     ]
+  },
+  {
+    "name": "t:general.cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "t:general.cart_type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "t:general.cart_type_drawer"
+          },
+          {
+            "value": "page",
+            "label": "t:general.cart_type_page"
+          }
+        ],
+        "default": "drawer"
+      }
+    ]
   }
 ]

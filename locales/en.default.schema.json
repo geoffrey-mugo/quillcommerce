@@ -71,7 +71,11 @@
     "recommendation_intent": "Recommendation type",
     "intent_related": "Related products",
     "intent_complementary": "Complementary products (Search & Discovery pairings)",
-    "max_products": "Maximum products"
+    "max_products": "Maximum products",
+    "cart_type": "Cart type",
+    "cart_type_drawer": "Drawer",
+    "cart_type_page": "Page only",
+    "cart_drawer": "Cart drawer"
   },
   "labels": {
     "alignment": "Alignment",
