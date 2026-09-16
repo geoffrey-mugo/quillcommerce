@@ -11,7 +11,7 @@
   <div class="qc-cart-line__media">
     {% if line.image %}
       <a href="{{ line.url }}" tabindex="-1" aria-hidden="true">
-        {% render 'image', image: line.image, class: 'qc-cart-line__image', width: 240 %}
+        {% render 'image', image: line.image, class: 'qc-cart-line__image', width: 240, sizes: '96px' %}
       </a>
     {% else %}
       <div class="qc-cart-line__image qc-cart-line__image--empty" aria-hidden="true">

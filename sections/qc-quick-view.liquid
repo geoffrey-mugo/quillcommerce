@@ -24,7 +24,8 @@
                   width: 600,
                   height: 600,
                   crop: 'center',
-                  loading: qv_loading
+                  loading: qv_loading,
+                  sizes: '(min-width: 750px) 320px, 85vw'
                 %}
               {% when 'video', 'external_video' %}
                 {{ media | media_tag: class: 'qc-quick-view__video' }}

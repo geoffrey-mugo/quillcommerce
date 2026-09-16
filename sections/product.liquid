@@ -55,10 +55,10 @@
                     data-qc-zoom="{{ media.id }}"
                     aria-label="{{ 'products.product.zoom' | t }}"
                   >
-                    {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority %}
+                    {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority, sizes: '(min-width: 990px) 55vw, 100vw' %}
                   </a>
                 {% else %}
-                  {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority %}
+                  {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority, sizes: '(min-width: 990px) 55vw, 100vw' %}
                 {% endif %}
               {% when 'video', 'external_video' %}
                 {{ media | media_tag: class: 'qc-gallery__video' }}
@@ -84,7 +84,7 @@
               aria-label="{{ thumb_label }}"
               {% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}aria-current="true"{% endif %}
             >
-              {% render 'image', image: media.preview_image, class: 'qc-gallery__thumb-image', width: 120, height: 120, crop: 'center' %}
+              {% render 'image', image: media.preview_image, class: 'qc-gallery__thumb-image', width: 120, height: 120, crop: 'center', sizes: '60px' %}
             </button>
           {% endfor %}
         </div>
@@ -116,7 +116,7 @@
                 data-qc-lightbox-slide="{{ media.id }}"
                 {% unless forloop.first %}hidden{% endunless %}
               >
-                {{ media | image_url: width: 2048 | image_tag: class: 'qc-lightbox__image', loading: 'lazy' }}
+                {{ media | image_url: width: 2048 | image_tag: class: 'qc-lightbox__image', loading: 'lazy', sizes: '100vw' }}
               </div>
             {% endfor %}
           </div>

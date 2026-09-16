@@ -13,7 +13,7 @@
         <li class="qc-blog__card">
           {% if article.image %}
             <a href="{{ article.url }}" tabindex="-1" aria-hidden="true">
-              {% render 'image', image: article.image, class: 'qc-blog__image', width: 900 %}
+              {% render 'image', image: article.image, class: 'qc-blog__image', width: 900, sizes: '(min-width: 750px) 700px, 100vw' %}
             </a>
           {% endif %}
           <h2 class="qc-blog__title"><a href="{{ article.url }}">{{ article.title }}</a></h2>

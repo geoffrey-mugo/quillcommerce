@@ -30,7 +30,8 @@
           class: 'qc-product-card__image',
           width: 600,
           height: 600,
-          crop: 'center'
+          crop: 'center',
+          sizes: '(min-width: 990px) 300px, (min-width: 650px) 33vw, 50vw'
         %}
         {% if settings.enable_card_hover_image and product.images[1] %}
           {% render 'image',
@@ -38,7 +39,8 @@
             class: 'qc-product-card__image qc-product-card__image--hover',
             width: 600,
             height: 600,
-            crop: 'center'
+            crop: 'center',
+            sizes: '(min-width: 990px) 300px, (min-width: 650px) 33vw, 50vw'
           %}
         {% endif %}
       {% else %}
