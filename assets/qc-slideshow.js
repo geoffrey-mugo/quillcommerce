@@ -109,7 +109,10 @@ if (!customElements.get('qc-slideshow')) {
       go(target) {
         const count = this.slides.length;
         const next = ((target % count) + count) % count; /* loop both ways */
-        this.track.scrollTo({ left: next * this.track.clientWidth, behavior: 'smooth' });
+        const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth';
+        this.track.scrollTo({ left: next * this.track.clientWidth, behavior });
       }
 
       markCurrent() {

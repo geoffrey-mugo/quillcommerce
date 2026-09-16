@@ -194,7 +194,8 @@
     "meta": {
       "tags": "getaggt mit \"{{ tags }}\"",
       "page": "Seite {{ page }}"
-    }
+    },
+    "utility_bar_label": "Shop-Einstellungen"
   },
   "header": {
     "account": "Konto",

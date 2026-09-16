@@ -3,7 +3,7 @@
   Shopify localization selectors (only when multiple options exist).
 {% endcomment %}
 
-<div class="qc-utility">
+<div class="qc-utility" role="region" aria-label="{{ 'general.utility_bar_label' | t }}">
   <div class="qc-utility__row">
     {% if section.settings.message != blank %}
       <p class="qc-utility__message">{{ section.settings.message }}</p>

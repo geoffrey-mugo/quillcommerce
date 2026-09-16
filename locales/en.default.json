@@ -194,7 +194,8 @@
     "meta": {
       "tags": "tagged \"{{ tags }}\"",
       "page": "Page {{ page }}"
-    }
+    },
+    "utility_bar_label": "Store preferences"
   },
   "header": {
     "account": "Account",

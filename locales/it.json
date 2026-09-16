@@ -194,7 +194,8 @@
     "meta": {
       "tags": "taggato \"{{ tags }}\"",
       "page": "Pagina {{ page }}"
-    }
+    },
+    "utility_bar_label": "Preferenze del negozio"
   },
   "header": {
     "account": "Account",

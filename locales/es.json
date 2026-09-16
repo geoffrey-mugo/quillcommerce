@@ -194,7 +194,8 @@
     "meta": {
       "tags": "etiquetado con \"{{ tags }}\"",
       "page": "Página {{ page }}"
-    }
+    },
+    "utility_bar_label": "Preferencias de la tienda"
   },
   "header": {
     "account": "Cuenta",
