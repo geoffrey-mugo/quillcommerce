@@ -132,17 +132,41 @@
           </form>
         </qc-product-form>
       {% else %}
-        <qc-quick-view
-          data-loading-label="{{ 'products.quick_view.loading' | t }}"
-          data-error-label="{{ 'products.quick_view.error' | t }}"
-          data-close-label="{{ 'products.quick_view.close' | t }}"
-          data-details-label="{{ 'products.quick_view.view_details' | t }}"
-        >
-          <a class="qc-btn qc-btn--primary" href="{{ product.url }}">
+        <details class="qc-card-picker">
+          <summary class="qc-btn qc-btn--primary qc-btn--full">
             {{ 'products.product.add_to_cart' | t }}
             <span class="qc-visually-hidden">— {{ product.title }}</span>
-          </a>
-        </qc-quick-view>
+          </summary>
+          <qc-product-form
+            class="qc-card-picker__panel"
+            data-adding-label="{{ 'products.card.adding' | t }}"
+            data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+            data-error-label="{{ 'products.card.add_error' | t }}"
+          >
+            <form action="{{ routes.cart_add_url }}" method="post" class="qc-card-picker__form">
+              <select
+                name="id"
+                class="qc-card-picker__select"
+                aria-label="{{ 'products.product.options_label' | t }}"
+              >
+                {% for variant in product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                    {{ variant.title }} — {{ variant.price | money }}
+                    {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+              <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
+                {{ 'products.product.add_to_cart' | t }}
+                <span class="qc-visually-hidden">— {{ product.title }}</span>
+              </button>
+            </form>
+          </qc-product-form>
+        </details>
       {% endif %}
     {% else %}
       <button type="button" class="qc-btn qc-btn--muted" disabled>

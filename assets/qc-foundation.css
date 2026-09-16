@@ -427,6 +427,54 @@ main {
   display: contents;
 }
 
+/* inline option picker: multi-variant quick add expands a small anchored
+   panel under the card's buttons — never a modal */
+.qc-card-picker {
+  position: relative;
+}
+
+.qc-card-picker summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.qc-card-picker summary::-webkit-details-marker {
+  display: none;
+}
+
+.qc-card-picker[open] summary {
+  background: color-mix(in oklab, var(--qc-accent) 85%, var(--qc-ink));
+}
+
+.qc-card-picker__panel {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + var(--qc-space-2xs));
+  min-inline-size: max(100%, 14rem);
+  z-index: 3;
+  background: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
+  border-radius: var(--qc-radius-surface);
+  padding: var(--qc-space-s);
+  box-shadow: var(--qc-shadow-2);
+}
+
+.qc-card-picker__form {
+  display: grid;
+  gap: var(--qc-space-xs);
+}
+
+.qc-card-picker__select {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 44px;
+  padding: var(--qc-space-2xs) var(--qc-space-xs);
+  border: var(--qc-line-w) solid var(--qc-line-strong);
+  border-radius: var(--qc-radius-control);
+  background: var(--qc-surface);
+  color: var(--qc-ink);
+}
+
 .qc-btn--ink {
   background: var(--qc-ink);
   border-color: var(--qc-ink);
