@@ -38,3 +38,9 @@ Excluded: `CLAUDE.md`, `README-CLEANROOM-EMPIRE-PARITY.md`, private
 
 v1.0.0-beta.1 published 2026-09-16: 118 files, tag + release with the
 packaged ZIP attached.
+
+v1.0.0 published 2026-09-16: second commit on the public main
+(872b822), tag v1.0.0, GitHub release with QuillCommerce-1.0.0.zip
+(124 files; theme check 94/0). Ships the full eight-pass audit;
+release notes on the GitHub release summarize the changes since
+beta.1.
