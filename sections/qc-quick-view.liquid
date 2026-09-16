@@ -45,6 +45,26 @@
     <h2 id="qc-quick-view-title">{{ product.title }}</h2>
     {% render 'qc-price', item: product %}
 
+    {%- liquid
+      assign qv_variant = product.selected_or_first_available_variant
+      assign qv_stock = 'in'
+      if product.available == false
+        assign qv_stock = 'out'
+      elsif qv_variant.inventory_management == 'shopify' and qv_variant.inventory_quantity > 0 and qv_variant.inventory_quantity <= 10
+        assign qv_stock = 'low'
+      endif
+    -%}
+    {% if qv_variant.sku != blank %}
+      <p class="qc-text-s qc-muted qc-quick-view__sku">{{ qv_variant.sku }}</p>
+    {% endif %}
+    <p class="qc-quick-view__stock" data-qc-stock-state="{{ qv_stock }}">
+      {%- case qv_stock -%}
+        {%- when 'out' -%}{{ 'products.product.sold_out' | t }}
+        {%- when 'low' -%}{{ 'products.product.stock_low' | t: count: qv_variant.inventory_quantity }}
+        {%- else -%}{{ 'products.product.stock_in' | t }}
+      {%- endcase -%}
+    </p>
+
     {% if product.available %}
       <qc-product-form
         data-adding-label="{{ 'products.card.adding' | t }}"
@@ -100,6 +120,18 @@
       <button type="button" class="qc-btn qc-btn--muted qc-btn--full" disabled>
         {{ 'products.product.sold_out' | t }}
       </button>
+    {% endif %}
+
+    {% if product.description != blank %}
+      <details class="qc-disclosure qc-quick-view__description">
+        <summary>
+          <span>{{ 'products.product.description' | t }}</span>
+          {% render 'qc-icon', name: 'chevron' %}
+        </summary>
+        <div class="qc-prose qc-disclosure__content">
+          {{ product.description }}
+        </div>
+      </details>
     {% endif %}
 
     <a class="qc-btn qc-btn--ink qc-btn--full" href="{{ product.url }}">
