@@ -1,0 +1,126 @@
+{% comment %}
+  FAQ (SPEC-024 §5): native details/summary accordions plus FAQPage
+  JSON-LD for rich results. Pure Liquid — no JS.
+{% endcomment %}
+
+<div class="qc-faq section-padding">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-faq__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="qc-faq__list">
+    {% for block in section.blocks %}
+      {% if block.settings.question != blank %}
+        <details class="qc-faq__item" {{ block.shopify_attributes }}>
+          <summary class="qc-faq__question">
+            <span>{{ block.settings.question }}</span>
+            {% render 'qc-icon', name: 'chevron' %}
+          </summary>
+          <div class="qc-prose qc-faq__answer">{{ block.settings.answer }}</div>
+        </details>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {%- assign qc_faq_first = true -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.question != blank -%}
+          {%- unless qc_faq_first %},{% endunless -%}
+          {%- assign qc_faq_first = false -%}
+          {
+            "@type": "Question",
+            "name": {{ block.settings.question | json }},
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": {{ block.settings.answer | strip_html | json }}
+            }
+          }
+        {%- endif -%}
+      {%- endfor -%}
+    ]
+  }
+</script>
+
+{% stylesheet %}
+  .qc-faq {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+    inline-size: min(46rem, 100%);
+  }
+
+  .qc-faq__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-faq__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .qc-faq__item {
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--qc-space-s);
+    min-block-size: 44px;
+    padding-block: var(--qc-space-s);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qc-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .qc-faq__question svg {
+    flex-shrink: 0;
+    transition: transform var(--qc-dur-1) var(--qc-ease);
+  }
+
+  .qc-faq__item[open] .qc-faq__question svg {
+    transform: rotate(180deg);
+  }
+
+  .qc-faq__answer {
+    padding-block-end: var(--qc-space-m);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.faq",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Frequently asked questions" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:general.faq_item",
+      "settings": [
+        { "type": "text", "id": "question", "label": "t:general.question", "default": "How long does shipping take?" },
+        { "type": "richtext", "id": "answer", "label": "t:general.answer", "default": "<p>Orders leave the warehouse within two business days.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.faq",
+      "blocks": [{ "type": "item" }, { "type": "item" }, { "type": "item" }]
+    }
+  ]
+}
+{% endschema %}

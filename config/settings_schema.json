@@ -171,6 +171,12 @@
         "id": "enable_compare",
         "label": "t:general.enable_compare",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_card_hover_image",
+        "label": "t:general.enable_card_hover_image",
+        "default": true
       }
     ]
   },

@@ -69,8 +69,12 @@
         {% endif %}
       </a>
 
+      {%- assign mega = false -%}
+      {%- if section.settings.desktop_menu_style == 'mega' -%}
+        {%- assign mega = true -%}
+      {%- endif -%}
       <nav class="qc-header__nav" aria-label="{{ 'header.menu' | t }}">
-        <ul class="qc-nav" role="list">
+        <ul class="qc-nav{% if mega %} qc-nav--mega{% endif %}" role="list">
           {% for link in section.settings.menu.links %}
             <li class="qc-nav__item">
               {% if link.links.size > 0 %}
@@ -79,6 +83,25 @@
                     {{ link.title }}
                     {% render 'qc-icon', name: 'chevron' %}
                   </summary>
+                  {% if mega %}
+                    <div class="qc-nav__panel qc-nav__panel--mega">
+                      {% for child in link.links %}
+                        <div class="qc-nav__mega-col">
+                          <a class="qc-nav__panel-link qc-nav__mega-heading" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title }}</a>
+                          {% if child.links.size > 0 %}
+                            <ul class="qc-nav__mega-list" role="list">
+                              {% for grandchild in child.links %}
+                                <li><a class="qc-nav__panel-link" href="{{ grandchild.url }}"{% if grandchild.current %} aria-current="page"{% endif %}>{{ grandchild.title }}</a></li>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                      <div class="qc-nav__mega-col">
+                        <a class="qc-nav__panel-link qc-nav__mega-heading" href="{{ link.url }}">{{ 'header.view_all_in' | t: title: link.title }}</a>
+                      </div>
+                    </div>
+                  {% else %}
                   <ul class="qc-nav__panel" role="list">
                     <li><a class="qc-nav__panel-link" href="{{ link.url }}">{{ link.title }}</a></li>
                     {% for child in link.links %}
@@ -101,6 +124,7 @@
                       </li>
                     {% endfor %}
                   </ul>
+                  {% endif %}
                 </details>
               {% else %}
                 <a class="qc-nav__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
@@ -174,6 +198,7 @@
 
 {% stylesheet %}
   .qc-header {
+    position: relative; /* containing block for the mega panel */
     background: var(--qc-surface);
     border-block-end: var(--qc-line-w) solid var(--qc-line);
   }
@@ -461,6 +486,33 @@
       z-index: 30;
     }
 
+    /* mega mode: the panel spans the whole header */
+    .qc-nav--mega .qc-nav__item {
+      position: static;
+    }
+
+    .qc-nav__panel--mega {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      gap: var(--qc-space-l);
+      inset-inline: 0;
+      padding: var(--qc-space-l) var(--qc-space-xl);
+      border-inline: none;
+      border-radius: 0;
+    }
+
+    .qc-nav__mega-heading {
+      font-weight: 600;
+    }
+
+    .qc-nav__mega-list {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
     .qc-nav__panel-link {
       display: flex;
       align-items: center;
@@ -518,13 +570,38 @@
     },
     {
       "type": "select",
+      "id": "desktop_menu_style",
+      "label": "t:general.desktop_menu_style",
+      "default": "dropdown",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "t:general.menu_style_dropdown"
+        },
+        {
+          "value": "mega",
+          "label": "t:general.menu_style_mega"
+        }
+      ]
+    },
+    {
+      "type": "select",
       "id": "sticky",
       "label": "t:general.sticky_header",
       "default": "scroll-up",
       "options": [
-        { "value": "none", "label": "t:general.sticky_none" },
-        { "value": "always", "label": "t:general.sticky_always" },
-        { "value": "scroll-up", "label": "t:general.sticky_scroll_up" }
+        {
+          "value": "none",
+          "label": "t:general.sticky_none"
+        },
+        {
+          "value": "always",
+          "label": "t:general.sticky_always"
+        },
+        {
+          "value": "scroll-up",
+          "label": "t:general.sticky_scroll_up"
+        }
       ]
     },
     {

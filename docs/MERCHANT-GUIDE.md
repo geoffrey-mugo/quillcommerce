@@ -11,7 +11,7 @@ below is configurable from the Theme Editor — no code required.
 | Layout | Favicon, page width, and margins |
 | Colors | Background, text, and accent, plus four optional overrides (button text, cards and panels, borders, errors). Everything you leave unset derives automatically with accessible contrast. Corner style and input radius live here too. |
 | Cart | Cart type: **Drawer** (slide-in panel after every add — default) or **Page only** |
-| Catalog | **Enable product compare** (card checkboxes + side-by-side table, up to 4 products) |
+| Catalog | **Enable product compare** (up to 4 products) and **Show second image on hover** for product cards |
 | Social media | Six profile URL fields; filled ones appear as footer icons |
 
 ## Theme styles
@@ -25,6 +25,11 @@ keep tuning.
 
 ## Sections you can add
 
+- **Slideshow** — up to five image slides with headings and buttons;
+  swipeable without JavaScript, with arrows, dots, and optional
+  auto-rotate (paused on hover, off for reduced-motion visitors).
+- **FAQ** — question/answer accordions that also emit FAQ structured
+  data for Google rich results.
 - **Hero banner** — cover image with contrast overlay, heading, two
   buttons, small/medium/large height. Turn on "Use as page heading
   (H1)" on exactly one section per page (the home template ships this
@@ -46,6 +51,12 @@ keep tuning.
   page.
 - **Utility bar** — announcement text plus country/currency and
   language selectors when your store has more than one.
+
+## Header
+
+The desktop menu offers two styles: **Dropdowns** (default) or a
+full-width **Mega menu** that lays second-level links out as columns —
+pick one in the header's settings. The mobile drawer is unchanged.
 
 ## Product page
 

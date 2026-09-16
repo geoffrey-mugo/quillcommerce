@@ -31,6 +31,15 @@
           height: 600,
           crop: 'center'
         %}
+        {% if settings.enable_card_hover_image and product.images[1] %}
+          {% render 'image',
+            image: product.images[1],
+            class: 'qc-product-card__image qc-product-card__image--hover',
+            width: 600,
+            height: 600,
+            crop: 'center'
+          %}
+        {% endif %}
       {% else %}
         <div class="qc-product-card__image qc-product-card__image--empty" aria-hidden="true">
           {% render 'qc-icon', name: 'alert' %}
@@ -50,6 +59,39 @@
     <h3 class="qc-product-card__title">
       <a class="qc-product-card__link" href="{{ product.url }}">{{ product.title }}</a>
     </h3>
+
+    {%- liquid
+      assign qc_swatch_option = nil
+      for qc_opt in product.options_with_values
+        for qc_val in qc_opt.values
+          if qc_val.swatch
+            assign qc_swatch_option = qc_opt
+            break
+          endif
+        endfor
+        if qc_swatch_option
+          break
+        endif
+      endfor
+    -%}
+    {% if qc_swatch_option %}
+      <ul class="qc-product-card__swatches" role="list" aria-label="{{ qc_swatch_option.name }}">
+        {% for qc_val in qc_swatch_option.values limit: 4 %}
+          <li
+            class="qc-swatch qc-swatch--dot"
+            {% if qc_val.swatch.color %}style="--qc-swatch: {{ qc_val.swatch.color }}"{% endif %}
+          >
+            {%- if qc_val.swatch.image -%}
+              {{ qc_val.swatch.image | image_url: width: 32 | image_tag: loading: 'lazy', alt: '' }}
+            {%- endif -%}
+            <span class="qc-visually-hidden">{{ qc_val }}</span>
+          </li>
+        {% endfor %}
+        {% if qc_swatch_option.values.size > 4 %}
+          <li class="qc-product-card__swatch-more qc-text-s">+{{ qc_swatch_option.values.size | minus: 4 }}</li>
+        {% endif %}
+      </ul>
+    {% endif %}
   </div>
 
   <div class="qc-product-card__actions">

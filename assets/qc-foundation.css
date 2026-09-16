@@ -323,6 +323,48 @@ main {
   line-height: 1.35;
 }
 
+.qc-product-card__image--hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--qc-dur-2) var(--qc-ease);
+}
+
+.qc-product-card__media-link:hover .qc-product-card__image--hover,
+.qc-product-card:has(.qc-product-card__link:focus-visible) .qc-product-card__image--hover {
+  opacity: 1;
+}
+
+.qc-product-card__swatches {
+  display: flex;
+  align-items: center;
+  gap: var(--qc-space-2xs);
+  margin: var(--qc-space-2xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qc-swatch {
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex-shrink: 0;
+  border-radius: var(--qc-radius-pill);
+  border: var(--qc-line-w) solid var(--qc-line-strong);
+  background: var(--qc-swatch, var(--qc-surface-raised));
+  overflow: hidden;
+}
+
+.qc-swatch img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.qc-product-card__swatch-more {
+  color: var(--qc-ink-soft);
+}
+
 .qc-product-card__link {
   text-decoration: none;
   color: inherit;

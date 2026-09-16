@@ -207,13 +207,24 @@
               <legend class="qc-field__label">{{ option.name }}</legend>
               <div class="qc-product__pills">
                 {% for value in option.values %}
-                  <label class="qc-pill">
+                  <label class="qc-pill{% if value.swatch %} qc-pill--swatch{% endif %}">
                     <input
                       type="radio"
                       name="qc-option-{{ option.position }}"
                       value="{{ value | escape }}"
                       {% if option.selected_value == value %}checked{% endif %}
                     >
+                    {% if value.swatch %}
+                      <span
+                        class="qc-swatch"
+                        aria-hidden="true"
+                        {% if value.swatch.color %}style="--qc-swatch: {{ value.swatch.color }}"{% endif %}
+                      >
+                        {%- if value.swatch.image -%}
+                          {{ value.swatch.image | image_url: width: 48 | image_tag: loading: 'lazy', alt: '' }}
+                        {%- endif -%}
+                      </span>
+                    {% endif %}
                     <span>{{ value }}</span>
                     <span class="qc-visually-hidden" data-qc-unavailable-note> — {{ 'products.product.unavailable' | t }}</span>
                   </label>
@@ -737,6 +748,15 @@
     border-radius: var(--qc-radius-control);
     cursor: pointer;
     user-select: none;
+  }
+
+  .qc-pill--swatch {
+    gap: var(--qc-space-2xs);
+  }
+
+  .qc-pill .qc-swatch {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
   }
 
   .qc-pill input {

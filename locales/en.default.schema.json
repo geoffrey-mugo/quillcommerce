@@ -124,7 +124,22 @@
     "contact_form": "Contact form",
     "variant_picker": "Variant picker style",
     "variant_picker_pills": "Pills",
-    "variant_picker_dropdown": "Dropdown"
+    "variant_picker_dropdown": "Dropdown",
+    "slideshow": "Slideshow",
+    "slide": "Slide",
+    "autoplay": "Auto-rotate slides",
+    "autoplay_off": "Off",
+    "autoplay_3": "Every 3 seconds",
+    "autoplay_5": "Every 5 seconds",
+    "autoplay_8": "Every 8 seconds",
+    "desktop_menu_style": "Desktop menu style",
+    "menu_style_dropdown": "Dropdowns",
+    "menu_style_mega": "Mega menu",
+    "enable_card_hover_image": "Show second image on hover",
+    "faq": "FAQ",
+    "faq_item": "Question",
+    "question": "Question",
+    "answer": "Answer"
   },
   "labels": {
     "alignment": "Alignment",

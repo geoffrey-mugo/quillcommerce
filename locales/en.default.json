@@ -193,7 +193,8 @@
   "header": {
     "menu": "Menu",
     "account": "Account",
-    "cart": "Cart"
+    "cart": "Cart",
+    "view_all_in": "All {{ title }}"
   },
   "facets": {
     "filters": "Filters",
@@ -319,5 +320,11 @@
     "email_label": "Email",
     "message_label": "Message",
     "submit": "Send message"
+  },
+  "slideshow": {
+    "label": "Slideshow",
+    "previous": "Previous slide",
+    "next": "Next slide",
+    "slide_n": "Slide {{ n }} of {{ total }}"
   }
 }
