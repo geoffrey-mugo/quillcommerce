@@ -16,6 +16,21 @@ function announce(message) {
   document.dispatchEvent(new CustomEvent(EVT_ANNOUNCE, { detail: { message } }));
 }
 
+/* A page restored from the back/forward cache shows the cart as it was
+   when the shopper left it; re-sync count and lines from the server. */
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  readCart()
+    .then((cart) => {
+      document.dispatchEvent(
+        new CustomEvent(EVT_UPDATED, { detail: { cart, source: 'restore' } })
+      );
+    })
+    .catch(() => {
+      /* offline restore — leave the cached view in place */
+    });
+});
+
 async function readCart() {
   const res = await fetch(`${qcRoute('cart', '/cart')}.js`, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error('cart read failed');

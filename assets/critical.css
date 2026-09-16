@@ -17,6 +17,11 @@ html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
 
+/* stop iOS scroll chaining from a scrolled dialog to the page behind it */
+dialog {
+  overscroll-behavior: contain;
+}
+
 img,
 picture,
 video,

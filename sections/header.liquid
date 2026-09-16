@@ -187,6 +187,11 @@
     z-index: 20;
   }
 
+  /* keep anchor targets clear of the stuck header */
+  html:has(qc-header .qc-header--sticky) {
+    scroll-padding-block-start: 5.5rem;
+  }
+
   .qc-header--sticky {
     transition: transform var(--qc-dur-2) var(--qc-ease), box-shadow var(--qc-dur-2) var(--qc-ease);
   }

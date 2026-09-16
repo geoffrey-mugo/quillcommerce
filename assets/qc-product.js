@@ -284,7 +284,22 @@ if (!customElements.get('qc-product-page')) {
 
       money(cents) {
         const fmt = this.dataset.moneyFormat || '{{amount}}';
-        return fmt.replace(/\{\{\s*amount[^}]*\}\}/, (cents / 100).toFixed(2));
+        return fmt.replace(/\{\{\s*(\w+)\s*\}\}/, (match, key) => {
+          const styles = {
+            amount: [2, ',', '.'],
+            amount_no_decimals: [0, ',', '.'],
+            amount_with_comma_separator: [2, '.', ','],
+            amount_no_decimals_with_comma_separator: [0, '.', ','],
+            amount_with_apostrophe_separator: [2, "'", '.'],
+            amount_no_decimals_with_space_separator: [0, ' ', '.'],
+            amount_with_space_separator: [2, ' ', ','],
+            amount_with_period_and_space_separator: [2, ' ', '.'],
+          };
+          const [places, thousands, decimal] = styles[key] || styles.amount;
+          const [int, dec] = (cents / 100).toFixed(places).split('.');
+          const grouped = int.replace(/\B(?=(\d{3})+(?!\d))/g, thousands);
+          return dec ? grouped + decimal + dec : grouped;
+        });
       }
 
       /* mark plans without an allocation for this variant; fall back when
@@ -444,7 +459,11 @@ if (!customElements.get('qc-product-page')) {
           const planId = this.plansEl?.querySelector('input[name="selling_plan"]:checked')?.value;
           if (planId) url.searchParams.set('selling_plan', planId);
           else url.searchParams.delete('selling_plan');
-          history.replaceState({}, '', url);
+          try {
+            history.replaceState({}, '', url);
+          } catch {
+            /* Safari throttles replaceState to 100 calls/30s — skip quietly */
+          }
         }
 
         this.markUnavailable();
