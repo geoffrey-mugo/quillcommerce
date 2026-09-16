@@ -729,6 +729,10 @@
     padding: 0;
     display: inline-grid;
     place-items: center;
+    /* stay above the slides and stay legible over photos */
+    z-index: 2;
+    background: var(--qc-surface);
+    border: var(--qc-line-w) solid var(--qc-line);
   }
 
   .qc-lightbox__close {

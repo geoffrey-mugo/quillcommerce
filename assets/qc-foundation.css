@@ -604,6 +604,10 @@ main {
   inset-inline-end: var(--qc-space-xs);
   min-inline-size: 44px;
   padding-inline: 0;
+  /* stay above the media strip and stay legible over photos */
+  z-index: 2;
+  background: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
 }
 
 .qc-quick-view__close::before {
