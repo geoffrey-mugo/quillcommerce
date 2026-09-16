@@ -66,10 +66,15 @@ if (!customElements.get('qc-live-region')) {
     class extends HTMLElement {
       connectedCallback() {
         this.abort = new AbortController();
-        this.region = document.createElement('div');
-        this.region.className = 'qc-visually-hidden';
-        this.region.setAttribute('aria-live', 'polite');
-        this.append(this.region);
+        /* reuse the node across reconnects (Theme Editor reorders) so
+           stale duplicate live regions never pile up */
+        this.region = this.querySelector('[aria-live]');
+        if (!this.region) {
+          this.region = document.createElement('div');
+          this.region.className = 'qc-visually-hidden';
+          this.region.setAttribute('aria-live', 'polite');
+          this.append(this.region);
+        }
         document.addEventListener(
           EVT_ANNOUNCE,
           (e) => {
@@ -182,7 +187,9 @@ if (!customElements.get('qc-product-form')) {
             body: new FormData(this.form),
             signal: this.inflight.signal,
           });
-          const payload = await res.json();
+          /* non-JSON bodies (rate-limit or gateway error pages) must not
+             surface a raw parse error to the shopper */
+          const payload = await res.json().catch(() => ({}));
           if (!res.ok) {
             throw new Error(payload.description || payload.message || this.dataset.errorLabel);
           }
@@ -276,7 +283,9 @@ if (!customElements.get('qc-cart-lines')) {
             const dialog = this.closest('dialog');
             if (dialog && !dialog.open) {
               this.stale = true;
-            } else {
+            } else if (!this.pending?.size) {
+              /* hold the re-render while stepper edits are queued — the
+                 replayed change triggers the final, correct refresh */
               this.refresh();
             }
           },
@@ -296,7 +305,14 @@ if (!customElements.get('qc-cart-lines')) {
       }
 
       async changeLine(key, quantity) {
-        if (this.busy || !key || Number.isNaN(quantity) || quantity < 0) return;
+        if (!key || Number.isNaN(quantity) || quantity < 0) return;
+        if (this.busy) {
+          /* rapid stepper taps: queue the newest quantity per line and
+             replay once the in-flight request settles — dropping them
+             would snap the input back and lose clicks */
+          (this.pending ??= new Map()).set(key, quantity);
+          return;
+        }
         this.busy = true;
         this.setAttribute('aria-busy', 'true');
         try {
@@ -305,9 +321,9 @@ if (!customElements.get('qc-cart-lines')) {
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ id: key, quantity }),
           });
-          const cart = await res.json();
-          if (!res.ok) {
-            throw new Error(cart.description || cart.message || this.dataset.errorLabel);
+          const cart = await res.json().catch(() => null);
+          if (!res.ok || !cart) {
+            throw new Error(cart?.description || cart?.message || this.dataset.errorLabel);
           }
           document.dispatchEvent(
             new CustomEvent(EVT_UPDATED, { detail: { cart, source: 'line' } })
@@ -319,6 +335,11 @@ if (!customElements.get('qc-cart-lines')) {
         } finally {
           this.busy = false;
           this.setAttribute('aria-busy', 'false');
+          const queued = this.pending?.entries().next().value;
+          if (queued) {
+            this.pending.delete(queued[0]);
+            this.changeLine(queued[0], queued[1]);
+          }
         }
       }
 

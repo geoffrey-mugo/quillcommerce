@@ -95,7 +95,11 @@ if (!customElements.get('qc-slideshow')) {
       disconnectedCallback() {
         this.abort.abort();
         clearInterval(this.timer);
+        /* null it, or `this.timer ??=` keeps autoplay off after the
+           Theme Editor reorders this section (disconnect + reconnect) */
+        this.timer = null;
         if (this.raf) cancelAnimationFrame(this.raf);
+        this.raf = null;
       }
 
       index() {
