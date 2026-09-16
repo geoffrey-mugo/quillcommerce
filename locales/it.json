@@ -188,6 +188,10 @@
       "youtube": "YouTube",
       "tiktok": "TikTok",
       "pinterest": "Pinterest"
+    },
+    "meta": {
+      "tags": "taggato \"{{ tags }}\"",
+      "page": "Pagina {{ page }}"
     }
   },
   "header": {

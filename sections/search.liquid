@@ -28,7 +28,8 @@
   </form>
 
   {% if search.performed %}
-    {% assign search_clear_url = routes.search_url | append: '?q=' | append: search.terms | url_encode %}
+    {% assign qc_terms_param = search.terms | url_encode %}
+    {% assign search_clear_url = routes.search_url | append: '?q=' | append: qc_terms_param %}
     {% render 'qc-facets', results: search, results_url: search_clear_url, query: search.terms %}
 
     {% if search.results_count == 0 %}

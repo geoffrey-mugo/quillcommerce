@@ -50,7 +50,7 @@
       assign qv_stock = 'in'
       if product.available == false
         assign qv_stock = 'out'
-      elsif qv_variant.inventory_management == 'shopify' and qv_variant.inventory_quantity > 0 and qv_variant.inventory_quantity <= 10
+      elsif qv_variant.inventory_management == 'shopify' and qv_variant.inventory_quantity > 0 and qv_variant.inventory_quantity <= settings.low_stock_threshold and settings.low_stock_threshold > 0
         assign qv_stock = 'low'
       endif
     -%}
@@ -143,7 +143,7 @@
 
 {% schema %}
 {
-  "name": "Quick view",
+  "name": "t:general.quick_view",
   "settings": []
 }
 {% endschema %}
