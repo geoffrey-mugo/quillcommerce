@@ -527,8 +527,11 @@ main {
   flex: 1;
 }
 
-/* phones: always two cards per row; the cards' own container queries
-   scale their contents down for the narrow width */
+/* responsive column policy: phones always 2 across, tablets 3 then 4;
+   from desktop up (where the filter sidebar can appear) the auto-fill
+   rule above governs — the merchant's grid-density setting picks the
+   minimum card size, so cards pack as densely as chosen but never
+   shrink below it. The cards' container queries scale their contents. */
 @media (max-width: 649px) {
   .qc-product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -538,6 +541,18 @@ main {
   .qc-product-grid .qc-product-card {
     padding: var(--qc-space-xs);
     gap: var(--qc-space-xs);
+  }
+}
+
+@media (min-width: 650px) and (max-width: 849px) {
+  .qc-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 850px) and (max-width: 989px) {
+  .qc-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
