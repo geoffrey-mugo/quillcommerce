@@ -239,6 +239,12 @@ if (!customElements.get('qc-product-page')) {
           f.addEventListener('change', () => this.sync(true), { signal })
         );
 
+        /* dropdown picker mode: no pill fieldsets — the variant select is
+           the picker, so page state follows its changes */
+        this.variantSelect =
+          this.fieldsets.length === 0 ? this.querySelector('select[name="id"]') : null;
+        this.variantSelect?.addEventListener('change', () => this.sync(true), { signal });
+
         this.markUnavailable();
         this.syncPlans(this.currentVariant());
         this.recordView();
@@ -277,9 +283,12 @@ if (!customElements.get('qc-product-page')) {
       }
 
       currentVariant() {
-        return this.fieldsets.length > 0
-          ? this.findVariant(this.selectedOptions)
-          : this.variants[0];
+        if (this.fieldsets.length > 0) return this.findVariant(this.selectedOptions);
+        if (this.variantSelect) {
+          const id = Number(this.variantSelect.value);
+          return this.variants.find((v) => v.id === id) ?? this.variants[0];
+        }
+        return this.variants[0];
       }
 
       money(cents) {
@@ -374,11 +383,17 @@ if (!customElements.get('qc-product-page')) {
           const rule = variant.qty_rule;
           this.qtyInput.min = rule.min;
           this.qtyInput.step = rule.inc;
-          if (rule.max != null) this.qtyInput.max = rule.max;
+          /* cap at what can actually ship: quantity rules, then remaining
+             inventory when tracked and overselling is off */
+          let cap = rule.max != null ? rule.max : null;
+          if (variant.managed && variant.policy === 'deny' && variant.qty > 0) {
+            cap = cap == null ? variant.qty : Math.min(cap, variant.qty);
+          }
+          if (cap != null) this.qtyInput.max = cap;
           else this.qtyInput.removeAttribute('max');
           const current = Number(this.qtyInput.value) || 0;
           if (current < rule.min) this.qtyInput.value = rule.min;
-          else if (rule.max != null && current > rule.max) this.qtyInput.value = rule.max;
+          else if (cap != null && current > cap) this.qtyInput.value = cap;
           if (this.qtyNote) {
             const parts = [];
             if (rule.min > 1) parts.push((this.dataset.qtyMin || '').replace('[n]', rule.min));

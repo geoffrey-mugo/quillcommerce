@@ -201,6 +201,7 @@
       >
       {% form 'product', product, id: product_form_id %}
         {% unless product.has_only_default_variant %}
+          {% if section.settings.variant_picker != 'dropdown' %}
           {% for option in product.options_with_values %}
             <fieldset class="qc-product__option" data-qc-option hidden>
               <legend class="qc-field__label">{{ option.name }}</legend>
@@ -220,6 +221,7 @@
               </div>
             </fieldset>
           {% endfor %}
+          {% endif %}
 
           <div class="qc-field" data-qc-fallback-picker>
             <label class="qc-field__label" for="qc-variant-{{ section.id }}">
@@ -302,7 +304,15 @@
             inputmode="numeric"
             min="{{ qty_min }}"
             step="{{ qty_inc }}"
-            {% if qty_rule.max %}max="{{ qty_rule.max }}"{% endif %}
+            {%- liquid
+              assign qty_cap = qty_rule.max
+              if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0
+                if qty_cap == nil or current_variant.inventory_quantity < qty_cap
+                  assign qty_cap = current_variant.inventory_quantity
+                endif
+              endif
+            -%}
+            {% if qty_cap %}max="{{ qty_cap }}"{% endif %}
             value="{{ qty_min }}"
           >
           {%- liquid
@@ -491,6 +501,7 @@
           "compare_at_price": {{ variant.compare_at_price | default: 0 | json }},
           "sku": {{ variant.sku | json }},
           "managed": {% if variant.inventory_management == 'shopify' %}true{% else %}false{% endif %},
+          "policy": {{ variant.inventory_policy | json }},
           "qty": {{ variant.inventory_quantity | json }},
           "media_id": {{ variant.featured_media.id | json }},
           "unit_price": {{ variant.unit_price | json }},
@@ -970,6 +981,22 @@
   "max_blocks": 6,
   "settings": [
     {
+      "type": "select",
+      "id": "variant_picker",
+      "label": "t:general.variant_picker",
+      "default": "pills",
+      "options": [
+        {
+          "value": "pills",
+          "label": "t:general.variant_picker_pills"
+        },
+        {
+          "value": "dropdown",
+          "label": "t:general.variant_picker_dropdown"
+        }
+      ]
+    },
+    {
       "type": "checkbox",
       "id": "enable_zoom",
       "label": "t:general.enable_zoom",
@@ -992,7 +1019,10 @@
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   }
 }
 {% endschema %}

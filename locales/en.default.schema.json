@@ -121,7 +121,10 @@
     "critical_color": "Errors and alerts",
     "favicon": "Favicon",
     "favicon_info": "Scaled down to 32 × 32 px",
-    "contact_form": "Contact form"
+    "contact_form": "Contact form",
+    "variant_picker": "Variant picker style",
+    "variant_picker_pills": "Pills",
+    "variant_picker_dropdown": "Dropdown"
   },
   "labels": {
     "alignment": "Alignment",
