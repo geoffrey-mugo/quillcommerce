@@ -653,6 +653,21 @@
     object-fit: contain;
   }
 
+  /* photos fill the square frame like the cards do; the zoom lightbox
+     always shows the uncropped original. The image snippet renders a
+     div.image wrapper around the img, so both need sizing. */
+  .qc-gallery__zoom,
+  .qc-gallery__slide .image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .qc-gallery__slide .image > img {
+    block-size: 100%;
+    object-fit: cover;
+  }
+
   .qc-product__image--empty {
     color: var(--qc-ink-soft);
   }

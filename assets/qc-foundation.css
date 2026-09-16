@@ -338,7 +338,15 @@ main {
   background: var(--qc-surface);
 }
 
-.qc-product-card__image--hover {
+/* the image snippet's wrapper carries `.image { position: relative }`,
+   so this needs the extra specificity to actually leave the flow —
+   otherwise the hidden hover image stacks below the first one */
+.qc-product-card__media-link {
+  position: relative;
+  display: block;
+}
+
+.qc-product-card .qc-product-card__image--hover {
   position: absolute;
   inset: 0;
   opacity: 0;
@@ -490,7 +498,9 @@ main {
 .qc-card-picker__panel {
   position: absolute;
   inset-inline-end: 0;
-  inset-block-start: calc(100% + var(--qc-space-2xs));
+  /* opens upward so it never falls below the fold on cards near the
+     bottom of the screen */
+  inset-block-end: calc(100% + var(--qc-space-2xs));
   min-inline-size: max(100%, 14rem);
   z-index: 3;
   background: var(--qc-surface);
