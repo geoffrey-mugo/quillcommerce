@@ -145,10 +145,11 @@
       "preorder": "Preordina"
     },
     "card": {
-      "adding": "Aggiunta in corso…",
-      "added": "{{ title }} aggiunto al carrello",
       "add_error": "Impossibile aggiungere al carrello. Riprova.",
+      "added": "{{ title }} aggiunto al carrello",
+      "adding": "Aggiunta in corso…",
       "choose_options": "Scegli le opzioni",
+      "example_title": "Prodotto di esempio",
       "quick_view": "Anteprima rapida"
     },
     "quick_view": {

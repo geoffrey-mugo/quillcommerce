@@ -6,14 +6,34 @@
 
 <div class="qc-quick-view__inner">
   <div class="qc-quick-view__media">
-    {% if product.featured_image %}
-      {% render 'image',
-        image: product.featured_image,
-        class: 'qc-quick-view__image',
-        width: 600,
-        height: 600,
-        crop: 'center'
-      %}
+    {% if product.media.size > 0 %}
+      <div class="qc-quick-view__strip" role="group" aria-label="{{ 'products.product.media_label' | t }}">
+        {% for media in product.media limit: 8 %}
+          <div class="qc-quick-view__slide">
+            {% case media.media_type %}
+              {% when 'image' %}
+                {% liquid
+                  assign qv_loading = 'lazy'
+                  if forloop.first
+                    assign qv_loading = 'eager'
+                  endif
+                %}
+                {% render 'image',
+                  image: media,
+                  class: 'qc-quick-view__image',
+                  width: 600,
+                  height: 600,
+                  crop: 'center',
+                  loading: qv_loading
+                %}
+              {% when 'video', 'external_video' %}
+                {{ media | media_tag: class: 'qc-quick-view__video' }}
+              {% when 'model' %}
+                {{ media | media_tag: class: 'qc-quick-view__video' }}
+            {% endcase %}
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
       <div class="qc-quick-view__image qc-product-card__image--empty" aria-hidden="true">
         {% render 'qc-icon', name: 'alert' %}

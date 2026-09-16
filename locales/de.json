@@ -145,10 +145,11 @@
       "preorder": "Vorbestellen"
     },
     "card": {
-      "adding": "Wird hinzugefügt…",
-      "added": "{{ title }} zum Warenkorb hinzugefügt",
       "add_error": "Konnte nicht zum Warenkorb hinzugefügt werden. Bitte erneut versuchen.",
+      "added": "{{ title }} zum Warenkorb hinzugefügt",
+      "adding": "Wird hinzugefügt…",
       "choose_options": "Optionen wählen",
+      "example_title": "Beispielprodukt",
       "quick_view": "Schnellansicht"
     },
     "quick_view": {

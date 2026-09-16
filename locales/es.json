@@ -145,10 +145,11 @@
       "preorder": "Reservar"
     },
     "card": {
-      "adding": "Añadiendo…",
-      "added": "{{ title }} añadido al carrito",
       "add_error": "No se pudo añadir al carrito. Inténtalo de nuevo.",
+      "added": "{{ title }} añadido al carrito",
+      "adding": "Añadiendo…",
       "choose_options": "Elegir opciones",
+      "example_title": "Producto de ejemplo",
       "quick_view": "Vista rápida"
     },
     "quick_view": {

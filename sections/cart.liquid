@@ -72,6 +72,12 @@
             {{ 'cart.checkout' | t }}
           </button>
         </div>
+
+        {% if additional_checkout_buttons %}
+          <div class="qc-cart__accelerated additional-checkout-buttons">
+            {{ content_for_additional_checkout_buttons }}
+          </div>
+        {% endif %}
       </aside>
     </form>
   {% endif %}

@@ -1,0 +1,132 @@
+{
+  "sections": {
+    "hero": {
+      "type": "qc-hero",
+      "settings": {
+        "image": "shopify://shop_images/qc-hero-cast-2.jpg",
+        "overlay": 45,
+        "heading": "Made by hand, kept for seasons",
+        "heading_is_h1": true,
+        "subheading": "Warm, honest gear from small workshops — chosen for how it ages, not how it photographs.",
+        "cta_1_label": "Shop the catalog",
+        "cta_1_link": "/collections/all",
+        "cta_2_label": "Our story",
+        "cta_2_link": "/pages/about-the-outfitter",
+        "alignment": "start",
+        "height": "medium"
+      }
+    },
+    "intro": {
+      "type": "qc-rich-text",
+      "settings": {
+        "heading": "Worn in, not worn out",
+        "body": "<p>Driftwood pairs warm parchment tones with generous rounded corners and a serif voice. Everything else is the same quiet, fast storefront underneath.</p>",
+        "alignment": "center"
+      }
+    },
+    "featured": {
+      "type": "qc-featured-collection",
+      "settings": {
+        "heading": "Featured gear",
+        "collection": "automated-collection",
+        "limit": 4,
+        "show_view_all": true
+      }
+    },
+    "catnav": {
+      "type": "qc-catalog-navigator",
+      "blocks": {
+        "b1": {
+          "type": "collection",
+          "settings": {
+            "collection": "automated-collection"
+          }
+        },
+        "b2": {
+          "type": "collection",
+          "settings": {
+            "collection": "hydrogen"
+          }
+        },
+        "b3": {
+          "type": "collection",
+          "settings": {
+            "collection": "frontpage"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "heading": "Browse the catalog",
+        "layout": "tiles",
+        "show_counts": true
+      }
+    },
+    "values": {
+      "type": "qc-multi-column",
+      "blocks": {
+        "v1": {
+          "type": "column",
+          "settings": {
+            "heading": "Chosen, not listed",
+            "body": "<p>Every item earns its place in the catalog by being used first.</p>"
+          }
+        },
+        "v2": {
+          "type": "column",
+          "settings": {
+            "heading": "Straight answers",
+            "body": "<p>Honest stock levels, honest pricing, and pickup you can count on.</p>"
+          }
+        },
+        "v3": {
+          "type": "column",
+          "settings": {
+            "heading": "Here after the sale",
+            "body": "<p>Questions, repairs, or returns — reach a person, not a queue.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "heading": "Why shop with us"
+      }
+    },
+    "story": {
+      "type": "qc-image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/qc-story-stream.jpg",
+        "image_position": "end",
+        "heading": "Field-tested, not focus-grouped",
+        "body": "<p>We carry what we use. Read the field notes for what held up, what didn't, and what earned a permanent place in the kit.</p>",
+        "cta_label": "Read the field notes",
+        "cta_link": "/blogs/news"
+      }
+    },
+    "signup": {
+      "type": "qc-newsletter",
+      "settings": {
+        "heading": "Stay in the loop",
+        "subheading": "New arrivals, field notes, and offers — no noise.",
+        "alignment": "center"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "intro",
+    "featured",
+    "catnav",
+    "values",
+    "story",
+    "signup"
+  ]
+}

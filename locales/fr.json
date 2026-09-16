@@ -145,10 +145,11 @@
       "preorder": "Précommander"
     },
     "card": {
-      "adding": "Ajout…",
-      "added": "{{ title }} ajouté au panier",
       "add_error": "Impossible d'ajouter au panier. Veuillez réessayer.",
+      "added": "{{ title }} ajouté au panier",
+      "adding": "Ajout…",
       "choose_options": "Choisir les options",
+      "example_title": "Exemple de produit",
       "quick_view": "Aperçu rapide"
     },
     "quick_view": {

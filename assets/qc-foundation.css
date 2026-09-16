@@ -555,6 +555,30 @@ main {
   border: var(--qc-line-w) solid var(--qc-line);
 }
 
+.qc-quick-view__strip {
+  display: flex;
+  gap: var(--qc-space-s);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.qc-quick-view__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
+.qc-quick-view__slide:only-child {
+  flex-basis: 100%;
+}
+
+.qc-quick-view__video {
+  inline-size: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--qc-radius-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
+}
+
 .qc-quick-view__info {
   display: flex;
   flex-direction: column;

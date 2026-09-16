@@ -145,10 +145,11 @@
       "preorder": "Pre-order"
     },
     "card": {
-      "adding": "Adding…",
-      "added": "{{ title }} added to cart",
       "add_error": "Couldn't add to cart. Please try again.",
+      "added": "{{ title }} added to cart",
+      "adding": "Adding…",
       "choose_options": "Choose options",
+      "example_title": "Example product",
       "quick_view": "Quick view"
     },
     "quick_view": {

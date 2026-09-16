@@ -1,0 +1,132 @@
+{
+  "sections": {
+    "hero": {
+      "type": "qc-hero",
+      "settings": {
+        "image": "shopify://shop_images/qc-hero-cast-2.jpg",
+        "overlay": 45,
+        "heading": "Precision gear, plainly priced",
+        "heading_is_h1": true,
+        "subheading": "A cool, technical storefront for catalogs that lead with specs and stock.",
+        "cta_1_label": "Shop the catalog",
+        "cta_1_link": "/collections/all",
+        "cta_2_label": "Our story",
+        "cta_2_link": "/pages/about-the-outfitter",
+        "alignment": "start",
+        "height": "medium"
+      }
+    },
+    "intro": {
+      "type": "qc-rich-text",
+      "settings": {
+        "heading": "Nothing you don’t need",
+        "body": "<p>Slate is the sharp-cornered, cool-toned style: condensed display type, hard edges, and the same accessible foundation as every QuillCommerce store.</p>",
+        "alignment": "center"
+      }
+    },
+    "featured": {
+      "type": "qc-featured-collection",
+      "settings": {
+        "heading": "Featured gear",
+        "collection": "automated-collection",
+        "limit": 4,
+        "show_view_all": true
+      }
+    },
+    "catnav": {
+      "type": "qc-catalog-navigator",
+      "blocks": {
+        "b1": {
+          "type": "collection",
+          "settings": {
+            "collection": "automated-collection"
+          }
+        },
+        "b2": {
+          "type": "collection",
+          "settings": {
+            "collection": "hydrogen"
+          }
+        },
+        "b3": {
+          "type": "collection",
+          "settings": {
+            "collection": "frontpage"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "heading": "Browse the catalog",
+        "layout": "tiles",
+        "show_counts": true
+      }
+    },
+    "values": {
+      "type": "qc-multi-column",
+      "blocks": {
+        "v1": {
+          "type": "column",
+          "settings": {
+            "heading": "Chosen, not listed",
+            "body": "<p>Every item earns its place in the catalog by being used first.</p>"
+          }
+        },
+        "v2": {
+          "type": "column",
+          "settings": {
+            "heading": "Straight answers",
+            "body": "<p>Honest stock levels, honest pricing, and pickup you can count on.</p>"
+          }
+        },
+        "v3": {
+          "type": "column",
+          "settings": {
+            "heading": "Here after the sale",
+            "body": "<p>Questions, repairs, or returns — reach a person, not a queue.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "settings": {
+        "heading": "Why shop with us"
+      }
+    },
+    "story": {
+      "type": "qc-image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/qc-story-stream.jpg",
+        "image_position": "end",
+        "heading": "Field-tested, not focus-grouped",
+        "body": "<p>We carry what we use. Read the field notes for what held up, what didn't, and what earned a permanent place in the kit.</p>",
+        "cta_label": "Read the field notes",
+        "cta_link": "/blogs/news"
+      }
+    },
+    "signup": {
+      "type": "qc-newsletter",
+      "settings": {
+        "heading": "Stay in the loop",
+        "subheading": "New arrivals, field notes, and offers — no noise.",
+        "alignment": "center"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "intro",
+    "featured",
+    "catnav",
+    "values",
+    "story",
+    "signup"
+  ]
+}

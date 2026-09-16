@@ -35,7 +35,7 @@
     --qc-line: color-mix(in oklab, var(--qc-ink) 18%, var(--qc-surface));
     --qc-line-strong: color-mix(in oklab, var(--qc-ink) 40%, var(--qc-surface));
     --qc-surface-raised: color-mix(in oklab, var(--qc-ink) 4%, var(--qc-surface));
-    --qc-accent-ink: color-mix(in oklab, var(--qc-accent) 8%, white);
+    --qc-accent-ink: #ffffff;
     --qc-accent-tint: color-mix(in oklab, var(--qc-accent) 10%, var(--qc-surface));
     --qc-ok: color-mix(in oklab, #2E7D4F 85%, var(--qc-ink));
     --qc-warn: color-mix(in oklab, #9A6B15 85%, var(--qc-ink));
@@ -128,7 +128,7 @@
       --qc-surface-raised: {{ settings.foreground_color | color_mix: settings.background_color, 4 }};
       {%- endif %}
       {%- if settings.button_text_color == blank %}
-      --qc-accent-ink: {{ settings.accent_color | color_mix: '#FFFFFF', 8 }};
+      --qc-accent-ink: #ffffff;
       {%- endif %}
       --qc-accent-tint: {{ settings.accent_color | color_mix: settings.background_color, 10 }};
       --qc-ok: {{ '#2E7D4F' | color_mix: settings.foreground_color, 85 }};

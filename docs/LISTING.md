@@ -81,7 +81,7 @@ products are photographed; no merchant-store photography is used.
 
 ## Listing form details
 - Documentation URL: https://saasquill.com/docs/quillcommerce (live)
-- Support URL: https://saasquill.com/contact (live)
+- Support URL: https://saasquill.com/support (dedicated theme-support form; deploy drop-in)
 - Demo store: saasquill-app-dev.myshopify.com (password-protected —
   submit via preview link or lift the password for review)
 

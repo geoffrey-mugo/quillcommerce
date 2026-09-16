@@ -12,6 +12,10 @@
           <div class="qc-text-s qc-footer__blurb">{{ section.settings.blurb }}</div>
         {% endif %}
         {% render 'qc-social' %}
+        {%- capture qc_follow_button -%}{{ shop | login_button: action: 'follow' }}{%- endcapture -%}
+        {% if qc_follow_button != blank %}
+          <div class="qc-footer__follow">{{ qc_follow_button }}</div>
+        {% endif %}
       </div>
 
       {% if section.settings.menu != blank %}

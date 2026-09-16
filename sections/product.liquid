@@ -144,9 +144,25 @@
     </qc-gallery>
 
     <div class="qc-product__info">
-      <h1>{{ product.title }}</h1>
+      {%- assign product_form_id = 'qc-product-form-' | append: section.id -%}
+      {%- assign qc_has_picker_block = false -%}
+      {%- for qc_block in section.blocks -%}
+        {%- if qc_block.type == 'variant_picker' -%}
+          {%- assign qc_has_picker_block = true -%}
+        {%- endif -%}
+      {%- endfor -%}
 
-      {%- liquid
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when '@app' %}
+            {% render block %}
+
+          {% when 'title' %}
+            <h1 {{ block.shopify_attributes }}>{{ product.title }}</h1>
+
+          {% when 'price' %}
+            <div {{ block.shopify_attributes }}>
+              {%- liquid
         assign shown_price = current_variant.price
         assign shown_compare = current_variant.compare_at_price
         assign selected_alloc = current_variant.selected_selling_plan_allocation
@@ -174,8 +190,11 @@
           {{ current_variant.unit_price_measurement.reference_unit }}
         {%- endif -%}
       </p>
+            </div>
 
-      <p class="qc-text-s qc-muted" data-qc-sku {% if current_variant.sku == blank %}hidden{% endif %}>
+          {% when 'sku_stock' %}
+            <div {{ block.shopify_attributes }}>
+              <p class="qc-text-s qc-muted" data-qc-sku {% if current_variant.sku == blank %}hidden{% endif %}>
         {{- current_variant.sku -}}
       </p>
 
@@ -194,16 +213,12 @@
           {%- else -%}{{ 'products.product.stock_in' | t }}
         {%- endcase -%}
       </p>
+            </div>
 
-      {%- assign product_form_id = 'qc-product-form-' | append: section.id -%}
-      <qc-product-form
-        data-adding-label="{{ 'products.card.adding' | t }}"
-        data-added-label="{{ 'products.card.added' | t: title: product.title }}"
-        data-error-label="{{ 'products.card.add_error' | t }}"
-      >
-      {% form 'product', product, id: product_form_id %}
-        {% unless product.has_only_default_variant %}
-          {% if section.settings.variant_picker != 'dropdown' %}
+          {% when 'variant_picker' %}
+            {% unless product.has_only_default_variant %}
+              <div class="qc-product__picker" {{ block.shopify_attributes }}>
+                {% if section.settings.variant_picker != 'dropdown' %}
           {% for option in product.options_with_values %}
             <fieldset class="qc-product__option" data-qc-option hidden>
               <legend class="qc-field__label">{{ option.name }}</legend>
@@ -236,11 +251,11 @@
           {% endfor %}
           {% endif %}
 
-          <div class="qc-field" data-qc-fallback-picker>
+                <div class="qc-field" data-qc-fallback-picker>
             <label class="qc-field__label" for="qc-variant-{{ section.id }}">
               {{ 'products.product.options_label' | t }}
             </label>
-            <select id="qc-variant-{{ section.id }}" name="id">
+            <select id="qc-variant-{{ section.id }}" name="id" form="{{ product_form_id }}">
               {% for variant in product.variants %}
                 <option
                   value="{{ variant.id }}"
@@ -252,24 +267,25 @@
               {% endfor %}
             </select>
           </div>
-        {% else %}
-          <input type="hidden" name="id" value="{{ current_variant.id }}">
-        {% endunless %}
+              </div>
+            {% endunless %}
 
-        {% if product.selling_plan_groups.size > 0 %}
+          {% when 'selling_plans' %}
+            {% if product.selling_plan_groups.size > 0 %}
           {%- liquid
             assign default_plan_id = 0
             if product.requires_selling_plan and product.selected_selling_plan == nil
               assign default_plan_id = product.selling_plan_groups.first.selling_plans.first.id
             endif
           -%}
-          <fieldset class="qc-product__plans" data-qc-plans>
+          <fieldset class="qc-product__plans" data-qc-plans {{ block.shopify_attributes }}>
             <legend class="qc-field__label">{{ 'products.product.purchase_options' | t }}</legend>
             {% unless product.requires_selling_plan %}
               <label class="qc-plan">
                 <input
                   type="radio"
                   name="selling_plan"
+                  form="{{ product_form_id }}"
                   value=""
                   {% unless product.selected_selling_plan %}checked{% endunless %}
                 >
@@ -286,6 +302,7 @@
                   <input
                     type="radio"
                     name="selling_plan"
+                  form="{{ product_form_id }}"
                     value="{{ plan.id }}"
                     {% if product.selected_selling_plan.id == plan.id or plan.id == default_plan_id %}checked{% endif %}
                   >
@@ -300,7 +317,9 @@
           </fieldset>
         {% endif %}
 
-        {%- liquid
+          {% when 'quantity' %}
+            <div {{ block.shopify_attributes }}>
+              {%- liquid
           assign qty_rule = current_variant.quantity_rule
           assign qty_min = qty_rule.min | default: 1
           assign qty_inc = qty_rule.increment | default: 1
@@ -314,6 +333,7 @@
             class="qc-input qc-product__quantity"
             type="number"
             name="quantity"
+            form="{{ product_form_id }}"
             inputmode="numeric"
             min="{{ qty_min }}"
             step="{{ qty_inc }}"
@@ -354,7 +374,30 @@
           </p>
         </div>
 
-        {% if product.gift_card? %}
+              <div data-qc-breaks {% if current_variant.quantity_price_breaks.size == 0 %}hidden{% endif %}>
+          <p class="qc-field__label">{{ 'products.product.volume_pricing' | t }}</p>
+          <ul class="qc-product__breaks qc-text-s" role="list" data-qc-breaks-list>
+            {% for break in current_variant.quantity_price_breaks %}
+              {%- assign break_price = break.price | money -%}
+              <li>{{ 'products.product.break_row' | t: quantity: break.minimum_quantity, price: break_price }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+            </div>
+
+          {% when 'buy_buttons' %}
+            <qc-product-form
+              data-adding-label="{{ 'products.card.adding' | t }}"
+              data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+              data-error-label="{{ 'products.card.add_error' | t }}"
+              {{ block.shopify_attributes }}
+            >
+              {% form 'product', product, id: product_form_id %}
+                {% if product.has_only_default_variant or qc_has_picker_block == false %}
+                  <input type="hidden" name="id" value="{{ current_variant.id }}">
+                {% endif %}
+
+                {% if product.gift_card? %}
           <qc-gift-recipient class="qc-gift">
             <label class="qc-gift__toggle">
               <input type="checkbox" name="properties[__shopify_send_gift_card_to_recipient]" data-qc-gift-toggle>
@@ -418,17 +461,7 @@
           </qc-gift-recipient>
         {% endif %}
 
-        <div data-qc-breaks {% if current_variant.quantity_price_breaks.size == 0 %}hidden{% endif %}>
-          <p class="qc-field__label">{{ 'products.product.volume_pricing' | t }}</p>
-          <ul class="qc-product__breaks qc-text-s" role="list" data-qc-breaks-list>
-            {% for break in current_variant.quantity_price_breaks %}
-              {%- assign break_price = break.price | money -%}
-              <li>{{ 'products.product.break_row' | t: quantity: break.minimum_quantity, price: break_price }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-
-        {%- liquid
+                {%- liquid
           assign qc_is_preorder = false
           if current_variant.available and current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'continue' and current_variant.inventory_quantity <= 0
             assign qc_is_preorder = true
@@ -450,27 +483,28 @@
         </button>
         {{ form | payment_button }}
         {{ form | payment_terms }}
-      {% endform %}
-      </qc-product-form>
+              {% endform %}
+            </qc-product-form>
 
-      <div data-qc-pickup>
+          {% when 'pickup' %}
+            <div {{ block.shopify_attributes }}>
+              <div data-qc-pickup>
         {% render 'qc-pickup', variant: current_variant %}
       </div>
+            </div>
 
-      <div class="qc-prose">{{ product.description }}</div>
+          {% when 'description' %}
+            <div class="qc-prose" {{ block.shopify_attributes }}>{{ product.description }}</div>
 
-      {% if section.blocks.size > 0 %}
-        <div class="qc-product__disclosures">
-          {% for block in section.blocks %}
-            {% case block.type %}
-              {% when '@app' %}
-                {% render block %}
-              {% when 'trust' %}
+          {% when 'custom_liquid' %}
+            <div {{ block.shopify_attributes }}>{{ block.settings.custom_liquid }}</div>
+
+          {% when 'trust' %}
                 <div class="qc-trust" {{ block.shopify_attributes }}>
                   {% render 'qc-icon', name: block.settings.icon %}
                   <span>{{ block.settings.text }}</span>
                 </div>
-              {% when 'disclosure' %}
+          {% when 'disclosure' %}
                 <details class="qc-disclosure" {{ block.shopify_attributes }}>
                   <summary>
                     <span>{{ block.settings.heading }}</span>
@@ -483,14 +517,23 @@
                     {% endif %}
                   </div>
                 </details>
-            {% endcase %}
-          {% endfor %}
-        </div>
-      {% endif %}
+        {% endcase %}
+      {% endfor %}
     </div>
   </div>
 
   {% if section.settings.enable_sticky_bar %}
+    {%- liquid
+      assign shown_price = current_variant.price
+      assign selected_alloc = current_variant.selected_selling_plan_allocation
+      if selected_alloc
+        assign shown_price = selected_alloc.price
+      endif
+      assign qc_is_preorder = false
+      if current_variant.available and current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'continue' and current_variant.inventory_quantity <= 0
+        assign qc_is_preorder = true
+      endif
+    -%}
     <qc-sticky-bar
       class="qc-sticky-bar"
       role="region"
@@ -948,7 +991,7 @@
     gap: var(--qc-space-s);
   }
 
-  .qc-product__disclosures {
+  .qc-product__info .qc-disclosure:first-of-type {
     border-block-start: var(--qc-line-w) solid var(--qc-line);
   }
 
@@ -1038,6 +1081,63 @@
       "type": "@app"
     },
     {
+      "type": "title",
+      "name": "t:general.block_title",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "t:general.block_price",
+      "limit": 1
+    },
+    {
+      "type": "sku_stock",
+      "name": "t:general.block_sku_stock",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "t:general.block_variant_picker",
+      "limit": 1
+    },
+    {
+      "type": "selling_plans",
+      "name": "t:general.block_selling_plans",
+      "limit": 1
+    },
+    {
+      "type": "quantity",
+      "name": "t:general.block_quantity",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "t:general.block_buy_buttons",
+      "limit": 1
+    },
+    {
+      "type": "pickup",
+      "name": "t:general.block_pickup",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "t:general.block_description",
+      "limit": 1
+    },
+    {
+      "type": "custom_liquid",
+      "name": "t:general.custom_liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "t:general.custom_liquid",
+          "info": "t:general.custom_liquid_info"
+        }
+      ]
+    },
+    {
       "type": "trust",
       "name": "t:general.trust_badge",
       "settings": [
@@ -1096,7 +1196,7 @@
       ]
     }
   ],
-  "max_blocks": 6,
+  "max_blocks": 20,
   "settings": [
     {
       "type": "select",
