@@ -50,6 +50,8 @@
       assign qv_stock = 'in'
       if product.available == false
         assign qv_stock = 'out'
+      elsif qv_variant.inventory_management == 'shopify' and qv_variant.inventory_policy == 'continue' and qv_variant.inventory_quantity <= 0
+        assign qv_stock = 'preorder'
       elsif qv_variant.inventory_management == 'shopify' and qv_variant.inventory_quantity > 0 and qv_variant.inventory_quantity <= settings.low_stock_threshold and settings.low_stock_threshold > 0
         assign qv_stock = 'low'
       endif
@@ -60,6 +62,7 @@
     <p class="qc-quick-view__stock" data-qc-stock-state="{{ qv_stock }}">
       {%- case qv_stock -%}
         {%- when 'out' -%}{{ 'products.product.sold_out' | t }}
+        {%- when 'preorder' -%}{{ 'products.product.stock_preorder' | t }}
         {%- when 'low' -%}{{ 'products.product.stock_low' | t: count: qv_variant.inventory_quantity }}
         {%- else -%}{{ 'products.product.stock_in' | t }}
       {%- endcase -%}

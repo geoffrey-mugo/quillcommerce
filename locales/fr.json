@@ -39,7 +39,8 @@
     "title": "Panier",
     "update": "Mettre à jour",
     "updated": "Panier mis à jour",
-    "view_cart": "Voir le panier"
+    "view_cart": "Voir le panier",
+    "update_error": "Impossible de mettre à jour le panier. Veuillez réessayer."
   },
   "customers": {},
   "collections": {
@@ -137,7 +138,8 @@
       "stock_low": "Stock faible — {{ count }} restant(s)",
       "unavailable": "Indisponible",
       "volume_pricing": "Tarifs dégressifs",
-      "zoom": "Voir l'image en taille réelle"
+      "zoom": "Voir l'image en taille réelle",
+      "stock_preorder": "Disponible en précommande"
     },
     "card": {
       "add_error": "Impossible d'ajouter au panier. Veuillez réessayer.",

@@ -39,7 +39,8 @@
     "title": "Cart",
     "update": "Update",
     "updated": "Cart updated",
-    "view_cart": "View cart"
+    "view_cart": "View cart",
+    "update_error": "Couldn't update the cart. Please try again."
   },
   "customers": {},
   "collections": {
@@ -137,7 +138,8 @@
       "stock_low": "Low stock — {{ count }} left",
       "unavailable": "Unavailable",
       "volume_pricing": "Volume pricing",
-      "zoom": "View full-size image"
+      "zoom": "View full-size image",
+      "stock_preorder": "Available to pre-order"
     },
     "card": {
       "add_error": "Couldn't add to cart. Please try again.",

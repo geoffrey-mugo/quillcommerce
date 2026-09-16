@@ -24,6 +24,7 @@
   data-qty-max="{{ 'products.product.quantity_max' | t: max: '[n]' }}"
   data-stock-low="{{ 'products.product.stock_low' | t: count: '[count]' }}"
   data-stock-out="{{ 'products.product.sold_out' | t }}"
+  data-stock-preorder="{{ 'products.product.stock_preorder' | t }}"
 >
   {% render 'qc-breadcrumbs' %}
 
@@ -202,6 +203,8 @@
         assign stock_state = 'in'
         if current_variant.available == false
           assign stock_state = 'out'
+        elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'continue' and current_variant.inventory_quantity <= 0
+          assign stock_state = 'preorder'
         elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= settings.low_stock_threshold and settings.low_stock_threshold > 0
           assign stock_state = 'low'
         endif
@@ -209,6 +212,7 @@
       <p class="qc-product__stock" data-qc-stock data-qc-stock-state="{{ stock_state }}">
         {%- case stock_state -%}
           {%- when 'out' -%}{{ 'products.product.sold_out' | t }}
+          {%- when 'preorder' -%}{{ 'products.product.stock_preorder' | t }}
           {%- when 'low' -%}{{ 'products.product.stock_low' | t: count: current_variant.inventory_quantity }}
           {%- else -%}{{ 'products.product.stock_in' | t }}
         {%- endcase -%}

@@ -39,7 +39,8 @@
     "title": "Carrito",
     "update": "Actualizar",
     "updated": "Carrito actualizado",
-    "view_cart": "Ver carrito"
+    "view_cart": "Ver carrito",
+    "update_error": "No se pudo actualizar el carrito. Inténtalo de nuevo."
   },
   "customers": {},
   "collections": {
@@ -137,7 +138,8 @@
       "stock_low": "Pocas unidades — quedan {{ count }}",
       "unavailable": "No disponible",
       "volume_pricing": "Precios por volumen",
-      "zoom": "Ver imagen a tamaño completo"
+      "zoom": "Ver imagen a tamaño completo",
+      "stock_preorder": "Disponible para reservar"
     },
     "card": {
       "add_error": "No se pudo añadir al carrito. Inténtalo de nuevo.",

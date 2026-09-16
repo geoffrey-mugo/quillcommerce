@@ -39,7 +39,8 @@
     "title": "Warenkorb",
     "update": "Aktualisieren",
     "updated": "Warenkorb aktualisiert",
-    "view_cart": "Warenkorb ansehen"
+    "view_cart": "Warenkorb ansehen",
+    "update_error": "Der Warenkorb konnte nicht aktualisiert werden. Bitte erneut versuchen."
   },
   "customers": {},
   "collections": {
@@ -137,7 +138,8 @@
       "stock_low": "Geringer Bestand — noch {{ count }}",
       "unavailable": "Nicht verfügbar",
       "volume_pricing": "Mengenrabatt",
-      "zoom": "Bild in voller Größe ansehen"
+      "zoom": "Bild in voller Größe ansehen",
+      "stock_preorder": "Zum Vorbestellen verfügbar"
     },
     "card": {
       "add_error": "Konnte nicht zum Warenkorb hinzugefügt werden. Bitte erneut versuchen.",

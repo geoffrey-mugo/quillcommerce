@@ -426,6 +426,8 @@ if (!customElements.get('qc-product-page')) {
           const threshold = Number(this.dataset.lowStock || 0);
           let key = 'in';
           if (!variant || !variant.available) key = 'out';
+          else if (variant.managed && variant.policy === 'continue' && variant.qty <= 0)
+            key = 'preorder';
           else if (
             threshold > 0 &&
             variant.managed &&
@@ -437,9 +439,11 @@ if (!customElements.get('qc-product-page')) {
           const label =
             key === 'out'
               ? this.dataset.stockOut
-              : key === 'low'
-                ? (this.dataset.stockLow || '').replace('[count]', variant.qty)
-                : this.dataset.stockIn;
+              : key === 'preorder'
+                ? this.dataset.stockPreorder
+                : key === 'low'
+                  ? (this.dataset.stockLow || '').replace('[count]', variant.qty)
+                  : this.dataset.stockIn;
           this.stockEl.textContent = label || '';
           this.stockEl.dataset.qcStockState = key;
         }

@@ -39,10 +39,13 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.remove(), 3500);
 }
 
-/* A page restored from the back/forward cache shows the cart as it was
-   when the shopper left it; re-sync count and lines from the server. */
+/* A page restored via back/forward shows the cart as it was when the
+   HTML was produced — whether from the bfcache (event.persisted) or
+   re-served from the HTTP cache (persisted false, but the navigation
+   entry says back_forward). Re-sync count and lines from the server. */
 window.addEventListener('pageshow', (event) => {
-  if (!event.persisted) return;
+  const nav = performance.getEntriesByType('navigation')[0];
+  if (!event.persisted && nav?.type !== 'back_forward') return;
   readCart()
     .then((cart) => {
       document.dispatchEvent(
@@ -55,7 +58,12 @@ window.addEventListener('pageshow', (event) => {
 });
 
 async function readCart() {
-  const res = await fetch(`${qcRoute('cart', '/cart')}.js`, { headers: { Accept: 'application/json' } });
+  /* Shopify serves /cart.js without cache-control, so browsers may
+     heuristically cache it — always read the live cart */
+  const res = await fetch(`${qcRoute('cart', '/cart')}.js`, {
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+  });
   if (!res.ok) throw new Error('cart read failed');
   return res.json();
 }
@@ -203,7 +211,12 @@ if (!customElements.get('qc-product-form')) {
           this.closest('details.qc-card-picker')?.removeAttribute('open');
         } catch (err) {
           if (err.name !== 'AbortError') {
-            const message = err.message || this.dataset.errorLabel || '';
+            /* a network-level TypeError carries browser prose
+               ("Failed to fetch") — show the localized label instead */
+            const message =
+              (err instanceof TypeError ? '' : err.message) ||
+              this.dataset.errorLabel ||
+              '';
             this.showError(message);
             announce(message);
           }
@@ -330,7 +343,8 @@ if (!customElements.get('qc-cart-lines')) {
           );
           announce(this.dataset.updatedLabel || '');
         } catch (err) {
-          announce(err.message || this.dataset.errorLabel || '');
+          const message = err instanceof TypeError ? '' : err.message;
+          announce(message || this.dataset.errorLabel || '');
           this.refresh(); /* re-sync to server truth after a failure */
         } finally {
           this.busy = false;
@@ -364,6 +378,7 @@ if (!customElements.get('qc-cart-lines')) {
         try {
           const res = await fetch(`${location.pathname}?section_id=${id}`, {
             signal: this.inflight.signal,
+            cache: 'no-store' /* cart markup must never come from HTTP cache */,
           });
           if (!res.ok) return;
           const doc = new DOMParser().parseFromString(await res.text(), 'text/html');

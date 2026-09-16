@@ -39,7 +39,8 @@
     "title": "Carrello",
     "update": "Aggiorna",
     "updated": "Carrello aggiornato",
-    "view_cart": "Vedi il carrello"
+    "view_cart": "Vedi il carrello",
+    "update_error": "Impossibile aggiornare il carrello. Riprova."
   },
   "customers": {},
   "collections": {
@@ -137,7 +138,8 @@
       "stock_low": "Scorte limitate — ne restano {{ count }}",
       "unavailable": "Non disponibile",
       "volume_pricing": "Prezzi per quantità",
-      "zoom": "Vedi l'immagine a grandezza intera"
+      "zoom": "Vedi l'immagine a grandezza intera",
+      "stock_preorder": "Disponibile in preordine"
     },
     "card": {
       "add_error": "Impossibile aggiungere al carrello. Riprova.",

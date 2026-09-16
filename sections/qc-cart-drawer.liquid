@@ -29,7 +29,7 @@
         class="qc-cart-drawer__body"
         data-section-id="qc-cart-drawer"
         data-updated-label="{{ 'cart.updated' | t }}"
-        data-error-label="{{ 'products.card.add_error' | t }}"
+        data-error-label="{{ 'cart.update_error' | t }}"
       >
         {% if cart.item_count == 0 %}
           <div class="qc-cart-drawer__empty">
@@ -141,7 +141,15 @@
     gap: var(--qc-space-m);
     flex: 1;
     min-block-size: 0;
+  }
+
+  /* only the line list scrolls — the subtotal + checkout footer stays
+     in view however many items the cart holds */
+  .qc-cart-drawer__lines {
+    flex: 1;
+    min-block-size: 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .qc-cart-drawer__lines .qc-cart-line {
