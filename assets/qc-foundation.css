@@ -641,6 +641,7 @@ main {
 .qc-quick-view {
   inline-size: min(52rem, calc(100% - var(--qc-space-l) * 2));
   max-inline-size: 100%;
+  max-block-size: calc(100vh - var(--qc-space-l) * 2);
   max-block-size: calc(100dvh - var(--qc-space-l) * 2);
   overflow-y: auto;
   border: var(--qc-line-w) solid var(--qc-line);

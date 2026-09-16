@@ -89,6 +89,14 @@
     gap: var(--qc-space-2xs);
   }
 
+  /* 16px on small screens: iOS Safari zooms the page when focusing
+     any control with a smaller font */
+  @media (max-width: 649px) {
+    .qc-utility__select {
+      font-size: 1rem;
+    }
+  }
+
   .qc-utility__select {
     min-block-size: 28px;
     border: var(--qc-line-w) solid var(--qc-line);

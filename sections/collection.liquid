@@ -113,6 +113,15 @@
     display: none;
   }
 
+  /* with the 260px filter sidebar the grid loses width at 990px; cap
+     the card minimum in this band so columns never drop from 4 to 2
+     (min() keeps the dense setting's smaller value) */
+  @media (min-width: 990px) and (max-width: 1199px) {
+    .qc-collection__layout .qc-product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(min(var(--qc-card-min, 220px), 190px), 1fr));
+    }
+  }
+
   /* results dim while a filter change is fetched and swapped in place */
   .qc-collection[aria-busy='true'] {
     opacity: 0.55;
