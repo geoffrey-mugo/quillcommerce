@@ -1,0 +1,32 @@
+{% comment %}
+  Custom Liquid: merchant-authored Liquid/HTML, addable on any sectioned
+  template. https://shopify.dev/docs/storefronts/themes/architecture/sections
+{% endcomment %}
+
+<div class="qc-custom-liquid section-padding">
+  {{ section.settings.custom_liquid }}
+</div>
+
+{% stylesheet %}
+  .qc-custom-liquid {
+    padding-block: var(--qc-space-xl);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.custom_liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:general.custom_liquid",
+      "info": "t:general.custom_liquid_info"
+    }
+  ],
+  "presets": [{ "name": "t:general.custom_liquid" }],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}

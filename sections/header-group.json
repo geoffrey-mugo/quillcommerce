@@ -1,0 +1,18 @@
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {}
+    },
+    "utility": {
+      "type": "qc-utility-bar",
+      "settings": {}
+    }
+  },
+  "order": [
+    "utility",
+    "header"
+  ]
+}

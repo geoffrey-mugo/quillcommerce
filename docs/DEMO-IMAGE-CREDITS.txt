@@ -1,0 +1,25 @@
+Demo imagery: Pexels (https://www.pexels.com/license/) — free for
+commercial use, no attribution required. Photo IDs:
+  qc-dry-fly-assortment-2.jpg = pexels.com/photo/5396318
+  qc-nymph-assortment-2.jpg = pexels.com/photo/6739265
+  qc-local-favorites-box-2.jpg = pexels.com/photo/6738842
+  qc-tapered-leader-2.jpg = pexels.com/photo/6478249
+  qc-signature-fly-rod-2.jpg = pexels.com/photo/11143767
+  qc-explorer-fly-rod-2.jpg = pexels.com/photo/4329690
+  qc-starter-fly-rod-2.jpg = pexels.com/photo/36917549
+  qc-creek-pack-rod-2.jpg = pexels.com/photo/27033591
+  qc-signature-fly-reel-2.jpg = pexels.com/photo/8983970
+  qc-explorer-fly-reel-2.jpg = pexels.com/photo/6739266
+  qc-starter-fly-reel-2.jpg = pexels.com/photo/21855895
+  qc-guide-cap-2.jpg = pexels.com/photo/9558604
+  qc-shop-logo-tee-2.jpg = pexels.com/photo/9558597
+  qc-hero-cast-2.jpg = pexels.com/photo/27207261
+  qc-story-stream.jpg = pexels.com/photo/39147908
+  qc-waterproof-fly-box.jpg = pexels.com/photo/5411949
+  qc-streamer-selection.jpg = pexels.com/photo/6739264
+  qc-tying-thread.jpg = pexels.com/photo/15470478
+  qc-rotary-vise.jpg = pexels.com/photo/15018887
+  qc-fly-tying-kit.jpg = pexels.com/photo/3690705
+  qc-dubbing-dispenser.jpg = pexels.com/photo/37955302
+  qc-river-hoodie.jpg = pexels.com/photo/11340657
+  qc-magnetic-net-release.jpg = pexels.com/photo/14438490

@@ -1,0 +1,32 @@
+{
+  "current": {},
+  "presets": {
+    "QuillCommerce": {
+      "background_color": "#FFFFFF",
+      "foreground_color": "#333333",
+      "accent_color": "#1E4A3C",
+      "corner_style": "soft",
+      "input_corner_radius": 4,
+      "type_primary_font": "work_sans_n4",
+      "type_display_font": "assistant_n4"
+    },
+    "Driftwood": {
+      "background_color": "#F7F3EB",
+      "foreground_color": "#3A2E22",
+      "accent_color": "#9C5227",
+      "corner_style": "rounded",
+      "input_corner_radius": 8,
+      "type_primary_font": "work_sans_n4",
+      "type_display_font": "lora_n4"
+    },
+    "Slate": {
+      "background_color": "#F3F5F7",
+      "foreground_color": "#24313B",
+      "accent_color": "#33607F",
+      "corner_style": "sharp",
+      "input_corner_radius": 0,
+      "type_primary_font": "karla_n4",
+      "type_display_font": "oswald_n6"
+    }
+  }
+}

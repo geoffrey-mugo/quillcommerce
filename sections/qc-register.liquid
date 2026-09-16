@@ -1,0 +1,37 @@
+{% comment %} Customer registration (SPEC-022 §2). {% endcomment %}
+
+<div class="qc-account section-padding">
+  <h1>{{ 'customer.register.title' | t }}</h1>
+
+  {% form 'create_customer', class: 'qc-account__form' %}
+    {% render 'qc-form-errors', form: form %}
+    <div class="qc-field">
+      <label class="qc-field__label" for="qc-reg-first">{{ 'customer.fields.first_name' | t }}</label>
+      <input class="qc-input" id="qc-reg-first" type="text" name="customer[first_name]" autocomplete="given-name">
+    </div>
+    <div class="qc-field">
+      <label class="qc-field__label" for="qc-reg-last">{{ 'customer.fields.last_name' | t }}</label>
+      <input class="qc-input" id="qc-reg-last" type="text" name="customer[last_name]" autocomplete="family-name">
+    </div>
+    <div class="qc-field">
+      <label class="qc-field__label" for="qc-reg-email">{{ 'customer.fields.email' | t }}</label>
+      <input class="qc-input" id="qc-reg-email" type="email" name="customer[email]" autocomplete="email" required>
+    </div>
+    <div class="qc-field">
+      <label class="qc-field__label" for="qc-reg-password">{{ 'customer.fields.password' | t }}</label>
+      <input class="qc-input" id="qc-reg-password" type="password" name="customer[password]" autocomplete="new-password" required>
+    </div>
+    <button type="submit" class="qc-btn qc-btn--primary">{{ 'customer.register.submit' | t }}</button>
+  {% endform %}
+
+  <div class="qc-account__links">
+    <a href="{{ routes.account_login_url }}">{{ 'customer.register.have_account' | t }}</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:general.register",
+  "settings": []
+}
+{% endschema %}

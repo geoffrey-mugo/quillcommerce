@@ -1,0 +1,265 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "QuillCommerce",
+    "theme_version": "1.0.0-beta.1",
+    "theme_author": "SaaSQuill",
+    "theme_documentation_url": "https://saasquill.com/docs/quillcommerce",
+    "theme_support_url": "https://saasquill.com/support"
+  },
+  {
+    "name": "t:general.typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:general.fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_primary_font",
+        "default": "work_sans_n4",
+        "label": "t:general.primary"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_display_font",
+        "label": "t:general.type_display_font",
+        "default": "assistant_n4"
+      }
+    ]
+  },
+  {
+    "name": "t:general.layout",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:general.favicon",
+        "info": "t:general.favicon_info"
+      },
+      {
+        "type": "select",
+        "id": "max_page_width",
+        "label": "t:labels.page_width",
+        "options": [
+          {
+            "value": "90rem",
+            "label": "t:options.page_width.narrow"
+          },
+          {
+            "value": "110rem",
+            "label": "t:options.page_width.wide"
+          }
+        ],
+        "default": "90rem"
+      },
+      {
+        "type": "range",
+        "id": "min_page_margin",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.page_margin",
+        "default": 20
+      }
+    ]
+  },
+  {
+    "name": "t:general.colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#FFFFFF",
+        "label": "t:labels.background"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#333333",
+        "label": "t:labels.foreground"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "t:general.accent_color",
+        "default": "#1E4A3C"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:general.colors_derived_note"
+      },
+      {
+        "type": "color",
+        "id": "button_text_color",
+        "label": "t:general.button_text_color"
+      },
+      {
+        "type": "color",
+        "id": "card_background_color",
+        "label": "t:general.card_background_color"
+      },
+      {
+        "type": "color",
+        "id": "border_color",
+        "label": "t:general.border_color"
+      },
+      {
+        "type": "color",
+        "id": "critical_color",
+        "label": "t:general.critical_color"
+      },
+      {
+        "type": "range",
+        "id": "input_corner_radius",
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.input_corner_radius",
+        "default": 4
+      },
+      {
+        "type": "select",
+        "id": "corner_style",
+        "label": "t:general.corner_style",
+        "default": "soft",
+        "options": [
+          {
+            "value": "sharp",
+            "label": "t:general.corner_sharp"
+          },
+          {
+            "value": "soft",
+            "label": "t:general.corner_soft"
+          },
+          {
+            "value": "rounded",
+            "label": "t:general.corner_rounded"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "t:general.cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "t:general.cart_type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "t:general.cart_type_drawer"
+          },
+          {
+            "value": "page",
+            "label": "t:general.cart_type_page"
+          }
+        ],
+        "default": "drawer"
+      }
+    ]
+  },
+  {
+    "name": "t:general.catalog",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_compare",
+        "label": "t:general.enable_compare",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_card_hover_image",
+        "label": "t:general.enable_card_hover_image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sale_badge",
+        "label": "t:general.show_sale_badge",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "t:general.social_media",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook"
+      },
+      {
+        "type": "url",
+        "id": "social_x",
+        "label": "X"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      }
+    ]
+  },
+  {
+    "name": "t:general.age_gate",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_age_gate",
+        "label": "t:general.enable_age_gate",
+        "info": "t:general.age_gate_info",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "age_gate_heading",
+        "label": "t:general.heading",
+        "default": "Are you of legal age?"
+      },
+      {
+        "type": "textarea",
+        "id": "age_gate_text",
+        "label": "t:general.text",
+        "default": "You must be of legal age in your region to enter this store."
+      },
+      {
+        "type": "text",
+        "id": "age_gate_confirm_label",
+        "label": "t:general.age_gate_confirm",
+        "default": "Yes, I am"
+      },
+      {
+        "type": "text",
+        "id": "age_gate_decline_label",
+        "label": "t:general.age_gate_decline",
+        "default": "No, take me back"
+      },
+      {
+        "type": "url",
+        "id": "age_gate_decline_url",
+        "label": "t:general.age_gate_decline_url"
+      }
+    ]
+  }
+]

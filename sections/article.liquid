@@ -1,0 +1,138 @@
+{% comment %}
+  Article page (SPEC-004 §5): lead media, measure-width prose, comments and
+  comment form on foundation primitives.
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/article
+{% endcomment %}
+
+<article class="qc-article">
+  {% render 'qc-breadcrumbs' %}
+  {% if article.image %}
+    {% render 'image', image: article.image, class: 'qc-article__lead', width: 1400 %}
+  {% endif %}
+
+  <header class="qc-article__header">
+    <h1>{{ article.title }}</h1>
+    {% assign date = article.published_at | time_tag: format: 'date' %}
+    <p class="qc-text-s qc-muted">{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
+  </header>
+
+  <div class="qc-prose qc-article__content">
+    {{ article.content }}
+  </div>
+
+  {% if blog.comments_enabled? %}
+    <section class="qc-article__comments" aria-labelledby="qc-comments-heading">
+      <h2 id="qc-comments-heading">{{ 'blog.article_comments' | t }}</h2>
+
+      <div id="comments">
+        {% paginate article.comments by 10 %}
+          <ul class="qc-article__comment-list" role="list">
+            {% for comment in article.comments %}
+              <li class="qc-article__comment">
+                <p class="qc-text-s"><strong>{{ comment.author }}</strong> · {{ comment.created_at | time_tag: format: 'date' }}</p>
+                <p>{{ comment.content }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+
+          {% if paginate.pages > 1 %}
+            <nav class="qc-pagination" aria-label="{{ 'general.pagination' | t }}">
+              {{ paginate | default_pagination: anchor: 'comments' }}
+            </nav>
+          {% endif %}
+        {% endpaginate %}
+      </div>
+
+      {% form 'new_comment', article, class: 'qc-article__comment-form' %}
+        <h3>{{ 'blog.comment_form_title' | t }}</h3>
+
+        {% if form.errors %}
+          <p class="qc-field__error" role="alert">
+            {% render 'qc-icon', name: 'alert' %}
+            {{ form.errors | default_errors }}
+          </p>
+        {% endif %}
+
+        <div class="qc-field">
+          <label class="qc-field__label" for="author">{{ 'blog.comment_form_name' | t }}</label>
+          <input class="qc-input" type="text" name="comment[author]" id="author" value="{{ form.author }}" required>
+        </div>
+
+        <div class="qc-field">
+          <label class="qc-field__label" for="email">{{ 'blog.comment_form_email' | t }}</label>
+          <input class="qc-input" type="email" name="comment[email]" id="email" value="{{ form.email }}" required>
+        </div>
+
+        <div class="qc-field">
+          <label class="qc-field__label" for="body">{{ 'blog.comment_form_body' | t }}</label>
+          <textarea name="comment[body]" id="body" rows="4" required>{{ form.body }}</textarea>
+        </div>
+
+        <button type="submit" class="qc-btn qc-btn--primary">{{ 'blog.comment_form_submit' | t }}</button>
+      {% endform %}
+    </section>
+  {% endif %}
+</article>
+
+{% stylesheet %}
+  .qc-article {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    padding-block: var(--qc-space-xl);
+    max-inline-size: 46rem;
+  }
+
+  .qc-article__lead {
+    inline-size: 100%;
+    border-radius: var(--qc-radius-surface);
+  }
+
+  .qc-article__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-2xs);
+  }
+
+  .qc-article__comments {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+    padding-block-start: var(--qc-space-l);
+  }
+
+  .qc-article__comment-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-article__comment {
+    padding: var(--qc-space-m);
+    background: var(--qc-surface-raised);
+    border-radius: var(--qc-radius-surface);
+  }
+
+  .qc-article__comment-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-article__comment-form .qc-field {
+    inline-size: 100%;
+    max-inline-size: 28rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.article",
+  "settings": []
+}
+{% endschema %}

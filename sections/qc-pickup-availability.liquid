@@ -1,0 +1,14 @@
+{% comment %}
+  Section Rendering API endpoint for pickup availability (SPEC-014):
+  fetched as /products/<handle>?section_id=qc-pickup-availability&variant=<id>
+  by qc-product.js on variant change. No presets — not addable in the editor.
+{% endcomment %}
+
+{% render 'qc-pickup', variant: product.selected_or_first_available_variant %}
+
+{% schema %}
+{
+  "name": "t:general.pickup_availability",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,149 @@
+{% comment %}
+  QuillCommerce — Copyright (c) 2026 SaaSQuill. All rights reserved.
+
+  Built on Shopify's Skeleton theme. The following notice is retained
+  as the Skeleton license requires (full text in LICENSE.md of the
+  source repository):
+
+  Copyright (c) 2018-present Shopify Inc.
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, sell and/or create derivative works of the
+  Software or any part thereof, and to permit persons to whom the
+  Software is furnished to do so, subject to the following conditions:
+
+  The rights granted above may only be exercised to develop themes that
+  integrate or interoperate with Shopify software or services, and, if
+  applicable, to distribute, offer for sale or otherwise make available
+  any such themes via the Shopify Theme Store. All other uses of the
+  Software are strictly prohibited.
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+{% endcomment %}
+<!doctype html>
+{%- liquid
+  assign qc_base_lang = request.locale.iso_code | split: '-' | first
+  assign qc_rtl_langs = 'ar,he,fa,ur,ps,sd,ckb,dv,ug,yi' | split: ','
+  if qc_rtl_langs contains qc_base_lang
+    assign qc_dir = 'rtl'
+  else
+    assign qc_dir = 'ltr'
+  endif
+-%}
+<html lang="{{ request.locale.iso_code }}" dir="{{ qc_dir }}">
+  <head>
+    {% # Inlined CSS Variables %}
+    {% render 'css-variables' %}
+
+    {% comment %}
+      Font preloading:
+      1. Preconnect to font CDN for faster connection
+      2. Preload only the critical font variant (base weight)
+      3. Additional variants load on-demand via @font-face
+    {% endcomment %}
+    {% unless settings.type_primary_font.system? %}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
+      {% comment %} Preload the base font variant for initial page render {% endcomment %}
+      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {% endunless %}
+
+    {% # Load and preload the critical CSS %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'qc-foundation.css' | asset_url | stylesheet_tag }}
+
+    {% # Locale-aware storefront routes for Ajax requests %}
+    <script>
+      window.Shopify = window.Shopify || {};
+      Shopify.routes = Shopify.routes || {};
+      Shopify.routes.root = {{ routes.root_url | json }};
+      window.qcRoutes = {
+        cart: {{ routes.cart_url | json }},
+        cartAdd: {{ routes.cart_add_url | json }},
+        cartChange: {{ routes.cart_change_url | json }},
+        cartUpdate: {{ routes.cart_update_url | json }},
+        search: {{ routes.search_url | json }},
+        predictiveSearch: {{ routes.predictive_search_url | json }}
+      };
+    </script>
+    <script src="{{ 'qc-cart.js' | asset_url }}" type="module"></script>
+    <script src="{{ 'qc-quick-view.js' | asset_url }}" type="module"></script>
+
+    {% # Social, title, etc. %}
+    {% render 'meta-tags' %}
+
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    <a href="#qc-main" class="qc-skip-link">{{ 'accessibility.skip_to_content' | t }}</a>
+    <qc-live-region></qc-live-region>
+
+    {% sections 'header-group' %}
+
+    <main id="qc-main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'qc-cart-drawer' %}
+
+    {% render 'qc-age-gate' %}
+
+    {% if settings.enable_compare %}
+      <qc-compare-tray
+        class="qc-compare-tray"
+        hidden
+        data-search-url="{{ routes.search_url }}"
+        data-count-label="{{ 'products.compare.count' | t: count: '[n]' }}"
+        data-full-label="{{ 'products.compare.full' | t }}"
+        data-added-label="{{ 'products.compare.added' | t }}"
+        data-removed-label="{{ 'products.compare.removed' | t }}"
+        data-cleared-label="{{ 'products.compare.cleared' | t }}"
+        data-error-label="{{ 'products.compare.error' | t }}"
+      >
+        <button type="button" class="qc-btn qc-btn--primary" data-qc-compare-open>
+          <span data-qc-compare-count></span>
+        </button>
+        <button type="button" class="qc-btn qc-btn--outline" data-qc-compare-clear>
+          {{ 'products.compare.clear' | t }}
+        </button>
+        <dialog class="qc-compare__dialog" aria-label="{{ 'products.compare.title' | t }}">
+          <div class="qc-compare__head">
+            <h2 class="qc-compare__heading">{{ 'products.compare.title' | t }}</h2>
+            <button
+              type="button"
+              class="qc-btn qc-btn--quiet qc-compare__close"
+              data-qc-compare-close
+              aria-label="{{ 'products.compare.close' | t }}"
+            >
+              {% render 'qc-icon', name: 'close' %}
+            </button>
+          </div>
+          <div data-qc-compare-content></div>
+        </dialog>
+      </qc-compare-tray>
+      <script src="{{ 'qc-compare.js' | asset_url }}" type="module"></script>
+    {% endif %}
+
+    <qc-back-to-top class="qc-back-to-top">
+      <button type="button" class="qc-btn qc-btn--outline" aria-label="{{ 'accessibility.back_to_top' | t }}">
+        {% render 'qc-icon', name: 'chevron' %}
+      </button>
+    </qc-back-to-top>
+    <script src="{{ 'qc-back-to-top.js' | asset_url }}" type="module"></script>
+  </body>
+</html>

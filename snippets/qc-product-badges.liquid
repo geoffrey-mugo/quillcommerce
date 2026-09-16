@@ -1,0 +1,23 @@
+{% doc %}
+  Product badges (SPEC-025 §3): automatic Sale badge (Catalog toggle)
+  plus up to two merchant badges from tags prefixed `badge:`
+  (e.g. `badge:Limited`). Renders nothing when there is nothing to say.
+
+  @param {object} product - product object (required)
+{% enddoc %}
+{%- capture qc_badge_html -%}
+  {%- if settings.show_sale_badge and product.compare_at_price_min > product.price_min -%}
+    <span class="qc-badge qc-badge--accent">{{ 'products.badges.sale' | t }}</span>
+  {%- endif -%}
+  {%- assign qc_badges_shown = 0 -%}
+  {%- for tag in product.tags -%}
+    {%- assign qc_tag_prefix = tag | slice: 0, 6 -%}
+    {%- if qc_tag_prefix == 'badge:' and qc_badges_shown < 2 -%}
+      {%- assign qc_badges_shown = qc_badges_shown | plus: 1 -%}
+      <span class="qc-badge">{{ tag | remove_first: 'badge:' | strip }}</span>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if qc_badge_html contains 'qc-badge' -%}
+  <div class="qc-product-badges">{{ qc_badge_html }}</div>
+{%- endif -%}

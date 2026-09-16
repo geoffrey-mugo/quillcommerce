@@ -1,0 +1,151 @@
+{% doc %}
+  Faceted filtering + sorting (SPEC-009). URL-first: one GET form using
+  Shopify param names; applying is a normal navigation.
+
+  @param {object} results - collection or search object (required)
+  @param {string} results_url - base URL for clear-all (required)
+  @param {string} [query] - search terms to preserve as hidden q input
+{% enddoc %}
+{%- liquid
+  assign active_count = 0
+  for f in results.filters
+    assign active_count = active_count | plus: f.active_values.size
+    if f.type == 'price_range'
+      if f.min_value.value != blank or f.max_value.value != blank
+        assign active_count = active_count | plus: 1
+      endif
+    endif
+  endfor
+-%}
+
+<qc-facets class="qc-facets">
+  <form method="get" class="qc-facets__form">
+    {% if query != blank %}
+      <input type="hidden" name="q" value="{{ query | escape }}">
+    {% endif %}
+
+    <div class="qc-field qc-facets__sort">
+      <label class="qc-field__label" for="qc-sort">{{ 'facets.sort_by' | t }}</label>
+      <select id="qc-sort" name="sort_by">
+        {% for option in results.sort_options %}
+          <option value="{{ option.value }}" {% if option.value == results.sort_by %}selected{% endif %}>
+            {{ option.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    {% if results.filters.size > 0 %}
+      <details class="qc-facets__panel"{% if active_count > 0 %} open{% endif %}>
+        <summary class="qc-facets__toggle qc-btn qc-btn--outline">
+          {{ 'facets.filters' | t }}
+          {% if active_count > 0 %}
+            <span class="qc-badge qc-badge--accent">{{ active_count }}</span>
+          {% endif %}
+        </summary>
+
+        <div class="qc-facets__groups">
+          {% for filter in results.filters %}
+            <details class="qc-facets__group"{% if filter.active_values.size > 0 %} open{% endif %}>
+              <summary class="qc-facets__group-label">
+                {{ filter.label }}
+                {% render 'qc-icon', name: 'chevron' %}
+              </summary>
+
+              {% case filter.type %}
+                {% when 'price_range' %}
+                  <div class="qc-facets__price">
+                    <div class="qc-field">
+                      <label class="qc-field__label" for="qc-price-min">{{ 'facets.price_from' | t }}</label>
+                      <input
+                        id="qc-price-min"
+                        class="qc-input"
+                        type="number"
+                        name="{{ filter.min_value.param_name }}"
+                        min="0"
+                        max="{{ filter.range_max | divided_by: 100 }}"
+                        placeholder="0"
+                        {% if filter.min_value.value %}value="{{ filter.min_value.value | divided_by: 100 }}"{% endif %}
+                      >
+                    </div>
+                    <div class="qc-field">
+                      <label class="qc-field__label" for="qc-price-max">{{ 'facets.price_to' | t }}</label>
+                      <input
+                        id="qc-price-max"
+                        class="qc-input"
+                        type="number"
+                        name="{{ filter.max_value.param_name }}"
+                        min="0"
+                        max="{{ filter.range_max | divided_by: 100 }}"
+                        placeholder="{{ filter.range_max | divided_by: 100 }}"
+                        {% if filter.max_value.value %}value="{{ filter.max_value.value | divided_by: 100 }}"{% endif %}
+                      >
+                    </div>
+                  </div>
+                {% else %}
+                  <ul class="qc-facets__values" role="list">
+                    {% for value in filter.values %}
+                      <li>
+                        <label class="qc-facets__value{% if value.count == 0 and value.active == false %} qc-facets__value--empty{% endif %}">
+                          <input
+                            type="checkbox"
+                            name="{{ value.param_name }}"
+                            value="{{ value.value }}"
+                            {% if value.active %}checked{% endif %}
+                            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                          >
+                          {% if value.swatch %}
+                            <span class="qc-facets__swatch" aria-hidden="true"{% if value.swatch.color %} style="--qc-swatch: rgb({{ value.swatch.color.rgb }})"{% endif %}>
+                              {%- if value.swatch.image -%}
+                                {% render 'image', image: value.swatch.image, class: 'qc-facets__swatch-image', width: 40, height: 40, crop: 'center' %}
+                              {%- endif -%}
+                            </span>
+                          {% endif %}
+                          <span>{{ value.label }}</span>
+                          <span class="qc-muted qc-text-s">({{ value.count }})</span>
+                        </label>
+                      </li>
+                    {% endfor %}
+                  </ul>
+              {% endcase %}
+            </details>
+          {% endfor %}
+        </div>
+      </details>
+    {% endif %}
+
+    <button type="submit" class="qc-btn qc-btn--primary qc-facets__apply">
+      {{ 'facets.apply' | t }}
+    </button>
+  </form>
+
+  {% if active_count > 0 %}
+    <ul class="qc-facets__chips" role="list">
+      {% for filter in results.filters %}
+        {% for value in filter.active_values %}
+          <li>
+            <a class="qc-badge qc-facets__chip" href="{{ value.url_to_remove }}">
+              {{ filter.label }}: {{ value.label }}
+              {% render 'qc-icon', name: 'close' %}
+              <span class="qc-visually-hidden">{{ 'facets.remove_filter' | t }}</span>
+            </a>
+          </li>
+        {% endfor %}
+        {% if filter.type == 'price_range' %}
+          {% if filter.min_value.value != blank or filter.max_value.value != blank %}
+            <li>
+              <a class="qc-badge qc-facets__chip" href="{{ filter.url_to_remove }}">
+                {{ filter.label }}
+                {% render 'qc-icon', name: 'close' %}
+                <span class="qc-visually-hidden">{{ 'facets.remove_filter' | t }}</span>
+              </a>
+            </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      <li>
+        <a class="qc-btn qc-btn--quiet" href="{{ results_url }}">{{ 'facets.clear_all' | t }}</a>
+      </li>
+    </ul>
+  {% endif %}
+</qc-facets>

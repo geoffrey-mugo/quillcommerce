@@ -1,0 +1,129 @@
+{% comment %}
+  Search page (SPEC-004 §3): labeled form, mixed result types (products as
+  canonical cards; pages/articles as rows with type badges), pagination.
+  Predictive search arrives Phase 3.
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/search
+{% endcomment %}
+
+<div class="qc-search">
+  <h1>{{ 'search.title' | t }}</h1>
+
+  <form action="{{ routes.search_url }}" method="get" role="search" class="qc-search__form">
+    <div class="qc-field qc-search__field">
+      <label class="qc-field__label" for="qc-search-input">{{ 'search.title' | t }}</label>
+      <input
+        id="qc-search-input"
+        class="qc-input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'search.placeholder' | t }}"
+      >
+    </div>
+    <button type="submit" class="qc-btn qc-btn--primary">
+      {% render 'qc-icon', name: 'search' %}
+      {{ 'search.submit' | t }}
+    </button>
+  </form>
+
+  {% if search.performed %}
+    {% assign search_clear_url = routes.search_url | append: '?q=' | append: search.terms | url_encode %}
+    {% render 'qc-facets', results: search, results_url: search_clear_url, query: search.terms %}
+
+    {% if search.results_count == 0 %}
+      <p role="status">{{ 'search.no_results_html' | t: terms: search.terms }}</p>
+    {% else %}
+      <p role="status">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+
+      {% paginate search.results by 24 %}
+        {% liquid
+          assign has_products = false
+          for result in search.results
+            if result.object_type == 'product'
+              assign has_products = true
+            endif
+          endfor
+        %}
+
+        {% if has_products %}
+          <h2 class="qc-visually-hidden">{{ 'search.results_heading' | t }}</h2>
+          <ul class="qc-product-grid" role="list">
+            {% for result in search.results %}
+              {% if result.object_type == 'product' %}
+                <li>{% render 'qc-product-card', product: result %}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <ul class="qc-search__rows" role="list">
+          {% for result in search.results %}
+            {% unless result.object_type == 'product' %}
+              <li class="qc-search__row">
+                <span class="qc-badge">
+                  {% if result.object_type == 'article' %}
+                    {{ 'search.type_article' | t }}
+                  {% else %}
+                    {{ 'search.type_page' | t }}
+                  {% endif %}
+                </span>
+                <a href="{{ result.url }}">{{ result.title }}</a>
+              </li>
+            {% endunless %}
+          {% endfor %}
+        </ul>
+
+        {% if paginate.pages > 1 %}
+          <nav class="qc-pagination" aria-label="{{ 'general.pagination' | t }}">
+            {{ paginate | default_pagination }}
+          </nav>
+        {% endif %}
+      {% endpaginate %}
+    {% endif %}
+  {% endif %}
+</div>
+
+<script src="{{ 'qc-facets.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .qc-search {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-search__form {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--qc-space-xs);
+    max-inline-size: 40rem;
+  }
+
+  .qc-search__field {
+    flex: 1;
+  }
+
+  .qc-search__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .qc-search__row {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-s);
+    padding-block: var(--qc-space-s);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.search",
+  "settings": []
+}
+{% endschema %}

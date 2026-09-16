@@ -1,0 +1,165 @@
+{% comment %}
+  Compare table (SPEC-019). Fetched by qc-compare.js as
+  {{ routes.search_url }}?section_id=qc-compare&type=product&q=id:A OR id:B
+  — renders only in that search context. Not addable in the editor.
+{% endcomment %}
+
+{% if search.performed %}
+  {%- liquid
+    assign compared = ''
+    for result in search.results
+      if result.object_type == 'product'
+        assign compared = compared | append: result.handle | append: ','
+      endif
+    endfor
+  -%}
+  {% if compared != '' %}
+    <div class="qc-compare__scroll">
+      <table class="qc-compare__table">
+        <thead>
+          <tr>
+            <th scope="col" class="qc-visually-hidden">{{ 'products.compare.product_column' | t }}</th>
+            {% for product in search.results %}
+              {% if product.object_type == 'product' %}
+                <th scope="col" class="qc-compare__product">
+                  <a class="qc-compare__link" href="{{ product.url }}">
+                    {% if product.featured_image %}
+                      {% render 'image', image: product.featured_image, class: 'qc-compare__image', width: 300, height: 300, crop: 'center' %}
+                    {% else %}
+                      <span class="qc-compare__image qc-compare__image--empty" aria-hidden="true">
+                        {% render 'qc-icon', name: 'alert' %}
+                      </span>
+                    {% endif %}
+                    <span class="qc-compare__title">{{ product.title }}</span>
+                  </a>
+                </th>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">{{ 'products.compare.price' | t }}</th>
+            {% for product in search.results %}
+              {% if product.object_type == 'product' %}
+                <td>{% render 'qc-price', item: product %}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">{{ 'products.compare.availability' | t }}</th>
+            {% for product in search.results %}
+              {% if product.object_type == 'product' %}
+                <td>
+                  {% if product.available %}
+                    {{ 'products.compare.available' | t }}
+                  {% else %}
+                    {{ 'products.product.sold_out' | t }}
+                  {% endif %}
+                </td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">{{ 'products.compare.type' | t }}</th>
+            {% for product in search.results %}
+              {% if product.object_type == 'product' %}
+                <td>{{ product.type | default: '—' }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">{{ 'products.compare.vendor' | t }}</th>
+            {% for product in search.results %}
+              {% if product.object_type == 'product' %}
+                <td>{{ product.vendor | default: '—' }}</td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+          <tr>
+            <th scope="row">{{ 'products.compare.options' | t }}</th>
+            {% for product in search.results %}
+              {% if product.object_type == 'product' %}
+                <td>
+                  {% if product.has_only_default_variant %}
+                    —
+                  {% else %}
+                    {% for option in product.options_with_values %}
+                      <p class="qc-text-s">
+                        <strong>{{ option.name }}:</strong>
+                        {{ option.values | join: ', ' }}
+                      </p>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% stylesheet %}
+  .qc-compare__scroll {
+    overflow-x: auto;
+  }
+
+  .qc-compare__table {
+    border-collapse: collapse;
+    min-inline-size: 100%;
+  }
+
+  .qc-compare__table th,
+  .qc-compare__table td {
+    padding: var(--qc-space-s) var(--qc-space-m);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+    text-align: start;
+    vertical-align: top;
+    min-inline-size: 10rem;
+  }
+
+  .qc-compare__table tbody th {
+    font-size: var(--qc-text-s);
+    color: var(--qc-ink-soft);
+    white-space: nowrap;
+    min-inline-size: 0;
+  }
+
+  .qc-compare__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    text-decoration: none;
+    color: inherit;
+    max-inline-size: 14rem;
+  }
+
+  .qc-compare__link:hover .qc-compare__title {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .qc-compare__image {
+    inline-size: 120px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--qc-radius-surface);
+    border: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-compare__image--empty {
+    display: grid;
+    place-items: center;
+    background: var(--qc-surface-raised);
+    color: var(--qc-ink-soft);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.compare",
+  "settings": []
+}
+{% endschema %}

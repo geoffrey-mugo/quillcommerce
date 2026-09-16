@@ -1,0 +1,248 @@
+{% comment %}
+  Collection page (SPEC-004 + SPEC-009): banner, facets/sort sidebar,
+  canonical product-card grid, result count, empty states, pagination.
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+{% endcomment %}
+
+<div class="qc-collection">
+  {% render 'qc-breadcrumbs' %}
+  <header class="qc-collection__header">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="qc-prose qc-muted">{{ collection.description }}</div>
+    {% endif %}
+  </header>
+
+  {% paginate collection.products by 24 %}
+    <div class="qc-collection__layout">
+      <aside class="qc-collection__aside">
+        {% render 'qc-facets', results: collection, results_url: collection.url %}
+      </aside>
+
+      <div class="qc-collection__main" style="--qc-card-min: {% if section.settings.density == 'dense' %}168px{% else %}220px{% endif %}">
+        <p class="qc-muted qc-text-s" role="status">
+          {% if collection.products_count == 1 %}
+            {{ 'collections.count.one' | t: count: collection.products_count }}
+          {% else %}
+            {{ 'collections.count.other' | t: count: collection.products_count }}
+          {% endif %}
+        </p>
+
+        {% if collection.products_count == 0 %}
+          <div class="qc-collection__empty">
+            {% if collection.filters.size > 0 and collection.all_products_count > 0 %}
+              <p>{{ 'collections.empty_filtered' | t }}</p>
+              <a class="qc-btn qc-btn--primary" href="{{ collection.url }}">{{ 'facets.clear_all' | t }}</a>
+            {% else %}
+              <p>{{ 'collections.empty' | t }}</p>
+              <a class="qc-btn qc-btn--primary" href="{{ routes.all_products_collection_url }}">
+                {{ 'cart.continue_shopping' | t }}
+              </a>
+            {% endif %}
+          </div>
+        {% else %}
+          <h2 class="qc-visually-hidden">{{ 'collections.products_heading' | t }}</h2>
+          <ul class="qc-product-grid" role="list">
+            {% for product in collection.products %}
+              <li>{% render 'qc-product-card', product: product %}</li>
+            {% endfor %}
+          </ul>
+
+          {% if paginate.pages > 1 %}
+            <nav class="qc-pagination" aria-label="{{ 'general.pagination' | t }}">
+              {{ paginate | default_pagination }}
+            </nav>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  {% endpaginate %}
+</div>
+
+<script src="{{ 'qc-facets.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .qc-collection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-collection__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-collection__layout {
+    display: grid;
+    gap: var(--qc-space-l);
+    align-items: start;
+  }
+
+  @media (min-width: 990px) {
+    .qc-collection__layout {
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+  }
+
+  .qc-collection__main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-collection__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  /* facets: disclosure on mobile, open sidebar on desktop */
+  .qc-facets__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-facets__toggle {
+    inline-size: 100%;
+    justify-content: space-between;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qc-facets__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .qc-facets__groups {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    padding-block-start: var(--qc-space-s);
+  }
+
+  .qc-facets__group {
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+    padding: var(--qc-space-s);
+  }
+
+  .qc-facets__group-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--qc-space-xs);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+    min-block-size: 32px;
+  }
+
+  .qc-facets__group-label::-webkit-details-marker {
+    display: none;
+  }
+
+  .qc-facets__group[open] > .qc-facets__group-label .qc-icon {
+    transform: rotate(180deg);
+  }
+
+  .qc-facets__values {
+    list-style: none;
+    margin: 0;
+    padding: var(--qc-space-xs) 0 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .qc-facets__value {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-xs);
+    min-block-size: 36px;
+    cursor: pointer;
+  }
+
+  .qc-facets__value--empty {
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-facets__value input {
+    inline-size: 18px;
+    block-size: 18px;
+    accent-color: var(--qc-accent);
+  }
+
+  .qc-facets__price {
+    display: flex;
+    gap: var(--qc-space-xs);
+    padding-block-start: var(--qc-space-xs);
+  }
+
+  .qc-facets__chips {
+    list-style: none;
+    margin: var(--qc-space-s) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--qc-space-xs);
+    align-items: center;
+  }
+
+  .qc-facets__chip {
+    text-decoration: none;
+  }
+
+  .qc-facets__chip:hover {
+    border-color: var(--qc-ink);
+  }
+
+  .qc-facets__swatch {
+    inline-size: 18px;
+    block-size: 18px;
+    border-radius: var(--qc-radius-pill);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    background: var(--qc-swatch, var(--qc-surface-raised));
+    overflow: hidden;
+    flex: none;
+  }
+
+  .qc-facets__swatch-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 990px) {
+    .qc-facets__panel {
+      display: block;
+    }
+
+    .qc-facets__panel > .qc-facets__toggle {
+      pointer-events: none;
+    }
+
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.collection",
+  "settings": [
+    {
+      "type": "select",
+      "id": "density",
+      "label": "t:general.grid_density",
+      "default": "comfortable",
+      "options": [
+        { "value": "comfortable", "label": "t:general.density_comfortable" },
+        { "value": "dense", "label": "t:general.density_dense" }
+      ]
+    }
+  ]
+}
+{% endschema %}

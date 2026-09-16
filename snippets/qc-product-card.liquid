@@ -1,0 +1,154 @@
+{% doc %}
+  Canonical QuillCommerce product card, v2 (SPEC-023): one bounding box —
+  compare toggle, media, price, title, and a
+  Quick view / Add to cart action row. The single card used by
+  collection, search, recommendations, recently-viewed, and
+  merchandising contexts.
+
+  @param {object} product - product object (required)
+  @param {boolean} [show_vendor] - render vendor line above the title
+{% enddoc %}
+<article class="qc-product-card" data-qc-product-card="{{ product.handle }}">
+  {% if settings.enable_compare %}
+    <label class="qc-compare-toggle qc-text-s" hidden>
+      <input
+        type="checkbox"
+        data-qc-compare-id="{{ product.id }}"
+        data-qc-compare-handle="{{ product.handle }}"
+      >
+      <span>{{ 'products.compare.label' | t }}</span>
+      <span class="qc-visually-hidden">— {{ product.title }}</span>
+    </label>
+  {% endif %}
+
+  <a class="qc-product-card__media-link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    <div class="qc-product-card__media">
+      {% render 'qc-product-badges', product: product %}
+      {% if product.featured_image %}
+        {% render 'image',
+          image: product.featured_image,
+          class: 'qc-product-card__image',
+          width: 600,
+          height: 600,
+          crop: 'center'
+        %}
+        {% if settings.enable_card_hover_image and product.images[1] %}
+          {% render 'image',
+            image: product.images[1],
+            class: 'qc-product-card__image qc-product-card__image--hover',
+            width: 600,
+            height: 600,
+            crop: 'center'
+          %}
+        {% endif %}
+      {% else %}
+        <div class="qc-product-card__image qc-product-card__image--empty" aria-hidden="true">
+          {% render 'qc-icon', name: 'alert' %}
+        </div>
+      {% endif %}
+    </div>
+  </a>
+
+  <div class="qc-product-card__footer">
+    {% render 'qc-price', item: product %}
+  </div>
+
+  <div class="qc-product-card__body">
+    {% if show_vendor and product.vendor != blank %}
+      <p class="qc-text-s qc-muted">{{ product.vendor }}</p>
+    {% endif %}
+    <h3 class="qc-product-card__title">
+      <a class="qc-product-card__link" href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+
+    {%- liquid
+      assign qc_swatch_option = nil
+      for qc_opt in product.options_with_values
+        for qc_val in qc_opt.values
+          if qc_val.swatch
+            assign qc_swatch_option = qc_opt
+            break
+          endif
+        endfor
+        if qc_swatch_option
+          break
+        endif
+      endfor
+    -%}
+    {% if qc_swatch_option %}
+      <ul class="qc-product-card__swatches" role="list" aria-label="{{ qc_swatch_option.name }}">
+        {% for qc_val in qc_swatch_option.values limit: 4 %}
+          <li
+            class="qc-swatch qc-swatch--dot"
+            {% if qc_val.swatch.color %}style="--qc-swatch: {{ qc_val.swatch.color }}"{% endif %}
+          >
+            {%- if qc_val.swatch.image -%}
+              {{ qc_val.swatch.image | image_url: width: 32 | image_tag: loading: 'lazy', alt: '' }}
+            {%- endif -%}
+            <span class="qc-visually-hidden">{{ qc_val }}</span>
+          </li>
+        {% endfor %}
+        {% if qc_swatch_option.values.size > 4 %}
+          <li class="qc-product-card__swatch-more qc-text-s">+{{ qc_swatch_option.values.size | minus: 4 }}</li>
+        {% endif %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <div class="qc-product-card__actions">
+    <qc-quick-view
+      data-loading-label="{{ 'products.quick_view.loading' | t }}"
+      data-error-label="{{ 'products.quick_view.error' | t }}"
+      data-close-label="{{ 'products.quick_view.close' | t }}"
+      data-details-label="{{ 'products.quick_view.view_details' | t }}"
+    >
+      <a class="qc-btn qc-btn--ink" href="{{ product.url }}">
+        {{ 'products.card.quick_view' | t }}
+        <span class="qc-visually-hidden">— {{ product.title }}</span>
+      </a>
+    </qc-quick-view>
+
+    {% if product.available %}
+      {% if product.has_only_default_variant %}
+        <qc-product-form
+          class="qc-product-card__quick-add"
+          data-adding-label="{{ 'products.card.adding' | t }}"
+          data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+          data-error-label="{{ 'products.card.add_error' | t }}"
+        >
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            {%- liquid
+              assign qc_card_variant = product.selected_or_first_available_variant
+              assign qc_card_preorder = false
+              if qc_card_variant.inventory_management == 'shopify' and qc_card_variant.inventory_policy == 'continue' and qc_card_variant.inventory_quantity <= 0
+                assign qc_card_preorder = true
+              endif
+            -%}
+            <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
+              {% if qc_card_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}
+              <span class="qc-visually-hidden">— {{ product.title }}</span>
+            </button>
+          </form>
+        </qc-product-form>
+      {% else %}
+        <qc-quick-view
+          data-loading-label="{{ 'products.quick_view.loading' | t }}"
+          data-error-label="{{ 'products.quick_view.error' | t }}"
+          data-close-label="{{ 'products.quick_view.close' | t }}"
+          data-details-label="{{ 'products.quick_view.view_details' | t }}"
+        >
+          <a class="qc-btn qc-btn--primary" href="{{ product.url }}">
+            {{ 'products.product.add_to_cart' | t }}
+            <span class="qc-visually-hidden">— {{ product.title }}</span>
+          </a>
+        </qc-quick-view>
+      {% endif %}
+    {% else %}
+      <button type="button" class="qc-btn qc-btn--muted" disabled>
+        {{ 'products.product.sold_out' | t }}
+        <span class="qc-visually-hidden">— {{ product.title }}</span>
+      </button>
+    {% endif %}
+  </div>
+</article>

@@ -1,0 +1,128 @@
+{% comment %}
+  Newsletter signup (SPEC-021 §1): plain customer-form post with inline
+  success and error states. No JS.
+{% endcomment %}
+
+{%- assign form_id = 'qc-newsletter-' | append: section.id -%}
+
+<div class="qc-newsletter section-padding qc-newsletter--{{ section.settings.alignment }}">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-newsletter__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  {% if section.settings.subheading != blank %}
+    <p class="qc-muted">{{ section.settings.subheading }}</p>
+  {% endif %}
+
+  {% form 'customer', id: form_id, class: 'qc-newsletter__form' %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    {% if form.posted_successfully? %}
+      <p class="qc-newsletter__success" role="status">
+        {% render 'qc-icon', name: 'check' %}
+        {{ 'newsletter.success' | t }}
+      </p>
+    {% else %}
+      {% if form.errors %}
+        <p class="qc-field__error" role="alert" id="{{ form_id }}-error">
+          {% render 'qc-icon', name: 'alert' %}
+          {{ form.errors.translated_fields.email | capitalize }}
+          {{ form.errors.messages.email }}
+        </p>
+      {% endif %}
+      <div class="qc-newsletter__row">
+        <label class="qc-visually-hidden" for="{{ form_id }}-email">
+          {{ 'newsletter.email_label' | t }}
+        </label>
+        <input
+          id="{{ form_id }}-email"
+          class="qc-input qc-newsletter__input"
+          type="email"
+          name="contact[email]"
+          value="{{ form.email }}"
+          placeholder="{{ 'newsletter.email_placeholder' | t }}"
+          autocomplete="email"
+          required
+          {% if form.errors %}
+            aria-invalid="true"
+            aria-describedby="{{ form_id }}-error"
+          {% endif %}
+        >
+        <button type="submit" class="qc-btn qc-btn--primary">
+          {{ 'newsletter.submit' | t }}
+        </button>
+      </div>
+    {% endif %}
+  {% endform %}
+</div>
+
+{% stylesheet %}
+  .qc-newsletter {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+    align-items: flex-start;
+  }
+
+  .qc-newsletter--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .qc-newsletter__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-newsletter__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-s);
+    inline-size: min(28rem, 100%);
+  }
+
+  .qc-newsletter__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-newsletter__input {
+    flex: 1;
+    min-inline-size: 12rem;
+  }
+
+  .qc-newsletter__success {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--qc-space-xs);
+    margin: 0;
+    font-weight: 600;
+    color: var(--qc-ok);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Stay in the loop" },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.subheading",
+      "default": "New arrivals, field notes, and offers — no noise."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:general.alignment",
+      "options": [
+        { "value": "start", "label": "t:general.align_start" },
+        { "value": "center", "label": "t:general.align_center" }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [{ "name": "t:general.newsletter" }]
+}
+{% endschema %}

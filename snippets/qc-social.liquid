@@ -1,0 +1,40 @@
+{% doc %}
+  Social profile links (SPEC-021 §3): one 44px icon link per URL filled
+  in theme settings. Renders nothing when none are set.
+{% enddoc %}
+
+{%- liquid
+  assign social_handles = 'instagram,facebook,x,youtube,tiktok,pinterest' | split: ','
+  assign any_social = false
+  for handle in social_handles
+    assign setting_key = 'social_' | append: handle
+    if settings[setting_key] != blank
+      assign any_social = true
+      break
+    endif
+  endfor
+-%}
+
+{% if any_social %}
+  <ul class="qc-social" role="list">
+    {% for handle in social_handles %}
+      {%- liquid
+        assign setting_key = 'social_' | append: handle
+        assign url = settings[setting_key]
+        assign icon_name = handle
+        if handle == 'x'
+          assign icon_name = 'x-social'
+        endif
+        assign label_key = 'general.social.' | append: handle
+      -%}
+      {% if url != blank %}
+        <li>
+          <a class="qc-social__link" href="{{ url }}" target="_blank" rel="noopener">
+            {% render 'qc-icon', name: icon_name %}
+            <span class="qc-visually-hidden">{{ label_key | t }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}

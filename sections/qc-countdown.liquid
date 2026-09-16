@@ -1,0 +1,133 @@
+{% comment %}
+  Countdown timer (SPEC-025 §6): section-configured deadline rendered
+  as ticking D/H/M/S units by the qc-countdown element. Without JS the
+  plain deadline text stays visible.
+{% endcomment %}
+
+<script src="{{ 'qc-countdown.js' | asset_url }}" type="module"></script>
+
+{%- capture qc_deadline -%}{{ section.settings.end_date }}T{{ section.settings.end_time | default: '00:00' }}:00{%- endcapture -%}
+
+<qc-countdown
+  class="qc-countdown section-padding qc-countdown--{{ section.settings.alignment }}"
+  data-deadline="{{ qc_deadline }}"
+  data-days-label="{{ 'countdown.days' | t }}"
+  data-hours-label="{{ 'countdown.hours' | t }}"
+  data-minutes-label="{{ 'countdown.minutes' | t }}"
+  data-seconds-label="{{ 'countdown.seconds' | t }}"
+>
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-countdown__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <p class="qc-countdown__deadline" data-qc-deadline-text>
+    {{ 'countdown.until' | t: date: section.settings.end_date }}
+  </p>
+  <div class="qc-countdown__units" data-qc-units hidden aria-live="off"></div>
+  <p class="qc-countdown__expired" data-qc-expired hidden role="status">
+    {%- if section.settings.expired_text != blank -%}
+      {{ section.settings.expired_text }}
+    {%- else -%}
+      {{ 'countdown.expired' | t }}
+    {%- endif -%}
+  </p>
+
+  {% if section.settings.cta_label != blank %}
+    <a class="qc-btn qc-btn--primary" href="{{ section.settings.cta_link | default: '#' }}">
+      {{ section.settings.cta_label }}
+    </a>
+  {% endif %}
+</qc-countdown>
+
+{% stylesheet %}
+  .qc-countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-countdown--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .qc-countdown__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-countdown__deadline,
+  .qc-countdown__expired {
+    margin: 0;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-countdown__units {
+    display: flex;
+    gap: var(--qc-space-s);
+  }
+
+  .qc-countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-inline-size: 3.5rem;
+    padding: var(--qc-space-s);
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+    background: var(--qc-surface-raised);
+  }
+
+  .qc-countdown__value {
+    font-family: var(--qc-font-display);
+    font-size: var(--qc-text-2xl);
+    font-weight: var(--qc-font-display-weight);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .qc-countdown__label {
+    font-size: var(--qc-text-s);
+    color: var(--qc-ink-soft);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.countdown",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Sale ends soon" },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "t:general.end_date",
+      "info": "t:general.end_date_info",
+      "default": "2026-12-31"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "t:general.end_time",
+      "info": "t:general.end_time_info",
+      "default": "23:59"
+    },
+    { "type": "text", "id": "expired_text", "label": "t:general.expired_text" },
+    { "type": "text", "id": "cta_label", "label": "t:general.cta_1_label" },
+    { "type": "url", "id": "cta_link", "label": "t:general.cta_1_link" },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:general.alignment",
+      "options": [
+        { "value": "start", "label": "t:general.align_start" },
+        { "value": "center", "label": "t:general.align_center" }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [{ "name": "t:general.countdown" }]
+}
+{% endschema %}

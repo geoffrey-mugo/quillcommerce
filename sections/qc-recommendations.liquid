@@ -1,0 +1,70 @@
+{% comment %}
+  Related / complementary products (SPEC-016). Two-phase: the page request
+  emits only a <qc-recommendations> placeholder; the element fetches this
+  same section through the Product Recommendations route, and that render
+  (recommendations.performed) emits the real grid — or nothing.
+  https://shopify.dev/docs/storefronts/themes/product-merchandising/recommendations
+{% endcomment %}
+
+{% if recommendations.performed %}
+  {% if recommendations.products.size > 0 %}
+    <section class="qc-recs" aria-labelledby="qc-recs-heading-{{ section.id }}">
+      <h2 id="qc-recs-heading-{{ section.id }}" class="qc-recs__heading">
+        {{ section.settings.heading }}
+      </h2>
+      <ul class="qc-product-grid" role="list">
+        {% for recommendation in recommendations.products %}
+          <li>
+            {% render 'qc-product-card', product: recommendation %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+{% elsif product %}
+  <qc-recommendations
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}&intent={{ section.settings.intent }}"
+  ></qc-recommendations>
+  <script src="{{ 'qc-recommendations.js' | asset_url }}" type="module"></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:general.recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:general.heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "t:general.recommendation_intent",
+      "options": [
+        { "value": "related", "label": "t:general.intent_related" },
+        { "value": "complementary", "label": "t:general.intent_complementary" }
+      ],
+      "default": "related"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:general.max_products",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "presets": [
+    {
+      "name": "t:general.recommendations"
+    }
+  ]
+}
+{% endschema %}

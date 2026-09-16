@@ -1,0 +1,190 @@
+{% comment %}
+  Quick order list (SPEC-026 §1): B2B-style variant table for a chosen
+  collection. Every row posts natively to the cart; qc-product-form
+  (already global) upgrades rows to Ajax adds with busy state and
+  cart/drawer updates.
+{% endcomment %}
+
+{%- assign qo_col = section.settings.collection -%}
+
+<div class="qc-quick-order section-padding">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-quick-order__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  {% if qo_col %}
+    <table class="qc-quick-order__table">
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">{{ 'quick_order.product' | t }}</th>
+          <th scope="col">{{ 'customer.order.sku' | t }}</th>
+          <th scope="col">{{ 'quick_order.price' | t }}</th>
+          <th scope="col">{{ 'products.product.quantity' | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in qo_col.products limit: section.settings.limit %}
+          {% for variant in product.variants %}
+            <tr>
+              <td class="qc-quick-order__thumb-cell">
+                {% if product.featured_image %}
+                  {{ product.featured_image | image_url: width: 96, height: 96, crop: 'center' | image_tag: class: 'qc-quick-order__thumb', loading: 'lazy', alt: '' }}
+                {% endif %}
+              </td>
+              <td data-label="{{ 'quick_order.product' | t }}">
+                <a class="qc-quick-order__title" href="{{ variant.url }}">{{ product.title }}</a>
+                {% unless product.has_only_default_variant %}
+                  <span class="qc-text-s qc-muted">{{ variant.title }}</span>
+                {% endunless %}
+              </td>
+              <td data-label="{{ 'customer.order.sku' | t }}" class="qc-text-s">{{ variant.sku }}</td>
+              <td data-label="{{ 'quick_order.price' | t }}">{{ variant.price | money }}</td>
+              <td data-label="{{ 'products.product.quantity' | t }}" class="qc-quick-order__buy-cell">
+                {% if variant.available %}
+                  <qc-product-form
+                    data-adding-label="{{ 'products.card.adding' | t }}"
+                    data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+                    data-error-label="{{ 'products.card.add_error' | t }}"
+                  >
+                    <form action="{{ routes.cart_add_url }}" method="post" class="qc-quick-order__row-form">
+                      <input type="hidden" name="id" value="{{ variant.id }}">
+                      <label class="qc-visually-hidden" for="qc-qo-qty-{{ section.id }}-{{ variant.id }}">
+                        {{ 'cart.quantity_for' | t: product: product.title }}
+                      </label>
+                      <input
+                        id="qc-qo-qty-{{ section.id }}-{{ variant.id }}"
+                        class="qc-input qc-quick-order__qty"
+                        type="number"
+                        name="quantity"
+                        value="1"
+                        min="1"
+                        inputmode="numeric"
+                      >
+                      <button type="submit" class="qc-btn qc-btn--primary">
+                        {{ 'quick_order.add' | t }}
+                        <span class="qc-visually-hidden">— {{ product.title }} {{ variant.title }}</span>
+                      </button>
+                    </form>
+                  </qc-product-form>
+                {% else %}
+                  <button type="button" class="qc-btn qc-btn--muted" disabled>
+                    {{ 'products.product.sold_out' | t }}
+                  </button>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% elsif request.design_mode %}
+    <p class="qc-muted">{{ 'general.pick_collection_hint' | t }}</p>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .qc-quick-order {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-quick-order__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-quick-order__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .qc-quick-order__table th {
+    text-align: start;
+    font-size: var(--qc-text-s);
+    color: var(--qc-ink-soft);
+    padding: var(--qc-space-xs);
+    border-block-end: var(--qc-line-w) solid var(--qc-line-strong);
+  }
+
+  .qc-quick-order__table td {
+    padding: var(--qc-space-xs);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+    vertical-align: middle;
+  }
+
+  .qc-quick-order__thumb {
+    inline-size: 48px;
+    block-size: 48px;
+    border-radius: var(--qc-radius-control);
+    object-fit: cover;
+    display: block;
+  }
+
+  .qc-quick-order__title {
+    display: block;
+    color: var(--qc-ink);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .qc-quick-order__title:hover {
+    text-decoration: underline;
+  }
+
+  .qc-quick-order__qty {
+    inline-size: 5rem;
+  }
+
+  .qc-quick-order__row-form {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-xs);
+  }
+
+  @media (max-width: 749px) {
+    .qc-quick-order__table thead {
+      display: none;
+    }
+
+    .qc-quick-order__table tr {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--qc-space-2xs) var(--qc-space-s);
+      align-items: center;
+      padding-block: var(--qc-space-s);
+      border-block-end: var(--qc-line-w) solid var(--qc-line);
+    }
+
+    .qc-quick-order__table td {
+      display: block;
+      border: 0;
+      padding: 0;
+    }
+
+    .qc-quick-order__thumb-cell {
+      grid-row: span 2;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.quick_order",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Quick order" },
+    { "type": "collection", "id": "collection", "label": "t:general.collection" },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:general.max_products",
+      "min": 4,
+      "max": 50,
+      "step": 2,
+      "default": 24
+    }
+  ],
+  "presets": [{ "name": "t:general.quick_order" }]
+}
+{% endschema %}

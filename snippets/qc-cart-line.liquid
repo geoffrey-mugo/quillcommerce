@@ -1,0 +1,82 @@
+{% doc %}
+  QuillCommerce cart line item (SPEC-003 §1). Reused by cart page and,
+  later, the cart drawer. No-JS: quantity posts via updates[], remove is
+  a plain link.
+
+  @param {object} line - cart line_item (required)
+  @param {number} index - forloop.index for input association (required)
+  @param {string} [prefix] - id prefix so drawer + page inputs never collide
+{% enddoc %}
+<li class="qc-cart-line" data-qc-cart-line="{{ line.key }}">
+  <div class="qc-cart-line__media">
+    {% if line.image %}
+      <a href="{{ line.url }}" tabindex="-1" aria-hidden="true">
+        {% render 'image', image: line.image, class: 'qc-cart-line__image', width: 240 %}
+      </a>
+    {% else %}
+      <div class="qc-cart-line__image qc-cart-line__image--empty" aria-hidden="true">
+        {% render 'qc-icon', name: 'cart' %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="qc-cart-line__details">
+    <a class="qc-cart-line__title" href="{{ line.url }}">{{ line.product.title }}</a>
+    {% unless line.product.has_only_default_variant %}
+      <p class="qc-text-s qc-muted">{{ line.variant.title }}</p>
+    {% endunless %}
+    {% if line.selling_plan_allocation %}
+      <p class="qc-text-s qc-muted">{{ line.selling_plan_allocation.selling_plan.name }}</p>
+    {% endif %}
+    {% if line.unit_price_measurement %}
+      <p class="qc-price__unit">
+        {{ line.unit_price | money }}
+        /
+        {%- if line.unit_price_measurement.reference_value != 1 -%}
+          {{ line.unit_price_measurement.reference_value }}
+        {%- endif -%}
+        {{ line.unit_price_measurement.reference_unit }}
+      </p>
+    {% endif %}
+    {% for discount in line.line_level_discount_allocations %}
+      <p class="qc-badge qc-badge--accent">
+        {% render 'qc-icon', name: 'check' %}
+        {{ discount.discount_application.title }}
+        (−{{ discount.amount | money }})
+      </p>
+    {% endfor %}
+
+    <div class="qc-cart-line__controls">
+      <div class="qc-cart-line__quantity">
+        <label class="qc-visually-hidden" for="qc-line-qty-{{ prefix }}{{ index }}">
+          {{ 'cart.quantity_for' | t: product: line.product.title }}
+        </label>
+        <input
+          id="qc-line-qty-{{ prefix }}{{ index }}"
+          class="qc-input"
+          type="number"
+          name="updates[]"
+          value="{{ line.quantity }}"
+          min="0"
+          inputmode="numeric"
+        >
+      </div>
+      <a class="qc-btn qc-btn--quiet qc-cart-line__remove" href="{{ line.url_to_remove }}">
+        {% render 'qc-icon', name: 'close' %}
+        {{ 'cart.remove' | t }}
+        <span class="qc-visually-hidden">— {{ line.product.title }}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="qc-cart-line__price">
+    {% if line.original_line_price != line.final_line_price %}
+      <span class="qc-visually-hidden">{{ 'products.price.sale_price' | t }}</span>
+      <span>{{ line.final_line_price | money }}</span>
+      <span class="qc-visually-hidden">{{ 'products.price.regular_price' | t }}</span>
+      <s class="qc-price__compare">{{ line.original_line_price | money }}</s>
+    {% else %}
+      <span>{{ line.final_line_price | money }}</span>
+    {% endif %}
+  </div>
+</li>

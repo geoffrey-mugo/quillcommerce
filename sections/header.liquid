@@ -1,0 +1,615 @@
+{% comment %}
+  QuillCommerce header (SPEC-007): logo, ≤3-level disclosure navigation,
+  mobile drawer (details-based, JS-enhanced), search/account/cart cluster,
+  sticky modes. Native disclosures keep everything working without JS.
+{% endcomment %}
+
+<qc-header data-sticky="{{ section.settings.sticky }}">
+  <header class="qc-header{% if section.settings.sticky != 'none' %} qc-header--sticky{% endif %}">
+    <div class="qc-header__row">
+      <details class="qc-header__drawer">
+        <summary class="qc-header__icon-btn" aria-label="{{ 'header.menu' | t }}">
+          {% render 'qc-icon', name: 'menu' %}
+        </summary>
+        <div class="qc-header__drawer-panel">
+          <nav aria-label="{{ 'header.menu' | t }}">
+            <ul class="qc-drawer-nav" role="list">
+              {% for link in section.settings.menu.links %}
+                <li>
+                  {% if link.links.size > 0 %}
+                    <details>
+                      <summary class="qc-drawer-nav__item">
+                        {{ link.title }}
+                        {% render 'qc-icon', name: 'chevron' %}
+                      </summary>
+                      <ul class="qc-drawer-nav__sub" role="list">
+                        <li><a class="qc-drawer-nav__item" href="{{ link.url }}">{{ link.title }}</a></li>
+                        {% for child in link.links %}
+                          <li>
+                            {% if child.links.size > 0 %}
+                              <details>
+                                <summary class="qc-drawer-nav__item">
+                                  {{ child.title }}
+                                  {% render 'qc-icon', name: 'chevron' %}
+                                </summary>
+                                <ul class="qc-drawer-nav__sub" role="list">
+                                  <li><a class="qc-drawer-nav__item" href="{{ child.url }}">{{ child.title }}</a></li>
+                                  {% for grandchild in child.links %}
+                                    <li><a class="qc-drawer-nav__item" href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                                  {% endfor %}
+                                </ul>
+                              </details>
+                            {% else %}
+                              <a class="qc-drawer-nav__item" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title }}</a>
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </details>
+                  {% else %}
+                    <a class="qc-drawer-nav__item" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
+      </details>
+
+      <a class="qc-header__logo" href="{{ routes.root_url }}">
+        {% if section.settings.logo %}
+          {% render 'image',
+            image: section.settings.logo,
+            class: 'qc-header__logo-image',
+            width: section.settings.logo_width
+          %}
+          <span class="qc-visually-hidden">{{ shop.name }}</span>
+        {% else %}
+          <span class="qc-header__wordmark">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+
+      {%- assign mega = false -%}
+      {%- if section.settings.desktop_menu_style == 'mega' -%}
+        {%- assign mega = true -%}
+      {%- endif -%}
+      <nav class="qc-header__nav" aria-label="{{ 'header.menu' | t }}">
+        <ul class="qc-nav{% if mega %} qc-nav--mega{% endif %}" role="list">
+          {% for link in section.settings.menu.links %}
+            <li class="qc-nav__item">
+              {% if link.links.size > 0 %}
+                <details class="qc-nav__disclosure">
+                  <summary class="qc-nav__link">
+                    {{ link.title }}
+                    {% render 'qc-icon', name: 'chevron' %}
+                  </summary>
+                  {% if mega %}
+                    <div class="qc-nav__panel qc-nav__panel--mega">
+                      {% for child in link.links %}
+                        <div class="qc-nav__mega-col">
+                          <a class="qc-nav__panel-link qc-nav__mega-heading" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title }}</a>
+                          {% if child.links.size > 0 %}
+                            <ul class="qc-nav__mega-list" role="list">
+                              {% for grandchild in child.links %}
+                                <li><a class="qc-nav__panel-link" href="{{ grandchild.url }}"{% if grandchild.current %} aria-current="page"{% endif %}>{{ grandchild.title }}</a></li>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                      <div class="qc-nav__mega-col">
+                        <a class="qc-nav__panel-link qc-nav__mega-heading" href="{{ link.url }}">{{ 'header.view_all_in' | t: title: link.title }}</a>
+                      </div>
+                    </div>
+                  {% else %}
+                  <ul class="qc-nav__panel" role="list">
+                    <li><a class="qc-nav__panel-link" href="{{ link.url }}">{{ link.title }}</a></li>
+                    {% for child in link.links %}
+                      <li>
+                        {% if child.links.size > 0 %}
+                          <details class="qc-nav__subdisclosure">
+                            <summary class="qc-nav__panel-link">
+                              {{ child.title }}
+                              {% render 'qc-icon', name: 'chevron' %}
+                            </summary>
+                            <ul class="qc-nav__subpanel" role="list">
+                              {% for grandchild in child.links %}
+                                <li><a class="qc-nav__panel-link" href="{{ grandchild.url }}"{% if grandchild.current %} aria-current="page"{% endif %}>{{ grandchild.title }}</a></li>
+                              {% endfor %}
+                            </ul>
+                          </details>
+                        {% else %}
+                          <a class="qc-nav__panel-link" href="{{ child.url }}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title }}</a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </details>
+              {% else %}
+                <a class="qc-nav__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+
+      <div class="qc-header__tools">
+        <qc-search
+          data-loading-label="{{ 'search.suggest.loading' | t }}"
+          data-error-label="{{ 'search.suggest.error' | t }}"
+          data-empty-label="{{ 'search.suggest.empty' | t }}"
+          data-products-label="{{ 'search.suggest.products' | t }}"
+          data-pages-label="{{ 'search.suggest.pages' | t }}"
+          data-articles-label="{{ 'search.suggest.articles' | t }}"
+          data-see-all-label="{{ 'search.suggest.see_all' | t: terms: '[terms]' }}"
+          data-count-one-label="{{ 'search.suggest.count.one' | t: count: '[count]' }}"
+          data-count-other-label="{{ 'search.suggest.count.other' | t: count: '[count]' }}"
+          data-search-url="{{ routes.search_url }}"
+          data-money-format="{{ shop.money_format | strip_html }}"
+        >
+          <a class="qc-header__icon-btn" href="{{ routes.search_url }}" aria-label="{{ 'search.title' | t }}">
+            {% render 'qc-icon', name: 'search' %}
+          </a>
+          <dialog class="qc-search-dialog" scroll-lock aria-label="{{ 'search.title' | t }}">
+            <form action="{{ routes.search_url }}" method="get" role="search" class="qc-search-dialog__form">
+              <div class="qc-field qc-search-dialog__field">
+                <label class="qc-field__label" for="qc-suggest-input">{{ 'search.title' | t }}</label>
+                <input
+                  id="qc-suggest-input"
+                  class="qc-input"
+                  type="search"
+                  name="q"
+                  placeholder="{{ 'search.placeholder' | t }}"
+                  autocomplete="off"
+                >
+              </div>
+              <button type="submit" class="qc-btn qc-btn--primary" aria-label="{{ 'search.submit' | t }}">
+                {% render 'qc-icon', name: 'search' %}
+              </button>
+              <button type="button" class="qc-btn qc-btn--outline" data-qc-search-close aria-label="{{ 'products.quick_view.close' | t }}">
+                {% render 'qc-icon', name: 'close' %}
+              </button>
+            </form>
+            <div class="qc-search-suggest" data-qc-search-results>
+              <p class="qc-muted qc-text-s">{{ 'search.suggest.hint' | t }}</p>
+            </div>
+          </dialog>
+        </qc-search>
+        {% if shop.customer_accounts_enabled %}
+          {% assign account_label = 'header.account' | t %}
+          <shopify-account menu="{{ section.settings.customer_account_menu }}">
+            {% render 'qc-icon', name: 'account', label: account_label %}
+          </shopify-account>
+        {% endif %}
+        <a class="qc-header__icon-btn qc-header__cart" href="{{ routes.cart_url }}" aria-label="{{ 'header.cart' | t }}" {% if settings.cart_type == 'drawer' %}data-qc-cart-open{% endif %}>
+          {% render 'qc-icon', name: 'cart' %}
+          <qc-cart-count class="qc-header__count" {% if cart.item_count == 0 %}hidden{% endif %}>
+            {%- if cart.item_count > 0 %}{{ cart.item_count }}{% endif -%}
+          </qc-cart-count>
+        </a>
+      </div>
+    </div>
+  </header>
+</qc-header>
+
+<script src="{{ 'qc-header.js' | asset_url }}" type="module"></script>
+<script src="{{ 'qc-search.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  .qc-header {
+    position: relative; /* containing block for the mega panel */
+    background: var(--qc-surface);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  /* the SECTION WRAPPER must carry the sticky position: a sticky
+     .qc-header can only stick within its own wrapper (exactly its own
+     height), so the scroll-up reveal never showed mid-page */
+  .shopify-section:has(> qc-header .qc-header--sticky) {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 20;
+  }
+
+  /* keep anchor targets clear of the stuck header */
+  html:has(qc-header .qc-header--sticky) {
+    scroll-padding-block-start: 5.5rem;
+  }
+
+  .qc-header--sticky {
+    transition: transform var(--qc-dur-2) var(--qc-ease), box-shadow var(--qc-dur-2) var(--qc-ease);
+  }
+
+  .qc-header--sticky.qc-header--stuck {
+    box-shadow: var(--qc-shadow-1);
+  }
+
+  .qc-header--sticky.qc-header--tucked {
+    transform: translateY(-100%);
+  }
+
+  .qc-header__row {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-m);
+    min-block-size: 64px;
+  }
+
+  .qc-header__logo {
+    text-decoration: none;
+    margin-inline-end: var(--qc-space-m);
+  }
+
+  .qc-header__wordmark {
+    font-family: var(--qc-font-display);
+    font-weight: var(--qc-font-display-weight);
+    font-size: var(--qc-text-xl);
+    letter-spacing: 0.01em;
+  }
+
+  .qc-header__nav {
+    display: none;
+  }
+
+  .qc-header__tools {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-2xs);
+    margin-inline-start: auto;
+  }
+
+  .qc-header__icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 44px;
+    block-size: 44px;
+    color: var(--qc-ink);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qc-header__icon-btn::-webkit-details-marker {
+    display: none;
+  }
+
+  .qc-header__cart {
+    position: relative;
+  }
+
+  .qc-header__count {
+    position: absolute;
+    inset-block-start: 4px;
+    inset-inline-end: 0;
+    min-inline-size: 18px;
+    block-size: 18px;
+    display: grid;
+    place-items: center;
+    background: var(--qc-accent);
+    color: var(--qc-accent-ink);
+    border-radius: var(--qc-radius-pill);
+    font-size: 11px;
+    font-weight: 700;
+    padding-inline: 4px;
+  }
+
+  /* ---- predictive search dialog ---- */
+
+  .qc-search-dialog {
+    inline-size: min(38rem, calc(100% - var(--qc-space-l) * 2));
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+    padding: var(--qc-space-l);
+    margin-block-start: var(--qc-space-2xl);
+  }
+
+  .qc-search-dialog::backdrop {
+    background: rgb(0 0 0 / 45%);
+  }
+
+  .qc-search-dialog__form {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-search-dialog__field {
+    flex: 1;
+  }
+
+  .qc-search-suggest {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    margin-block-start: var(--qc-space-m);
+  }
+
+  .qc-search-suggest__group {
+    font-size: var(--qc-text-s);
+    color: var(--qc-ink-soft);
+    text-transform: none;
+    margin-block-start: var(--qc-space-xs);
+  }
+
+  .qc-search-suggest__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .qc-search-suggest__item {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-s);
+    min-block-size: 44px;
+    padding-inline: var(--qc-space-xs);
+    border-radius: var(--qc-radius-control);
+    text-decoration: none;
+    color: var(--qc-ink);
+  }
+
+  .qc-search-suggest__item:hover {
+    background: var(--qc-surface-raised);
+  }
+
+  .qc-search-suggest__item img {
+    border-radius: var(--qc-radius-control);
+    border: var(--qc-line-w) solid var(--qc-line);
+    flex: none;
+  }
+
+  .qc-search-suggest__price {
+    margin-inline-start: auto;
+    color: var(--qc-ink-soft);
+    font-size: var(--qc-text-s);
+  }
+
+  .qc-search-suggest__all {
+    align-self: flex-start;
+  }
+
+  /* ---- mobile drawer (details-based) ---- */
+
+  .qc-header__drawer {
+    position: relative;
+  }
+
+  .qc-header__drawer-panel {
+    position: absolute;
+    inset-inline-start: calc(-1 * var(--page-margin));
+    inline-size: 100vw;
+    max-block-size: calc(100svh - 64px);
+    overflow-y: auto;
+    background: var(--qc-surface);
+    border-block: var(--qc-line-w) solid var(--qc-line);
+    box-shadow: var(--qc-shadow-2);
+    padding: var(--qc-space-m);
+    z-index: 30;
+  }
+
+  .qc-drawer-nav,
+  .qc-drawer-nav__sub {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .qc-drawer-nav__sub {
+    padding-inline-start: var(--qc-space-m);
+  }
+
+  .qc-drawer-nav__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--qc-space-xs);
+    min-block-size: 44px;
+    padding-inline: var(--qc-space-xs);
+    text-decoration: none;
+    color: var(--qc-ink);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .qc-drawer-nav__item::-webkit-details-marker {
+    display: none;
+  }
+
+  .qc-drawer-nav details[open] > summary .qc-icon {
+    transform: rotate(180deg);
+  }
+
+  /* ---- desktop nav ---- */
+
+  @media (min-width: 990px) {
+    .qc-header__drawer {
+      display: none;
+    }
+
+    .qc-header__nav {
+      display: block;
+    }
+
+    .qc-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--qc-space-xs);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .qc-nav__item {
+      position: relative;
+    }
+
+    .qc-nav__link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--qc-space-2xs);
+      min-block-size: 44px;
+      padding-inline: var(--qc-space-s);
+      text-decoration: none;
+      color: var(--qc-ink);
+      font-weight: 500;
+      cursor: pointer;
+      list-style: none;
+      border-block-end: 2px solid transparent;
+    }
+
+    .qc-nav__link::-webkit-details-marker {
+      display: none;
+    }
+
+    .qc-nav__link:hover,
+    .qc-nav__link[aria-current='page'] {
+      border-block-end-color: var(--qc-accent);
+    }
+
+    .qc-nav__disclosure[open] > .qc-nav__link .qc-icon {
+      transform: rotate(180deg);
+    }
+
+    .qc-nav__panel {
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-start: 100%;
+      min-inline-size: 220px;
+      background: var(--qc-surface);
+      border: var(--qc-line-w) solid var(--qc-line);
+      border-radius: var(--qc-radius-surface);
+      box-shadow: var(--qc-shadow-2);
+      padding: var(--qc-space-xs);
+      list-style: none;
+      margin: 0;
+      z-index: 30;
+    }
+
+    /* mega mode: the panel spans the whole header */
+    .qc-nav--mega .qc-nav__item {
+      position: static;
+    }
+
+    .qc-nav__panel--mega {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      gap: var(--qc-space-l);
+      inset-inline: 0;
+      padding: var(--qc-space-l) var(--qc-space-xl);
+      border-inline: none;
+      border-radius: 0;
+    }
+
+    .qc-nav__mega-heading {
+      font-weight: 600;
+    }
+
+    .qc-nav__mega-list {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .qc-nav__panel-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--qc-space-xs);
+      min-block-size: 40px;
+      padding-inline: var(--qc-space-s);
+      border-radius: var(--qc-radius-control);
+      text-decoration: none;
+      color: var(--qc-ink);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .qc-nav__panel-link::-webkit-details-marker {
+      display: none;
+    }
+
+    .qc-nav__panel-link:hover {
+      background: var(--qc-surface-raised);
+    }
+
+    .qc-nav__subpanel {
+      list-style: none;
+      margin: 0;
+      padding-inline-start: var(--qc-space-m);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:general.logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "t:general.logo_width",
+      "min": 60,
+      "max": 240,
+      "step": 10,
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:general.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "select",
+      "id": "desktop_menu_style",
+      "label": "t:general.desktop_menu_style",
+      "default": "dropdown",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "t:general.menu_style_dropdown"
+        },
+        {
+          "value": "mega",
+          "label": "t:general.menu_style_mega"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sticky",
+      "label": "t:general.sticky_header",
+      "default": "scroll-up",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:general.sticky_none"
+        },
+        {
+          "value": "always",
+          "label": "t:general.sticky_always"
+        },
+        {
+          "value": "scroll-up",
+          "label": "t:general.sticky_scroll_up"
+        }
+      ]
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "t:general.customer_account_menu",
+      "default": "customer-account-main-menu"
+    }
+  ]
+}
+{% endschema %}

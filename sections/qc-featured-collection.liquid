@@ -1,0 +1,101 @@
+{% comment %}
+  Featured collection (SPEC-020 §4): canonical card strip from any
+  collection, optional View all. Pure Liquid.
+{% endcomment %}
+
+{%- liquid
+  assign col = section.settings.collection
+  assign heading = section.settings.heading
+  if heading == blank and col
+    assign heading = col.title
+  endif
+-%}
+
+{% if col %}
+  <section class="qc-featured section-padding" aria-labelledby="qc-featured-heading-{{ section.id }}">
+    <div class="qc-featured__head">
+      <h2 id="qc-featured-heading-{{ section.id }}" class="qc-featured__heading">{{ heading }}</h2>
+      {% if section.settings.show_view_all %}
+        <a class="qc-btn qc-btn--quiet" href="{{ col.url }}">
+          {{ 'collections.view_all' | t }}
+          <span class="qc-visually-hidden">— {{ col.title }}</span>
+        </a>
+      {% endif %}
+    </div>
+    <ul class="qc-product-grid" role="list">
+      {% for product in col.products limit: section.settings.limit %}
+        <li>
+          {% render 'qc-product-card', product: product %}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% elsif request.design_mode %}
+  <section class="qc-featured section-padding">
+    {% if heading != blank %}
+      <div class="qc-featured__head">
+        <h2 class="qc-featured__heading">{{ heading }}</h2>
+      </div>
+    {% endif %}
+    <ul class="qc-product-grid" role="list">
+      {% for i in (1..4) %}
+        <li>
+          <div class="qc-product-card">
+            <div class="qc-product-card__media">
+              {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'qc-product-card__image' }}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    <p class="qc-muted">{{ 'general.pick_collection_hint' | t }}</p>
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .qc-featured {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-featured__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--qc-space-m);
+    flex-wrap: wrap;
+  }
+
+  .qc-featured__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.featured_collection",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading" },
+    { "type": "collection", "id": "collection", "label": "t:general.collection" },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:general.max_products",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "t:general.show_view_all",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "t:general.featured_collection" }]
+}
+{% endschema %}

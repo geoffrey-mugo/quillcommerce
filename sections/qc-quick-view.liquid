@@ -1,0 +1,117 @@
+{% comment %}
+  Quick-view content (SPEC-006). Rendered only via the Section Rendering
+  API (?section_id=qc-quick-view on a product URL) and injected into the
+  shared quick-view dialog. No presets: not addable in the Theme Editor.
+{% endcomment %}
+
+<div class="qc-quick-view__inner">
+  <div class="qc-quick-view__media">
+    {% if product.media.size > 0 %}
+      <div class="qc-quick-view__strip" role="group" aria-label="{{ 'products.product.media_label' | t }}">
+        {% for media in product.media limit: 8 %}
+          <div class="qc-quick-view__slide">
+            {% case media.media_type %}
+              {% when 'image' %}
+                {% liquid
+                  assign qv_loading = 'lazy'
+                  if forloop.first
+                    assign qv_loading = 'eager'
+                  endif
+                %}
+                {% render 'image',
+                  image: media,
+                  class: 'qc-quick-view__image',
+                  width: 600,
+                  height: 600,
+                  crop: 'center',
+                  loading: qv_loading
+                %}
+              {% when 'video', 'external_video' %}
+                {{ media | media_tag: class: 'qc-quick-view__video' }}
+              {% when 'model' %}
+                {{ media | media_tag: class: 'qc-quick-view__video' }}
+            {% endcase %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="qc-quick-view__image qc-product-card__image--empty" aria-hidden="true">
+        {% render 'qc-icon', name: 'alert' %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="qc-quick-view__info">
+    <h2 id="qc-quick-view-title">{{ product.title }}</h2>
+    {% render 'qc-price', item: product %}
+
+    {% if product.available %}
+      <qc-product-form
+        data-adding-label="{{ 'products.card.adding' | t }}"
+        data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+        data-error-label="{{ 'products.card.add_error' | t }}"
+      >
+        {% form 'product', product %}
+          {% assign current_variant = product.selected_or_first_available_variant %}
+
+          {% unless product.has_only_default_variant %}
+            <div class="qc-field">
+              <label class="qc-field__label" for="qc-qv-variant">
+                {{ 'products.product.options_label' | t }}
+              </label>
+              <select id="qc-qv-variant" name="id">
+                {% for variant in product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == current_variant %}selected="selected"{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                    {{ variant.title }} — {{ variant.price | money }}
+                    {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {% else %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+          {% endunless %}
+
+          <div class="qc-field">
+            <label class="qc-field__label" for="qc-qv-quantity">
+              {{ 'products.product.quantity' | t }}
+            </label>
+            <input
+              id="qc-qv-quantity"
+              class="qc-input qc-quick-view__quantity"
+              type="number"
+              name="quantity"
+              inputmode="numeric"
+              min="1"
+              value="1"
+            >
+          </div>
+
+          <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
+            {{ 'products.product.add_to_cart' | t }}
+          </button>
+        {% endform %}
+      </qc-product-form>
+    {% else %}
+      <button type="button" class="qc-btn qc-btn--muted qc-btn--full" disabled>
+        {{ 'products.product.sold_out' | t }}
+      </button>
+    {% endif %}
+
+    <a class="qc-btn qc-btn--ink qc-btn--full" href="{{ product.url }}">
+      {{ 'products.quick_view.view_details' | t }}
+      {% render 'qc-icon', name: 'arrow' %}
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Quick view",
+  "settings": []
+}
+{% endschema %}

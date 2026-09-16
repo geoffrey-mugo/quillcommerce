@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "page"
+    },
+    "contact": {
+      "type": "qc-contact",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "contact"
+  ]
+}

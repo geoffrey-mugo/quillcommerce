@@ -1,0 +1,185 @@
+{% comment %}
+  Footer (SPEC-021 §4): blurb, menu, social, payment icons, copyright —
+  on QuillCommerce tokens. Replaces the Skeleton stub.
+{% endcomment %}
+
+<footer class="qc-footer full-width">
+  <div class="qc-footer__inner section-padding">
+    <div class="qc-footer__grid">
+      <div class="qc-footer__brand">
+        <p class="qc-footer__shop">{{ shop.name }}</p>
+        {% if section.settings.blurb != blank %}
+          <div class="qc-text-s qc-footer__blurb">{{ section.settings.blurb }}</div>
+        {% endif %}
+        {% render 'qc-social' %}
+        {%- capture qc_follow_button -%}{{ shop | login_button: action: 'follow' }}{%- endcapture -%}
+        {% if qc_follow_button != blank %}
+          <div class="qc-footer__follow">{{ qc_follow_button }}</div>
+        {% endif %}
+      </div>
+
+      {% if section.settings.menu != blank %}
+        <nav class="qc-footer__nav" aria-label="{{ 'general.footer_nav_label' | t }}">
+          <ul class="qc-footer__links" role="list">
+            {% for link in section.settings.menu.links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </nav>
+      {% endif %}
+    </div>
+
+    <div class="qc-footer__bottom">
+      <p class="qc-footer__copyright qc-text-s">
+        &copy; {{ 'now' | date: '%Y' }}
+        {{ shop.name | link_to: routes.root_url }}
+        · {{ powered_by_link }}
+      </p>
+
+      {% if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 %}
+        <div class="qc-footer__payment">
+          <span class="qc-visually-hidden">{{ 'general.payment_methods' | t }}</span>
+          <ul class="qc-footer__payment-list" role="list" aria-hidden="true">
+            {% for type in shop.enabled_payment_types %}
+              <li>{{ type | payment_type_svg_tag }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .qc-footer {
+    margin-block-start: var(--qc-space-2xl);
+    background: var(--qc-surface-raised);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xl);
+    padding-block: var(--qc-space-xl);
+    max-inline-size: var(--page-width);
+    margin-inline: auto;
+    padding-inline: var(--page-margin);
+  }
+
+  .qc-footer__grid {
+    display: grid;
+    gap: var(--qc-space-xl);
+  }
+
+  @media (min-width: 750px) {
+    .qc-footer__grid {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    }
+  }
+
+  .qc-footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-s);
+    align-items: flex-start;
+  }
+
+  .qc-footer__shop {
+    margin: 0;
+    font-family: var(--qc-font-display);
+    font-weight: var(--qc-font-display-weight);
+    font-size: var(--qc-text-l);
+  }
+
+  .qc-footer__blurb {
+    max-inline-size: var(--qc-measure);
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--qc-space-2xs);
+  }
+
+  .qc-social__link {
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: 44px;
+    min-block-size: 44px;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-social__link:hover {
+    color: var(--qc-accent);
+  }
+
+  .qc-footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-footer__links a {
+    text-decoration: none;
+  }
+
+  .qc-footer__links a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .qc-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--qc-space-m);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+    padding-block-start: var(--qc-space-m);
+  }
+
+  .qc-footer__copyright {
+    margin: 0;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-footer__payment-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--qc-space-2xs);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.footer",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "blurb",
+      "label": "t:general.footer_blurb"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:labels.show_payment_icons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

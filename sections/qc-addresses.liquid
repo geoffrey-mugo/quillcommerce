@@ -1,0 +1,59 @@
+{% comment %} Address management (SPEC-022 §5): list + details-disclosed forms. {% endcomment %}
+
+<div class="qc-account section-padding">
+  <div class="qc-account__links">
+    <a href="{{ routes.account_url }}">{{ 'customer.order.back' | t }}</a>
+  </div>
+  <h1>{{ 'customer.addresses.title' | t }}</h1>
+
+  <details class="qc-account__disclosure">
+    <summary class="qc-btn qc-btn--primary">{{ 'customer.addresses.add' | t }}</summary>
+    <div class="qc-account__disclosure-body">
+      {% render 'qc-address-form', id_prefix: 'qc-addr-new' %}
+    </div>
+  </details>
+
+  {% paginate customer.addresses by 10 %}
+    {% if customer.addresses.size > 0 %}
+      <ul class="qc-account__address-list" role="list">
+        {% for address in customer.addresses %}
+          <li class="qc-account__address">
+            {% if address == customer.default_address %}
+              <p class="qc-badge qc-badge--accent">{{ 'customer.addresses.default' | t }}</p>
+            {% endif %}
+            {{ address | format_address }}
+            <div class="qc-account__address-actions">
+              <details class="qc-account__disclosure">
+                <summary class="qc-btn qc-btn--outline">{{ 'customer.addresses.edit' | t }}</summary>
+                <div class="qc-account__disclosure-body">
+                  {% render 'qc-address-form', address: address, id_prefix: address.id %}
+                </div>
+              </details>
+              <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}">
+                <input type="hidden" name="_method" value="delete">
+                <button type="submit" class="qc-btn qc-btn--quiet">
+                  {{ 'customer.addresses.delete' | t }}
+                  <span class="qc-visually-hidden">— {{ address.address1 }}</span>
+                </button>
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      {% if paginate.pages > 1 %}
+        <nav class="qc-pagination" aria-label="{{ 'general.pagination' | t }}">
+          {{ paginate | default_pagination }}
+        </nav>
+      {% endif %}
+    {% else %}
+      <p class="qc-muted">{{ 'customer.addresses.none' | t }}</p>
+    {% endif %}
+  {% endpaginate %}
+</div>
+
+{% schema %}
+{
+  "name": "t:general.addresses",
+  "settings": []
+}
+{% endschema %}

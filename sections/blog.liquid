@@ -1,0 +1,87 @@
+{% comment %}
+  Blog listing (SPEC-004 §4): reading-list article cards with meta and
+  excerpt, at measure width.
+  https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
+{% endcomment %}
+
+<div class="qc-blog">
+  <h1>{{ blog.title }}</h1>
+
+  {% paginate blog.articles by 8 %}
+    <ul class="qc-blog__list" role="list">
+      {% for article in blog.articles %}
+        <li class="qc-blog__card">
+          {% if article.image %}
+            <a href="{{ article.url }}" tabindex="-1" aria-hidden="true">
+              {% render 'image', image: article.image, class: 'qc-blog__image', width: 900 %}
+            </a>
+          {% endif %}
+          <h2 class="qc-blog__title"><a href="{{ article.url }}">{{ article.title }}</a></h2>
+          {% assign date = article.published_at | time_tag: format: 'date' %}
+          <p class="qc-text-s qc-muted">{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
+          {% if article.excerpt != blank %}
+            <p>{{ article.excerpt | strip_html | truncatewords: 40 }}</p>
+          {% endif %}
+          <a class="qc-btn qc-btn--quiet" href="{{ article.url }}">
+            {{ 'blog.read_article' | t }}
+            <span class="qc-visually-hidden">— {{ article.title }}</span>
+            {% render 'qc-icon', name: 'arrow' %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {%- if paginate.pages > 1 -%}
+      <nav class="qc-pagination" aria-label="{{ 'general.pagination' | t }}">
+        {{ paginate | default_pagination }}
+      </nav>
+    {%- endif -%}
+  {% endpaginate %}
+</div>
+
+{% stylesheet %}
+  .qc-blog {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    padding-block: var(--qc-space-xl);
+    max-inline-size: 46rem;
+  }
+
+  .qc-blog__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-2xl);
+  }
+
+  .qc-blog__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--qc-space-xs);
+  }
+
+  .qc-blog__image {
+    inline-size: 100%;
+    border-radius: var(--qc-radius-surface);
+    border: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-blog__title a {
+    text-decoration: none;
+  }
+
+  .qc-blog__title a:hover {
+    text-decoration: underline;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.blog",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,140 @@
+{% comment %}
+  Contact form: plain contact-form post with inline success and error
+  states. No JS. Used by the page.contact template and addable to any
+  page.
+{% endcomment %}
+
+{%- assign form_id = 'qc-contact-' | append: section.id -%}
+
+<div class="qc-contact section-padding">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-contact__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  {% if section.settings.subheading != blank %}
+    <p class="qc-muted">{{ section.settings.subheading }}</p>
+  {% endif %}
+
+  {% form 'contact', id: form_id, class: 'qc-contact__form' %}
+    {% if form.posted_successfully? %}
+      <p class="qc-contact__success" role="status">
+        {% render 'qc-icon', name: 'check' %}
+        {{ 'contact.success' | t }}
+      </p>
+    {% endif %}
+    {% render 'qc-form-errors', form: form %}
+
+    <div class="qc-contact__row">
+      <div class="qc-field">
+        <label class="qc-field__label" for="{{ form_id }}-name">{{ 'contact.name_label' | t }}</label>
+        <input
+          id="{{ form_id }}-name"
+          class="qc-input"
+          type="text"
+          name="contact[name]"
+          value="{{ form.name }}"
+          autocomplete="name"
+        >
+      </div>
+      <div class="qc-field">
+        <label class="qc-field__label" for="{{ form_id }}-email">{{ 'contact.email_label' | t }}</label>
+        <input
+          id="{{ form_id }}-email"
+          class="qc-input"
+          type="email"
+          name="contact[email]"
+          value="{{ form.email }}"
+          autocomplete="email"
+          required
+          {% if form.errors contains 'email' %}
+            aria-invalid="true"
+          {% endif %}
+        >
+      </div>
+    </div>
+
+    <div class="qc-field">
+      <label class="qc-field__label" for="{{ form_id }}-message">{{ 'contact.message_label' | t }}</label>
+      <textarea
+        id="{{ form_id }}-message"
+        class="qc-input qc-contact__message"
+        name="contact[body]"
+        rows="6"
+        required
+      >{{ form.body }}</textarea>
+    </div>
+
+    <button type="submit" class="qc-btn qc-btn--primary">
+      {{ 'contact.submit' | t }}
+    </button>
+  {% endform %}
+</div>
+
+{% stylesheet %}
+  .qc-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+    inline-size: min(40rem, 100%);
+  }
+
+  .qc-contact__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    align-items: flex-start;
+  }
+
+  .qc-contact__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--qc-space-m);
+    inline-size: 100%;
+  }
+
+  .qc-contact__row .qc-field {
+    flex: 1;
+    min-inline-size: 14rem;
+  }
+
+  .qc-contact__form .qc-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-2xs);
+    inline-size: 100%;
+  }
+
+  .qc-contact__message {
+    resize: vertical;
+  }
+
+  .qc-contact__success {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--qc-space-xs);
+    margin: 0;
+    font-weight: 600;
+    color: var(--qc-ok);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.contact_form",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Get in touch" },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "t:general.subheading",
+      "default": "Questions about gear, orders, or the water? We answer every message."
+    }
+  ],
+  "presets": [{ "name": "t:general.contact_form" }]
+}
+{% endschema %}
