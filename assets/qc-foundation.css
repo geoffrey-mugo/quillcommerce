@@ -129,6 +129,7 @@ main {
 }
 
 .qc-btn--primary:hover {
+  background: var(--qc-accent);
   background: color-mix(in oklab, var(--qc-accent) 88%, var(--qc-ink));
   color: var(--qc-accent-ink);
 }
@@ -231,12 +232,13 @@ main {
 
 .qc-badge--accent {
   background: var(--qc-accent-tint);
+  border-color: var(--qc-accent);
   border-color: color-mix(in oklab, var(--qc-accent) 35%, var(--qc-surface));
 }
 
-.qc-badge--ok { color: var(--qc-ok); border-color: color-mix(in oklab, var(--qc-ok) 35%, var(--qc-surface)); }
-.qc-badge--warn { color: var(--qc-warn); border-color: color-mix(in oklab, var(--qc-warn) 35%, var(--qc-surface)); }
-.qc-badge--danger { color: var(--qc-danger); border-color: color-mix(in oklab, var(--qc-danger) 35%, var(--qc-surface)); }
+.qc-badge--ok { color: var(--qc-ok); border-color: var(--qc-ok); border-color: color-mix(in oklab, var(--qc-ok) 35%, var(--qc-surface)); }
+.qc-badge--warn { color: var(--qc-warn); border-color: var(--qc-warn); border-color: color-mix(in oklab, var(--qc-warn) 35%, var(--qc-surface)); }
+.qc-badge--danger { color: var(--qc-danger); border-color: var(--qc-danger); border-color: color-mix(in oklab, var(--qc-danger) 35%, var(--qc-surface)); }
 
 /* ---- price primitive companion styles ---- */
 
@@ -375,11 +377,13 @@ main {
 }
 
 .qc-btn--ink:hover {
+  background: var(--qc-ink);
   background: color-mix(in oklab, var(--qc-ink) 85%, var(--qc-surface));
   color: var(--qc-surface);
 }
 
 .qc-btn--muted {
+  background: var(--qc-line-strong);
   background: color-mix(in oklab, var(--qc-ink) 35%, var(--qc-surface));
   border-color: transparent;
   color: var(--qc-surface);
@@ -390,6 +394,7 @@ main {
    busy treatment instead of flashing grey */
 .qc-btn--primary:disabled:not([aria-busy='true']),
 .qc-btn--muted:disabled {
+  background: var(--qc-line-strong);
   background: color-mix(in oklab, var(--qc-ink) 35%, var(--qc-surface));
   border-color: transparent;
   color: var(--qc-surface);

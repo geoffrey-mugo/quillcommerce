@@ -1,5 +1,14 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+{%- liquid
+  assign qc_base_lang = request.locale.iso_code | split: '-' | first
+  assign qc_rtl_langs = 'ar,he,fa,ur,ps,sd,ckb,dv,ug,yi' | split: ','
+  if qc_rtl_langs contains qc_base_lang
+    assign qc_dir = 'rtl'
+  else
+    assign qc_dir = 'ltr'
+  endif
+-%}
+<html lang="{{ request.locale.iso_code }}" dir="{{ qc_dir }}">
   <head>
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}

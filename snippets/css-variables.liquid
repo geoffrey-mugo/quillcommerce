@@ -110,4 +110,34 @@
       --qc-dur-2: 0ms;
     }
   }
+
+  {%- comment -%}
+    Browsers without color-mix() (pre-2023) treat the derived tokens as
+    invalid at use time. Re-declare them here as literal colors computed
+    server-side with the same weights. Merchant overrides are literals
+    and already work, so they are skipped.
+  {%- endcomment -%}
+  @supports not (color: color-mix(in oklab, red, blue)) {
+    :root {
+      --qc-ink-soft: {{ settings.foreground_color | color_mix: settings.background_color, 76 }};
+      {%- if settings.border_color == blank %}
+      --qc-line: {{ settings.foreground_color | color_mix: settings.background_color, 18 }};
+      {%- endif %}
+      --qc-line-strong: {{ settings.foreground_color | color_mix: settings.background_color, 40 }};
+      {%- if settings.card_background_color == blank %}
+      --qc-surface-raised: {{ settings.foreground_color | color_mix: settings.background_color, 4 }};
+      {%- endif %}
+      {%- if settings.button_text_color == blank %}
+      --qc-accent-ink: {{ settings.accent_color | color_mix: '#FFFFFF', 8 }};
+      {%- endif %}
+      --qc-accent-tint: {{ settings.accent_color | color_mix: settings.background_color, 10 }};
+      --qc-ok: {{ '#2E7D4F' | color_mix: settings.foreground_color, 85 }};
+      --qc-warn: {{ '#9A6B15' | color_mix: settings.foreground_color, 85 }};
+      {%- if settings.critical_color == blank %}
+      --qc-danger: {{ '#B3372B' | color_mix: settings.foreground_color, 85 }};
+      {%- endif %}
+      --qc-shadow-1: 0 1px 2px {{ settings.foreground_color | color_modify: 'alpha', 0.1 }};
+      --qc-shadow-2: 0 6px 24px -8px {{ settings.foreground_color | color_modify: 'alpha', 0.22 }};
+    }
+  }
 {% endstyle %}
