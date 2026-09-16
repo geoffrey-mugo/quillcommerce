@@ -726,6 +726,37 @@
     gap: var(--qc-space-m);
   }
 
+  /* the primary CTA leads the buy box */
+  .qc-product__info [data-qc-buy] {
+    min-block-size: 52px;
+    font-size: var(--qc-text-l);
+  }
+
+  /* dynamic checkout: the unbranded button follows the theme as a
+     secondary action so it never outshines Add to cart (branded
+     wallets keep their own look, as Shopify requires) */
+  .shopify-payment-button__button--unbranded {
+    min-block-size: 48px;
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    border-radius: var(--qc-radius-control);
+    font: inherit;
+    font-weight: 600;
+    transition: border-color var(--qc-dur-1) var(--qc-ease);
+  }
+
+  .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    border-color: var(--qc-ink);
+  }
+
+  .shopify-payment-button__button--branded {
+    border-radius: var(--qc-radius-control);
+    overflow: hidden;
+  }
+
   .qc-product__stock[data-qc-stock-state='low'] {
     color: var(--qc-warn);
     font-weight: 600;
