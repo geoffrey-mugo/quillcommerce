@@ -527,6 +527,20 @@ main {
   flex: 1;
 }
 
+/* phones: always two cards per row; the cards' own container queries
+   scale their contents down for the narrow width */
+@media (max-width: 649px) {
+  .qc-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--qc-space-m) var(--qc-space-s);
+  }
+
+  .qc-product-grid .qc-product-card {
+    padding: var(--qc-space-xs);
+    gap: var(--qc-space-xs);
+  }
+}
+
 /* ---- pagination (SPEC-004 §9): styles default_pagination output ---- */
 
 .qc-pagination {
