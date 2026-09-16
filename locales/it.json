@@ -41,14 +41,7 @@
     "updated": "Carrello aggiornato",
     "view_cart": "Vedi il carrello"
   },
-  "customers": {
-    "login": {
-      "email": "E-mail",
-      "password": "Password",
-      "submit": "Accedi",
-      "title": "Accesso"
-    }
-  },
+  "customers": {},
   "collections": {
     "title": "Collezioni",
     "empty": "Questa collezione non contiene ancora prodotti.",
@@ -62,7 +55,6 @@
   },
   "gift_card": {
     "add_to_apple_wallet": "Aggiungi ad Apple Wallet",
-    "card": "Carta regalo",
     "expired": "Questa carta regalo è scaduta",
     "expires_on": "Scade il {{ expires_on }}",
     "use_at_checkout": "Usa questa carta regalo al pagamento",
@@ -151,7 +143,6 @@
       "add_error": "Impossibile aggiungere al carrello. Riprova.",
       "added": "{{ title }} aggiunto al carrello",
       "adding": "Aggiunta in corso…",
-      "choose_options": "Scegli le opzioni",
       "example_title": "Prodotto di esempio",
       "quick_view": "Anteprima"
     },
@@ -202,7 +193,6 @@
   "header": {
     "account": "Account",
     "cart": "Carrello",
-    "close_menu": "Chiudi il menu",
     "menu": "Menu",
     "view_all_in": "Tutto in {{ title }}"
   },

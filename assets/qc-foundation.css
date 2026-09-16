@@ -177,10 +177,6 @@ main {
   font-weight: 600;
 }
 
-.qc-field__hint {
-  font-size: var(--qc-text-s);
-  color: var(--qc-ink-soft);
-}
 
 .qc-input,
 .qc-field input:not([type='checkbox']):not([type='radio']),
@@ -208,10 +204,6 @@ main {
   color: var(--qc-danger);
 }
 
-.qc-field--invalid :is(input, select, textarea),
-.qc-input[aria-invalid='true'] {
-  border-color: var(--qc-danger);
-}
 
 /* ---- badges (SPEC-002 §10): meaning lives in the text, never color alone ---- */
 
@@ -236,9 +228,7 @@ main {
   border-color: color-mix(in oklab, var(--qc-accent) 35%, var(--qc-surface));
 }
 
-.qc-badge--ok { color: var(--qc-ok); border-color: var(--qc-ok); border-color: color-mix(in oklab, var(--qc-ok) 35%, var(--qc-surface)); }
 .qc-badge--warn { color: var(--qc-warn); border-color: var(--qc-warn); border-color: color-mix(in oklab, var(--qc-warn) 35%, var(--qc-surface)); }
-.qc-badge--danger { color: var(--qc-danger); border-color: var(--qc-danger); border-color: color-mix(in oklab, var(--qc-danger) 35%, var(--qc-surface)); }
 
 /* ---- price primitive companion styles ---- */
 

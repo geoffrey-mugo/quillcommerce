@@ -94,6 +94,13 @@
     padding-block: var(--qc-space-xl);
   }
 
+  /* results dim while a filter change is fetched and swapped in place */
+  .qc-search[aria-busy='true'] {
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity var(--qc-dur-1) var(--qc-ease);
+  }
+
   .qc-search__form {
     display: flex;
     align-items: flex-end;

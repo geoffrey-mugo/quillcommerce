@@ -113,6 +113,13 @@
     display: none;
   }
 
+  /* results dim while a filter change is fetched and swapped in place */
+  .qc-collection[aria-busy='true'] {
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity var(--qc-dur-1) var(--qc-ease);
+  }
+
   @media (max-width: 989px) {
     .qc-facets__form {
       gap: var(--qc-space-s);

@@ -41,14 +41,7 @@
     "updated": "Cart updated",
     "view_cart": "View cart"
   },
-  "customers": {
-    "login": {
-      "email": "Email",
-      "password": "Password",
-      "submit": "Sign in",
-      "title": "Login"
-    }
-  },
+  "customers": {},
   "collections": {
     "title": "Collections",
     "empty": "There are no products in this collection yet.",
@@ -62,7 +55,6 @@
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
-    "card": "Gift card",
     "expired": "This gift card has expired",
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout",
@@ -151,7 +143,6 @@
       "add_error": "Couldn't add to cart. Please try again.",
       "added": "{{ title }} added to cart",
       "adding": "Adding…",
-      "choose_options": "Choose options",
       "example_title": "Example product",
       "quick_view": "Quick"
     },
@@ -202,7 +193,6 @@
   "header": {
     "account": "Account",
     "cart": "Cart",
-    "close_menu": "Close menu",
     "menu": "Menu",
     "view_all_in": "All {{ title }}"
   },

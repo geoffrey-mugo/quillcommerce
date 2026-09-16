@@ -267,7 +267,28 @@ if (!customElements.get('qc-cart-lines')) {
           { signal }
         );
 
-        document.addEventListener(EVT_UPDATED, () => this.refresh(), { signal });
+        /* a surface hidden inside a closed drawer only marks itself
+           stale — it re-syncs when the drawer opens, so one edit never
+           costs two section renders */
+        document.addEventListener(
+          EVT_UPDATED,
+          () => {
+            const dialog = this.closest('dialog');
+            if (dialog && !dialog.open) {
+              this.stale = true;
+            } else {
+              this.refresh();
+            }
+          },
+          { signal }
+        );
+      }
+
+      refreshIfStale() {
+        if (this.stale) {
+          this.stale = false;
+          this.refresh();
+        }
       }
 
       disconnectedCallback() {
@@ -391,6 +412,7 @@ if (!customElements.get('qc-cart-drawer')) {
 
       open() {
         if (!this.dialog.open) this.dialog.showModal();
+        this.dialog.querySelector('qc-cart-lines')?.refreshIfStale();
       }
     }
   );

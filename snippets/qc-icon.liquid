@@ -1,8 +1,8 @@
 {% doc %}
   QuillCommerce icon primitive (SPEC-002 §12). Original 24×24 stroke set.
 
-  @param {string} name - one of: cart, account, search, chevron, close, plus,
-    minus, check, alert, arrow, eye
+  @param {string} name - one of: cart, account, search, chevron, close,
+    check, alert, arrow, eye, truck, shield, lock, returns
   @param {string} [label] - accessible name; omitted = decorative (aria-hidden)
   @param {string} [class] - extra classes
 {% enddoc %}
@@ -27,10 +27,6 @@
       <path d="m6.5 9.5 5.5 5.5 5.5-5.5"/>
     {%- when 'close' -%}
       <path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>
-    {%- when 'plus' -%}
-      <path d="M12 5.5v13M5.5 12h13"/>
-    {%- when 'minus' -%}
-      <path d="M5.5 12h13"/>
     {%- when 'check' -%}
       <path d="m5.5 12.5 4.2 4.2 8.8-9.4"/>
     {%- when 'alert' -%}
