@@ -16,28 +16,30 @@
   },
   "cart": {
     "checkout": "Vai al pagamento",
-    "title": "Carrello",
-    "update": "Aggiorna",
-    "remove": "Rimuovi",
-    "empty": "Il tuo carrello è vuoto.",
+    "close": "Chiudi il carrello",
     "continue_shopping": "Continua gli acquisti",
-    "summary": "Riepilogo ordine",
+    "decrease": "Riduci la quantità per {{ product }}",
+    "empty": "Il tuo carrello è vuoto.",
+    "increase": "Aumenta la quantità per {{ product }}",
+    "items_count": {
+      "one": "{{ count }} articolo",
+      "other": "{{ count }} articoli"
+    },
     "note_label": "Nota per l'ordine",
+    "note_saved": "Nota salvata",
+    "quantity_for": "Quantità per {{ product }}",
+    "remove": "Rimuovi",
     "subtotal": {
       "one": "Subtotale ({{ count }} articolo)",
       "other": "Subtotale ({{ count }} articoli)"
     },
-    "quantity_for": "Quantità per {{ product }}",
-    "taxes_included_shipping_at_checkout": "Tasse incluse. Spedizione calcolata al pagamento.",
+    "summary": "Riepilogo ordine",
     "taxes_and_shipping_at_checkout": "Tasse e spedizione calcolate al pagamento.",
-    "view_cart": "Vedi il carrello",
-    "close": "Chiudi il carrello",
+    "taxes_included_shipping_at_checkout": "Tasse incluse. Spedizione calcolata al pagamento.",
+    "title": "Carrello",
+    "update": "Aggiorna",
     "updated": "Carrello aggiornato",
-    "note_saved": "Nota salvata",
-    "items_count": {
-      "one": "{{ count }} articolo",
-      "other": "{{ count }} articoli"
-    }
+    "view_cart": "Vedi il carrello"
   },
   "customers": {
     "login": {
@@ -196,9 +198,10 @@
     }
   },
   "header": {
-    "menu": "Menu",
     "account": "Account",
     "cart": "Carrello",
+    "close_menu": "Chiudi il menu",
+    "menu": "Menu",
     "view_all_in": "Tutto in {{ title }}"
   },
   "facets": {

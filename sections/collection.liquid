@@ -108,6 +108,29 @@
     gap: var(--qc-space-m);
   }
 
+  /* changes auto-apply once JS runs; the Apply button is the no-JS path */
+  .qc-facets--enhanced .qc-facets__apply {
+    display: none;
+  }
+
+  @media (max-width: 989px) {
+    .qc-facets__form {
+      gap: var(--qc-space-s);
+    }
+
+    /* compact toolbar: label sits beside the sort select */
+    .qc-facets__sort {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: var(--qc-space-xs);
+    }
+
+    .qc-facets__sort .qc-field__label {
+      margin: 0;
+    }
+  }
+
   .qc-facets__toggle {
     inline-size: 100%;
     justify-content: space-between;

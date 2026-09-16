@@ -16,28 +16,30 @@
   },
   "cart": {
     "checkout": "Passer à la caisse",
-    "title": "Panier",
-    "update": "Mettre à jour",
-    "remove": "Supprimer",
-    "empty": "Votre panier est vide.",
+    "close": "Fermer le panier",
     "continue_shopping": "Continuer vos achats",
-    "summary": "Récapitulatif de commande",
+    "decrease": "Réduire la quantité pour {{ product }}",
+    "empty": "Votre panier est vide.",
+    "increase": "Augmenter la quantité pour {{ product }}",
+    "items_count": {
+      "one": "{{ count }} article",
+      "other": "{{ count }} articles"
+    },
     "note_label": "Note de commande",
+    "note_saved": "Note enregistrée",
+    "quantity_for": "Quantité pour {{ product }}",
+    "remove": "Supprimer",
     "subtotal": {
       "one": "Sous-total ({{ count }} article)",
       "other": "Sous-total ({{ count }} articles)"
     },
-    "quantity_for": "Quantité pour {{ product }}",
-    "taxes_included_shipping_at_checkout": "Taxes incluses. Frais de livraison calculés à la caisse.",
+    "summary": "Récapitulatif de commande",
     "taxes_and_shipping_at_checkout": "Taxes et frais de livraison calculés à la caisse.",
-    "view_cart": "Voir le panier",
-    "close": "Fermer le panier",
+    "taxes_included_shipping_at_checkout": "Taxes incluses. Frais de livraison calculés à la caisse.",
+    "title": "Panier",
+    "update": "Mettre à jour",
     "updated": "Panier mis à jour",
-    "note_saved": "Note enregistrée",
-    "items_count": {
-      "one": "{{ count }} article",
-      "other": "{{ count }} articles"
-    }
+    "view_cart": "Voir le panier"
   },
   "customers": {
     "login": {
@@ -196,9 +198,10 @@
     }
   },
   "header": {
-    "menu": "Menu",
     "account": "Compte",
     "cart": "Panier",
+    "close_menu": "Fermer le menu",
+    "menu": "Menu",
     "view_all_in": "Tout {{ title }}"
   },
   "facets": {

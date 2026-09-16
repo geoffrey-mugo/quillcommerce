@@ -219,8 +219,10 @@ if (!customElements.get('qc-cart-lines')) {
         this.abort = new AbortController();
         const { signal } = this.abort;
 
-        /* immediate edits — hide the manual Update button */
+        /* immediate edits — hide the manual Update button; steppers only
+           render once this enhancement is running */
         this.querySelector('[data-qc-cart-update]')?.setAttribute('hidden', '');
+        this.classList.add('qc-cart-lines--enhanced');
 
         this.addEventListener(
           'change',
@@ -241,6 +243,18 @@ if (!customElements.get('qc-cart-lines')) {
         this.addEventListener(
           'click',
           (e) => {
+            const step = e.target.closest('[data-qc-qty-step]');
+            if (step) {
+              const input = step
+                .closest('[data-qc-cart-line]')
+                ?.querySelector('input[name="updates[]"]');
+              if (input) {
+                const next = Math.max(0, Number(input.value || 0) + Number(step.dataset.qcQtyStep));
+                input.value = next;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+              return;
+            }
             const remove = e.target.closest('.qc-cart-line__remove');
             const line = remove?.closest('[data-qc-cart-line]');
             if (remove && line) {

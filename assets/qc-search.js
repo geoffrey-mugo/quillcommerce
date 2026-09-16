@@ -134,11 +134,14 @@ if (!customElements.get('qc-search')) {
             span.textContent = item.title;
             a.append(span);
             if (key === 'products' && item.price) {
+              const sep = document.createElement('span');
+              sep.className = 'qc-visually-hidden';
+              sep.textContent = ' — ';
               const price = document.createElement('span');
               price.className = 'qc-search-suggest__price';
               const fmt = this.dataset.moneyFormat;
               price.textContent = fmt ? fmt.replace(/\{\{\s*amount[^}]*\}\}/, item.price) : item.price;
-              a.append(price);
+              a.append(sep, price);
             }
             li.append(a);
             ul.append(li);

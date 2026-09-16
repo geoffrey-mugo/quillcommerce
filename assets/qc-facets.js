@@ -9,6 +9,9 @@ if (!customElements.get('qc-facets')) {
       connectedCallback() {
         this.abort = new AbortController();
         const { signal } = this.abort;
+        /* every change auto-applies below, so the Apply fallback button
+           is redundant noise once JS is running — CSS hides it */
+        this.classList.add('qc-facets--enhanced');
         this.form = this.querySelector('form');
         this.form?.addEventListener(
           'change',

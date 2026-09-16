@@ -16,28 +16,30 @@
   },
   "cart": {
     "checkout": "Checkout",
-    "title": "Cart",
-    "update": "Update",
-    "remove": "Remove",
-    "empty": "Your cart is empty.",
+    "close": "Close cart",
     "continue_shopping": "Continue shopping",
-    "summary": "Order summary",
+    "decrease": "Decrease quantity for {{ product }}",
+    "empty": "Your cart is empty.",
+    "increase": "Increase quantity for {{ product }}",
+    "items_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
     "note_label": "Order note",
+    "note_saved": "Note saved",
+    "quantity_for": "Quantity for {{ product }}",
+    "remove": "Remove",
     "subtotal": {
       "one": "Subtotal ({{ count }} item)",
       "other": "Subtotal ({{ count }} items)"
     },
-    "quantity_for": "Quantity for {{ product }}",
-    "taxes_included_shipping_at_checkout": "Taxes included. Shipping calculated at checkout.",
+    "summary": "Order summary",
     "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout.",
-    "view_cart": "View cart",
-    "close": "Close cart",
+    "taxes_included_shipping_at_checkout": "Taxes included. Shipping calculated at checkout.",
+    "title": "Cart",
+    "update": "Update",
     "updated": "Cart updated",
-    "note_saved": "Note saved",
-    "items_count": {
-      "one": "{{ count }} item",
-      "other": "{{ count }} items"
-    }
+    "view_cart": "View cart"
   },
   "customers": {
     "login": {
@@ -196,9 +198,10 @@
     }
   },
   "header": {
-    "menu": "Menu",
     "account": "Account",
     "cart": "Cart",
+    "close_menu": "Close menu",
+    "menu": "Menu",
     "view_all_in": "All {{ title }}"
   },
   "facets": {

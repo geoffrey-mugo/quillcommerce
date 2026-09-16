@@ -16,28 +16,30 @@
   },
   "cart": {
     "checkout": "Zur Kasse",
-    "title": "Warenkorb",
-    "update": "Aktualisieren",
-    "remove": "Entfernen",
-    "empty": "Ihr Warenkorb ist leer.",
+    "close": "Warenkorb schließen",
     "continue_shopping": "Weiter einkaufen",
-    "summary": "Bestellübersicht",
+    "decrease": "Menge verringern für {{ product }}",
+    "empty": "Ihr Warenkorb ist leer.",
+    "increase": "Menge erhöhen für {{ product }}",
+    "items_count": {
+      "one": "{{ count }} Artikel",
+      "other": "{{ count }} Artikel"
+    },
     "note_label": "Anmerkung zur Bestellung",
+    "note_saved": "Anmerkung gespeichert",
+    "quantity_for": "Menge für {{ product }}",
+    "remove": "Entfernen",
     "subtotal": {
       "one": "Zwischensumme ({{ count }} Artikel)",
       "other": "Zwischensumme ({{ count }} Artikel)"
     },
-    "quantity_for": "Menge für {{ product }}",
-    "taxes_included_shipping_at_checkout": "Inklusive Steuern. Versand wird an der Kasse berechnet.",
+    "summary": "Bestellübersicht",
     "taxes_and_shipping_at_checkout": "Steuern und Versand werden an der Kasse berechnet.",
-    "view_cart": "Warenkorb ansehen",
-    "close": "Warenkorb schließen",
+    "taxes_included_shipping_at_checkout": "Inklusive Steuern. Versand wird an der Kasse berechnet.",
+    "title": "Warenkorb",
+    "update": "Aktualisieren",
     "updated": "Warenkorb aktualisiert",
-    "note_saved": "Anmerkung gespeichert",
-    "items_count": {
-      "one": "{{ count }} Artikel",
-      "other": "{{ count }} Artikel"
-    }
+    "view_cart": "Warenkorb ansehen"
   },
   "customers": {
     "login": {
@@ -196,9 +198,10 @@
     }
   },
   "header": {
-    "menu": "Menü",
     "account": "Konto",
     "cart": "Warenkorb",
+    "close_menu": "Menü schließen",
+    "menu": "Menü",
     "view_all_in": "Alles in {{ title }}"
   },
   "facets": {

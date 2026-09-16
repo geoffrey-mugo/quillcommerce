@@ -416,10 +416,15 @@ main {
   white-space: nowrap;
 }
 
-/* dense-grid guard: buttons keep fitting even on very narrow cards */
+/* dense-grid guard: buttons keep fitting even on very narrow cards, and
+   titles get a third line instead of truncating harder */
 @container (max-width: 200px) {
   .qc-product-card__actions .qc-btn {
     font-size: 0.75rem;
+  }
+
+  .qc-product-card__link {
+    -webkit-line-clamp: 3;
   }
 }
 
@@ -845,6 +850,68 @@ main {
 
   .qc-cart-line__quantity .qc-input {
     inline-size: 5.5rem;
+  }
+
+  /* quantity stepper: one bordered group of − / count / +. The buttons
+     appear only under JS enhancement; without it the bare input plus the
+     Update button flow remains. */
+  .qc-qty {
+    display: inline-flex;
+    align-items: stretch;
+  }
+
+  .qc-qty__btn {
+    display: none;
+    inline-size: 40px;
+    min-block-size: 44px;
+    place-items: center;
+    font-size: var(--qc-text-l);
+    line-height: 1;
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    cursor: pointer;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__btn {
+    display: inline-grid;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty {
+    border-radius: var(--qc-radius-control);
+    overflow: hidden;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__btn:first-child {
+    border-inline-end: 0;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__btn:last-child {
+    border-inline-start: 0;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__input {
+    inline-size: 3.5rem;
+    text-align: center;
+    border-radius: 0;
+    appearance: textfield;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__input::-webkit-outer-spin-button,
+  .qc-cart-lines--enhanced .qc-qty__input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* remove reads as one quiet control, icon tight against the word */
+  .qc-cart-line__remove {
+    gap: var(--qc-space-2xs);
+    padding-inline: var(--qc-space-xs);
+  }
+
+  .qc-cart-line__remove .qc-icon {
+    inline-size: 0.9em;
+    block-size: 0.9em;
   }
 
   .qc-cart-line__price {

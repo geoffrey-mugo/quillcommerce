@@ -16,28 +16,30 @@
   },
   "cart": {
     "checkout": "Finalizar compra",
-    "title": "Carrito",
-    "update": "Actualizar",
-    "remove": "Eliminar",
-    "empty": "Tu carrito está vacío.",
+    "close": "Cerrar carrito",
     "continue_shopping": "Seguir comprando",
-    "summary": "Resumen del pedido",
+    "decrease": "Reducir la cantidad de {{ product }}",
+    "empty": "Tu carrito está vacío.",
+    "increase": "Aumentar la cantidad de {{ product }}",
+    "items_count": {
+      "one": "{{ count }} artículo",
+      "other": "{{ count }} artículos"
+    },
     "note_label": "Nota del pedido",
+    "note_saved": "Nota guardada",
+    "quantity_for": "Cantidad de {{ product }}",
+    "remove": "Eliminar",
     "subtotal": {
       "one": "Subtotal ({{ count }} artículo)",
       "other": "Subtotal ({{ count }} artículos)"
     },
-    "quantity_for": "Cantidad de {{ product }}",
-    "taxes_included_shipping_at_checkout": "Impuestos incluidos. El envío se calcula al finalizar la compra.",
+    "summary": "Resumen del pedido",
     "taxes_and_shipping_at_checkout": "Impuestos y envío se calculan al finalizar la compra.",
-    "view_cart": "Ver carrito",
-    "close": "Cerrar carrito",
+    "taxes_included_shipping_at_checkout": "Impuestos incluidos. El envío se calcula al finalizar la compra.",
+    "title": "Carrito",
+    "update": "Actualizar",
     "updated": "Carrito actualizado",
-    "note_saved": "Nota guardada",
-    "items_count": {
-      "one": "{{ count }} artículo",
-      "other": "{{ count }} artículos"
-    }
+    "view_cart": "Ver carrito"
   },
   "customers": {
     "login": {
@@ -196,9 +198,10 @@
     }
   },
   "header": {
-    "menu": "Menú",
     "account": "Cuenta",
     "cart": "Carrito",
+    "close_menu": "Cerrar el menú",
+    "menu": "Menú",
     "view_all_in": "Todo en {{ title }}"
   },
   "facets": {

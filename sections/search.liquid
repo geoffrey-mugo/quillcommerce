@@ -10,7 +10,8 @@
 
   <form action="{{ routes.search_url }}" method="get" role="search" class="qc-search__form">
     <div class="qc-field qc-search__field">
-      <label class="qc-field__label" for="qc-search-input">{{ 'search.title' | t }}</label>
+      {% comment %} the page h1 already says "Search"; keep the label for AT only {% endcomment %}
+      <label class="qc-visually-hidden" for="qc-search-input">{{ 'search.title' | t }}</label>
       <input
         id="qc-search-input"
         class="qc-input"
