@@ -17,9 +17,12 @@ html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
 
-/* stop iOS scroll chaining from a scrolled dialog to the page behind it */
+/* stop iOS scroll chaining from a scrolled dialog to the page behind it.
+   margin: auto restores the browser's native modal centering, which the
+   `* { margin: 0 }` reset above would otherwise strip. */
 dialog {
   overscroll-behavior: contain;
+  margin: auto;
 }
 
 img,

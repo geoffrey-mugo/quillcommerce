@@ -15,7 +15,6 @@
       "type": "footer",
       "settings": {
         "menu": "main-menu",
-        "blurb": "<p>Original gear for people who use it.</p>",
         "show_payment_icons": true
       }
     }

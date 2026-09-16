@@ -11,7 +11,7 @@
   <div class="qc-cart-line__media">
     {% if line.image %}
       <a href="{{ line.url }}" tabindex="-1" aria-hidden="true">
-        {% render 'image', image: line.image, class: 'qc-cart-line__image', width: 240 %}
+        {% render 'image', image: line.image, class: 'qc-cart-line__image', width: 240, sizes: '96px' %}
       </a>
     {% else %}
       <div class="qc-cart-line__image qc-cart-line__image--empty" aria-hidden="true">
@@ -47,19 +47,31 @@
     {% endfor %}
 
     <div class="qc-cart-line__controls">
-      <div class="qc-cart-line__quantity">
+      <div class="qc-cart-line__quantity qc-qty">
+        <button
+          type="button"
+          class="qc-qty__btn"
+          data-qc-qty-step="-1"
+          aria-label="{{ 'cart.decrease' | t: product: line.product.title }}"
+        >&minus;</button>
         <label class="qc-visually-hidden" for="qc-line-qty-{{ prefix }}{{ index }}">
           {{ 'cart.quantity_for' | t: product: line.product.title }}
         </label>
         <input
           id="qc-line-qty-{{ prefix }}{{ index }}"
-          class="qc-input"
+          class="qc-input qc-qty__input"
           type="number"
           name="updates[]"
           value="{{ line.quantity }}"
           min="0"
           inputmode="numeric"
         >
+        <button
+          type="button"
+          class="qc-qty__btn"
+          data-qc-qty-step="1"
+          aria-label="{{ 'cart.increase' | t: product: line.product.title }}"
+        >+</button>
       </div>
       <a class="qc-btn qc-btn--quiet qc-cart-line__remove" href="{{ line.url_to_remove }}">
         {% render 'qc-icon', name: 'close' %}

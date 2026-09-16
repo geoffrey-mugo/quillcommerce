@@ -64,8 +64,16 @@ if (!customElements.get('qc-compare-tray')) {
           { signal }
         );
 
-        /* reveal + sync toggles on cards injected later */
-        this.observer = new MutationObserver(() => syncAllToggles());
+        /* reveal + sync toggles on cards injected later; coalesced to one
+           pass per frame — body mutations are frequent (toasts, cart
+           re-renders) and each pass queries every toggle */
+        this.observer = new MutationObserver(() => {
+          if (this.syncRaf) return;
+          this.syncRaf = requestAnimationFrame(() => {
+            this.syncRaf = 0;
+            syncAllToggles();
+          });
+        });
         this.observer.observe(document.body, { childList: true, subtree: true });
 
         document.addEventListener(EVT_COMPARE, () => this.renderTray(), { signal });
@@ -104,6 +112,8 @@ if (!customElements.get('qc-compare-tray')) {
       disconnectedCallback() {
         this.abort.abort();
         this.observer?.disconnect();
+        cancelAnimationFrame(this.syncRaf);
+        this.syncRaf = 0;
         this.inflight?.abort();
       }
 

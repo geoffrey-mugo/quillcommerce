@@ -16,10 +16,36 @@ function announce(message) {
   document.dispatchEvent(new CustomEvent(EVT_ANNOUNCE, { detail: { message } }));
 }
 
-/* A page restored from the back/forward cache shows the cart as it was
-   when the shopper left it; re-sync count and lines from the server. */
+/* Visual add-to-cart confirmation. Screen readers get the same text via
+   announce(), so the toast itself is aria-hidden. Mounted inside the
+   topmost open dialog when one is up (a plain fixed element would sit
+   below the dialog's top layer), otherwise on <body>. */
+let toastTimer = null;
+function showToast(message) {
+  if (!message) return;
+  document.querySelector('.qc-toast')?.remove();
+  const openDialogs = [...document.querySelectorAll('dialog[open]')];
+  const host = openDialogs[openDialogs.length - 1] || document.body;
+  const toast = document.createElement('div');
+  toast.className = 'qc-toast';
+  toast.setAttribute('aria-hidden', 'true');
+  const check = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  check.setAttribute('viewBox', '0 0 16 16');
+  check.setAttribute('class', 'qc-toast__check');
+  check.innerHTML = '<path d="M2.5 8.5 6 12l7.5-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  toast.append(check, document.createTextNode(message));
+  host.append(toast);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.remove(), 3500);
+}
+
+/* A page restored via back/forward shows the cart as it was when the
+   HTML was produced — whether from the bfcache (event.persisted) or
+   re-served from the HTTP cache (persisted false, but the navigation
+   entry says back_forward). Re-sync count and lines from the server. */
 window.addEventListener('pageshow', (event) => {
-  if (!event.persisted) return;
+  const nav = performance.getEntriesByType('navigation')[0];
+  if (!event.persisted && nav?.type !== 'back_forward') return;
   readCart()
     .then((cart) => {
       document.dispatchEvent(
@@ -32,7 +58,12 @@ window.addEventListener('pageshow', (event) => {
 });
 
 async function readCart() {
-  const res = await fetch(`${qcRoute('cart', '/cart')}.js`, { headers: { Accept: 'application/json' } });
+  /* Shopify serves /cart.js without cache-control, so browsers may
+     heuristically cache it — always read the live cart */
+  const res = await fetch(`${qcRoute('cart', '/cart')}.js`, {
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+  });
   if (!res.ok) throw new Error('cart read failed');
   return res.json();
 }
@@ -43,10 +74,15 @@ if (!customElements.get('qc-live-region')) {
     class extends HTMLElement {
       connectedCallback() {
         this.abort = new AbortController();
-        this.region = document.createElement('div');
-        this.region.className = 'qc-visually-hidden';
-        this.region.setAttribute('aria-live', 'polite');
-        this.append(this.region);
+        /* reuse the node across reconnects (Theme Editor reorders) so
+           stale duplicate live regions never pile up */
+        this.region = this.querySelector('[aria-live]');
+        if (!this.region) {
+          this.region = document.createElement('div');
+          this.region.className = 'qc-visually-hidden';
+          this.region.setAttribute('aria-live', 'polite');
+          this.append(this.region);
+        }
         document.addEventListener(
           EVT_ANNOUNCE,
           (e) => {
@@ -159,7 +195,9 @@ if (!customElements.get('qc-product-form')) {
             body: new FormData(this.form),
             signal: this.inflight.signal,
           });
-          const payload = await res.json();
+          /* non-JSON bodies (rate-limit or gateway error pages) must not
+             surface a raw parse error to the shopper */
+          const payload = await res.json().catch(() => ({}));
           if (!res.ok) {
             throw new Error(payload.description || payload.message || this.dataset.errorLabel);
           }
@@ -168,9 +206,17 @@ if (!customElements.get('qc-product-form')) {
             new CustomEvent(EVT_UPDATED, { detail: { cart, source: 'add' } })
           );
           announce(this.dataset.addedLabel || '');
+          showToast(this.dataset.addedLabel || '');
+          /* a card's variant popover has done its job once the item is in */
+          this.closest('details.qc-card-picker')?.removeAttribute('open');
         } catch (err) {
           if (err.name !== 'AbortError') {
-            const message = err.message || this.dataset.errorLabel || '';
+            /* a network-level TypeError carries browser prose
+               ("Failed to fetch") — show the localized label instead */
+            const message =
+              (err instanceof TypeError ? '' : err.message) ||
+              this.dataset.errorLabel ||
+              '';
             this.showError(message);
             announce(message);
           }
@@ -195,8 +241,10 @@ if (!customElements.get('qc-cart-lines')) {
         this.abort = new AbortController();
         const { signal } = this.abort;
 
-        /* immediate edits — hide the manual Update button */
+        /* immediate edits — hide the manual Update button; steppers only
+           render once this enhancement is running */
         this.querySelector('[data-qc-cart-update]')?.setAttribute('hidden', '');
+        this.classList.add('qc-cart-lines--enhanced');
 
         this.addEventListener(
           'change',
@@ -217,6 +265,18 @@ if (!customElements.get('qc-cart-lines')) {
         this.addEventListener(
           'click',
           (e) => {
+            const step = e.target.closest('[data-qc-qty-step]');
+            if (step) {
+              const input = step
+                .closest('[data-qc-cart-line]')
+                ?.querySelector('input[name="updates[]"]');
+              if (input) {
+                const next = Math.max(0, Number(input.value || 0) + Number(step.dataset.qcQtyStep));
+                input.value = next;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+              return;
+            }
             const remove = e.target.closest('.qc-cart-line__remove');
             const line = remove?.closest('[data-qc-cart-line]');
             if (remove && line) {
@@ -227,7 +287,30 @@ if (!customElements.get('qc-cart-lines')) {
           { signal }
         );
 
-        document.addEventListener(EVT_UPDATED, () => this.refresh(), { signal });
+        /* a surface hidden inside a closed drawer only marks itself
+           stale — it re-syncs when the drawer opens, so one edit never
+           costs two section renders */
+        document.addEventListener(
+          EVT_UPDATED,
+          () => {
+            const dialog = this.closest('dialog');
+            if (dialog && !dialog.open) {
+              this.stale = true;
+            } else if (!this.pending?.size) {
+              /* hold the re-render while stepper edits are queued — the
+                 replayed change triggers the final, correct refresh */
+              this.refresh();
+            }
+          },
+          { signal }
+        );
+      }
+
+      refreshIfStale() {
+        if (this.stale) {
+          this.stale = false;
+          this.refresh();
+        }
       }
 
       disconnectedCallback() {
@@ -235,7 +318,14 @@ if (!customElements.get('qc-cart-lines')) {
       }
 
       async changeLine(key, quantity) {
-        if (this.busy || !key || Number.isNaN(quantity) || quantity < 0) return;
+        if (!key || Number.isNaN(quantity) || quantity < 0) return;
+        if (this.busy) {
+          /* rapid stepper taps: queue the newest quantity per line and
+             replay once the in-flight request settles — dropping them
+             would snap the input back and lose clicks */
+          (this.pending ??= new Map()).set(key, quantity);
+          return;
+        }
         this.busy = true;
         this.setAttribute('aria-busy', 'true');
         try {
@@ -244,20 +334,26 @@ if (!customElements.get('qc-cart-lines')) {
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
             body: JSON.stringify({ id: key, quantity }),
           });
-          const cart = await res.json();
-          if (!res.ok) {
-            throw new Error(cart.description || cart.message || this.dataset.errorLabel);
+          const cart = await res.json().catch(() => null);
+          if (!res.ok || !cart) {
+            throw new Error(cart?.description || cart?.message || this.dataset.errorLabel);
           }
           document.dispatchEvent(
             new CustomEvent(EVT_UPDATED, { detail: { cart, source: 'line' } })
           );
           announce(this.dataset.updatedLabel || '');
         } catch (err) {
-          announce(err.message || this.dataset.errorLabel || '');
+          const message = err instanceof TypeError ? '' : err.message;
+          announce(message || this.dataset.errorLabel || '');
           this.refresh(); /* re-sync to server truth after a failure */
         } finally {
           this.busy = false;
           this.setAttribute('aria-busy', 'false');
+          const queued = this.pending?.entries().next().value;
+          if (queued) {
+            this.pending.delete(queued[0]);
+            this.changeLine(queued[0], queued[1]);
+          }
         }
       }
 
@@ -282,6 +378,7 @@ if (!customElements.get('qc-cart-lines')) {
         try {
           const res = await fetch(`${location.pathname}?section_id=${id}`, {
             signal: this.inflight.signal,
+            cache: 'no-store' /* cart markup must never come from HTTP cache */,
           });
           if (!res.ok) return;
           const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
@@ -330,23 +427,21 @@ if (!customElements.get('qc-cart-drawer')) {
           },
           { signal }
         );
-        document.querySelectorAll('[data-qc-cart-open]').forEach((link) =>
-          link.addEventListener(
-            'click',
-            (e) => {
-              e.preventDefault();
-              this.open();
-            },
-            { signal }
-          )
-        );
+        /* delegated so links re-rendered later (Theme Editor header
+           edits, swapped sections) keep working without rebinding */
         document.addEventListener(
-          EVT_UPDATED,
+          'click',
           (e) => {
-            if (e.detail.source === 'add') this.open();
+            const opener = e.target.closest('[data-qc-cart-open]');
+            if (!opener) return;
+            e.preventDefault();
+            this.open();
           },
           { signal }
         );
+        /* Adds confirm with the toast instead of springing the drawer
+           open (which buried whatever the shopper was doing under a
+           second layer); the drawer opens only from the cart link. */
       }
 
       disconnectedCallback() {
@@ -355,6 +450,7 @@ if (!customElements.get('qc-cart-drawer')) {
 
       open() {
         if (!this.dialog.open) this.dialog.showModal();
+        this.dialog.querySelector('qc-cart-lines')?.refreshIfStale();
       }
     }
   );

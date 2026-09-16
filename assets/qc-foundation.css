@@ -177,10 +177,6 @@ main {
   font-weight: 600;
 }
 
-.qc-field__hint {
-  font-size: var(--qc-text-s);
-  color: var(--qc-ink-soft);
-}
 
 .qc-input,
 .qc-field input:not([type='checkbox']):not([type='radio']),
@@ -208,10 +204,6 @@ main {
   color: var(--qc-danger);
 }
 
-.qc-field--invalid :is(input, select, textarea),
-.qc-input[aria-invalid='true'] {
-  border-color: var(--qc-danger);
-}
 
 /* ---- badges (SPEC-002 §10): meaning lives in the text, never color alone ---- */
 
@@ -236,9 +228,7 @@ main {
   border-color: color-mix(in oklab, var(--qc-accent) 35%, var(--qc-surface));
 }
 
-.qc-badge--ok { color: var(--qc-ok); border-color: var(--qc-ok); border-color: color-mix(in oklab, var(--qc-ok) 35%, var(--qc-surface)); }
 .qc-badge--warn { color: var(--qc-warn); border-color: var(--qc-warn); border-color: color-mix(in oklab, var(--qc-warn) 35%, var(--qc-surface)); }
-.qc-badge--danger { color: var(--qc-danger); border-color: var(--qc-danger); border-color: color-mix(in oklab, var(--qc-danger) 35%, var(--qc-surface)); }
 
 /* ---- price primitive companion styles ---- */
 
@@ -338,7 +328,15 @@ main {
   background: var(--qc-surface);
 }
 
-.qc-product-card__image--hover {
+/* the image snippet's wrapper carries `.image { position: relative }`,
+   so this needs the extra specificity to actually leave the flow —
+   otherwise the hidden hover image stacks below the first one */
+.qc-product-card__media-link {
+  position: relative;
+  display: block;
+}
+
+.qc-product-card .qc-product-card__image--hover {
   position: absolute;
   inset: 0;
   opacity: 0;
@@ -416,15 +414,117 @@ main {
   white-space: nowrap;
 }
 
-/* dense-grid guard: buttons keep fitting even on very narrow cards */
+/* dense-grid guard: buttons keep fitting even on very narrow cards, and
+   titles get a third line instead of truncating harder */
 @container (max-width: 200px) {
   .qc-product-card__actions .qc-btn {
     font-size: 0.75rem;
+  }
+
+  .qc-product-card__link {
+    -webkit-line-clamp: 3;
   }
 }
 
 .qc-product-card__quick-add form {
   display: contents;
+}
+
+/* add-to-cart confirmation toast (visual only; SR text goes through the
+   live region). Fixed to the viewport; when mounted inside an open
+   dialog it inherits the top layer and stays visible over it. */
+.qc-toast {
+  position: fixed;
+  inset-block-end: var(--qc-space-l);
+  inset-inline: 0;
+  margin-inline: auto;
+  inline-size: fit-content;
+  max-inline-size: calc(100% - var(--qc-space-l) * 2);
+  display: flex;
+  align-items: center;
+  gap: var(--qc-space-xs);
+  padding: var(--qc-space-s) var(--qc-space-l);
+  background: var(--qc-ink);
+  color: var(--qc-surface);
+  border-radius: var(--qc-radius-pill);
+  box-shadow: var(--qc-shadow-2);
+  font-size: var(--qc-text-s);
+  z-index: 90;
+  animation: qc-toast-in var(--qc-dur-2) var(--qc-ease);
+}
+
+.qc-toast__check {
+  inline-size: 1em;
+  block-size: 1em;
+  flex-shrink: 0;
+}
+
+@keyframes qc-toast-in {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+}
+
+/* inline option picker: multi-variant quick add expands a small anchored
+   panel under the card's buttons — never a modal */
+.qc-card-picker {
+  position: relative;
+}
+
+.qc-card-picker summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.qc-card-picker summary::-webkit-details-marker {
+  display: none;
+}
+
+.qc-card-picker[open] summary {
+  background: color-mix(in oklab, var(--qc-accent) 85%, var(--qc-ink));
+}
+
+/* the toggle reads "Close" while the panel is up — its Add to cart
+   button lives in the panel, so the label never appears twice */
+.qc-card-picker__label-close,
+.qc-card-picker[open] .qc-card-picker__label-add {
+  display: none;
+}
+
+.qc-card-picker[open] .qc-card-picker__label-close {
+  display: inline;
+}
+
+.qc-card-picker__panel {
+  position: absolute;
+  inset-inline-end: 0;
+  /* opens upward so it never falls below the fold on cards near the
+     bottom of the screen */
+  inset-block-end: calc(100% + var(--qc-space-2xs));
+  min-inline-size: max(100%, 14rem);
+  z-index: 3;
+  background: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
+  border-radius: var(--qc-radius-surface);
+  padding: var(--qc-space-s);
+  box-shadow: var(--qc-shadow-2);
+}
+
+.qc-card-picker__form {
+  display: grid;
+  gap: var(--qc-space-xs);
+}
+
+.qc-card-picker__select {
+  inline-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 44px;
+  padding: var(--qc-space-2xs) var(--qc-space-xs);
+  border: var(--qc-line-w) solid var(--qc-line-strong);
+  border-radius: var(--qc-radius-control);
+  background: var(--qc-surface);
+  color: var(--qc-ink);
 }
 
 .qc-btn--ink {
@@ -479,6 +579,35 @@ main {
   flex: 1;
 }
 
+/* responsive column policy: phones always 2 across, tablets 3 then 4;
+   from desktop up (where the filter sidebar can appear) the auto-fill
+   rule above governs — the merchant's grid-density setting picks the
+   minimum card size, so cards pack as densely as chosen but never
+   shrink below it. The cards' container queries scale their contents. */
+@media (max-width: 649px) {
+  .qc-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--qc-space-m) var(--qc-space-s);
+  }
+
+  .qc-product-grid .qc-product-card {
+    padding: var(--qc-space-xs);
+    gap: var(--qc-space-xs);
+  }
+}
+
+@media (min-width: 650px) and (max-width: 849px) {
+  .qc-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 850px) and (max-width: 989px) {
+  .qc-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* ---- pagination (SPEC-004 §9): styles default_pagination output ---- */
 
 .qc-pagination {
@@ -512,9 +641,62 @@ main {
 .qc-quick-view {
   inline-size: min(52rem, calc(100% - var(--qc-space-l) * 2));
   max-inline-size: 100%;
+  max-block-size: calc(100vh - var(--qc-space-l) * 2);
+  max-block-size: calc(100dvh - var(--qc-space-l) * 2);
+  overflow-y: auto;
   border: var(--qc-line-w) solid var(--qc-line);
   border-radius: var(--qc-radius-surface);
   padding: var(--qc-space-l);
+}
+
+.qc-quick-view__sku {
+  margin: 0;
+}
+
+.qc-quick-view__stock[data-qc-stock-state='low'] {
+  color: var(--qc-warn);
+  font-weight: 600;
+}
+
+.qc-quick-view__stock[data-qc-stock-state='out'] {
+  color: var(--qc-ink-soft);
+}
+
+.qc-quick-view__description .qc-disclosure__content {
+  max-block-size: 14rem;
+  overflow-y: auto;
+  font-size: var(--qc-text-s);
+  padding-inline-end: var(--qc-space-xs);
+}
+
+/* ---- collapsible disclosure rows (product page + quick view) ---- */
+
+.qc-disclosure {
+  border-block-end: var(--qc-line-w) solid var(--qc-line);
+}
+
+.qc-disclosure summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--qc-space-s);
+  min-block-size: 44px;
+  padding-block: var(--qc-space-xs);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.qc-disclosure summary .qc-icon {
+  flex: none;
+  transition: transform var(--qc-dur-1) var(--qc-ease);
+}
+
+.qc-disclosure[open] summary .qc-icon {
+  transform: rotate(180deg);
+}
+
+.qc-disclosure__content {
+  padding-block-end: var(--qc-space-m);
 }
 
 .qc-quick-view::backdrop {
@@ -527,6 +709,10 @@ main {
   inset-inline-end: var(--qc-space-xs);
   min-inline-size: 44px;
   padding-inline: 0;
+  /* stay above the media strip and stay legible over photos */
+  z-index: 2;
+  background: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
 }
 
 .qc-quick-view__close::before {
@@ -728,6 +914,68 @@ main {
 
   .qc-cart-line__quantity .qc-input {
     inline-size: 5.5rem;
+  }
+
+  /* quantity stepper: one bordered group of − / count / +. The buttons
+     appear only under JS enhancement; without it the bare input plus the
+     Update button flow remains. */
+  .qc-qty {
+    display: inline-flex;
+    align-items: stretch;
+  }
+
+  .qc-qty__btn {
+    display: none;
+    inline-size: 40px;
+    min-block-size: 44px;
+    place-items: center;
+    font-size: var(--qc-text-l);
+    line-height: 1;
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    cursor: pointer;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__btn {
+    display: inline-grid;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty {
+    border-radius: var(--qc-radius-control);
+    overflow: hidden;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__btn:first-child {
+    border-inline-end: 0;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__btn:last-child {
+    border-inline-start: 0;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__input {
+    inline-size: 3.5rem;
+    text-align: center;
+    border-radius: 0;
+    appearance: textfield;
+  }
+
+  .qc-cart-lines--enhanced .qc-qty__input::-webkit-outer-spin-button,
+  .qc-cart-lines--enhanced .qc-qty__input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* remove reads as one quiet control, icon tight against the word */
+  .qc-cart-line__remove {
+    gap: var(--qc-space-2xs);
+    padding-inline: var(--qc-space-xs);
+  }
+
+  .qc-cart-line__remove .qc-icon {
+    inline-size: 0.9em;
+    block-size: 0.9em;
   }
 
   .qc-cart-line__price {

@@ -10,7 +10,8 @@
 
   <form action="{{ routes.search_url }}" method="get" role="search" class="qc-search__form">
     <div class="qc-field qc-search__field">
-      <label class="qc-field__label" for="qc-search-input">{{ 'search.title' | t }}</label>
+      {% comment %} the page h1 already says "Search"; keep the label for AT only {% endcomment %}
+      <label class="qc-visually-hidden" for="qc-search-input">{{ 'search.title' | t }}</label>
       <input
         id="qc-search-input"
         class="qc-input"
@@ -27,7 +28,8 @@
   </form>
 
   {% if search.performed %}
-    {% assign search_clear_url = routes.search_url | append: '?q=' | append: search.terms | url_encode %}
+    {% assign qc_terms_param = search.terms | url_encode %}
+    {% assign search_clear_url = routes.search_url | append: '?q=' | append: qc_terms_param %}
     {% render 'qc-facets', results: search, results_url: search_clear_url, query: search.terms %}
 
     {% if search.results_count == 0 %}
@@ -91,6 +93,13 @@
     flex-direction: column;
     gap: var(--qc-space-l);
     padding-block: var(--qc-space-xl);
+  }
+
+  /* results dim while a filter change is fetched and swapped in place */
+  .qc-search[aria-busy='true'] {
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity var(--qc-dur-1) var(--qc-ease);
   }
 
   .qc-search__form {

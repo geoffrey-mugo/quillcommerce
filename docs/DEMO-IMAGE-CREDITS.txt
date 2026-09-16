@@ -23,3 +23,5 @@ commercial use, no attribution required. Photo IDs:
   qc-dubbing-dispenser.jpg = pexels.com/photo/37955302
   qc-river-hoodie.jpg = pexels.com/photo/11340657
   qc-magnetic-net-release.jpg = pexels.com/photo/14438490
+  qc-test-parka.jpg = pexels.com/photo/6207410
+  qc-test-parka-hood.jpg = pexels.com/photo/8830576

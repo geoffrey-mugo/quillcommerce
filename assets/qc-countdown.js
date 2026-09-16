@@ -19,6 +19,9 @@ if (!customElements.get('qc-countdown')) {
           this.dataset.minutesLabel || 'm',
           this.dataset.secondsLabel || 's',
         ];
+        /* reconnects (Theme Editor reorders) re-run this — start clean
+           instead of appending a second row of unit cells */
+        this.units.replaceChildren();
         this.cells = this.labels.map((label) => {
           const unit = document.createElement('div');
           unit.className = 'qc-countdown__unit';

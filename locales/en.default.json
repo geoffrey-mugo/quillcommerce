@@ -16,37 +16,33 @@
   },
   "cart": {
     "checkout": "Checkout",
-    "title": "Cart",
-    "update": "Update",
-    "remove": "Remove",
-    "empty": "Your cart is empty.",
+    "close": "Close cart",
     "continue_shopping": "Continue shopping",
-    "summary": "Order summary",
+    "decrease": "Decrease quantity for {{ product }}",
+    "empty": "Your cart is empty.",
+    "increase": "Increase quantity for {{ product }}",
+    "items_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
     "note_label": "Order note",
+    "note_saved": "Note saved",
+    "quantity_for": "Quantity for {{ product }}",
+    "remove": "Remove",
     "subtotal": {
       "one": "Subtotal ({{ count }} item)",
       "other": "Subtotal ({{ count }} items)"
     },
-    "quantity_for": "Quantity for {{ product }}",
-    "taxes_included_shipping_at_checkout": "Taxes included. Shipping calculated at checkout.",
+    "summary": "Order summary",
     "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout.",
-    "view_cart": "View cart",
-    "close": "Close cart",
+    "taxes_included_shipping_at_checkout": "Taxes included. Shipping calculated at checkout.",
+    "title": "Cart",
+    "update": "Update",
     "updated": "Cart updated",
-    "note_saved": "Note saved",
-    "items_count": {
-      "one": "{{ count }} item",
-      "other": "{{ count }} items"
-    }
+    "view_cart": "View cart",
+    "update_error": "Couldn't update the cart. Please try again."
   },
-  "customers": {
-    "login": {
-      "email": "Email",
-      "password": "Password",
-      "submit": "Sign in",
-      "title": "Login"
-    }
-  },
+  "customers": {},
   "collections": {
     "title": "Collections",
     "empty": "There are no products in this collection yet.",
@@ -60,7 +56,6 @@
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
-    "card": "Gift card",
     "expired": "This gift card has expired",
     "expires_on": "Expires on {{ expires_on }}",
     "use_at_checkout": "Use this gift card at checkout",
@@ -107,33 +102,9 @@
       "unit_price": "Unit price"
     },
     "product": {
-      "options_label": "Options",
-      "quantity": "Quantity",
       "add_to_cart": "Add to cart",
-      "sold_out": "Sold out",
-      "unavailable": "Unavailable",
-      "stock_in": "In stock",
-      "stock_low": "Low stock — {{ count }} left",
-      "media_label": "Product media",
-      "media_n_of": "Media {{ n }} of {{ total }}",
-      "zoom": "View full-size image",
-      "lightbox_label": "Full-size media",
-      "lightbox_close": "Close full-size view",
-      "lightbox_prev": "Previous image",
-      "lightbox_next": "Next image",
-      "purchase_options": "Purchase options",
-      "one_time": "One-time purchase",
-      "volume_pricing": "Volume pricing",
       "break_row": "{{ quantity }}+ for {{ price }} each",
-      "quantity_min": "Minimum {{ min }}",
-      "quantity_increment": "Sold in increments of {{ step }}",
-      "quantity_max": "Maximum {{ max }}",
-      "pickup_available": "Pickup available at {{ location }}",
-      "pickup_unavailable": "Pickup currently unavailable at {{ location }}",
-      "pickup_other_locations": "Check availability at other locations",
-      "pickup_in_stock": "Pickup available",
-      "pickup_out_of_stock": "Pickup unavailable",
-      "sticky_bar_label": "Purchase bar",
+      "description": "Description",
       "gift": {
         "label": "Send as a gift",
         "email": "Recipient email",
@@ -142,15 +113,40 @@
         "max_chars": "{{ max }} characters max",
         "send_on": "Send on (optional)"
       },
-      "preorder": "Pre-order"
+      "lightbox_close": "Close full-size view",
+      "lightbox_label": "Full-size media",
+      "lightbox_next": "Next image",
+      "lightbox_prev": "Previous image",
+      "media_label": "Product media",
+      "media_n_of": "Media {{ n }} of {{ total }}",
+      "one_time": "One-time purchase",
+      "options_label": "Options",
+      "pickup_available": "Pickup available at {{ location }}",
+      "pickup_in_stock": "Pickup available",
+      "pickup_other_locations": "Check availability at other locations",
+      "pickup_out_of_stock": "Pickup unavailable",
+      "pickup_unavailable": "Pickup currently unavailable at {{ location }}",
+      "preorder": "Pre-order",
+      "purchase_options": "Purchase options",
+      "quantity": "Quantity",
+      "quantity_increment": "Sold in increments of {{ step }}",
+      "quantity_max": "Maximum {{ max }}",
+      "quantity_min": "Minimum {{ min }}",
+      "sold_out": "Sold out",
+      "sticky_bar_label": "Purchase bar",
+      "stock_in": "In stock",
+      "stock_low": "Low stock — {{ count }} left",
+      "unavailable": "Unavailable",
+      "volume_pricing": "Volume pricing",
+      "zoom": "View full-size image",
+      "stock_preorder": "Available to pre-order"
     },
     "card": {
       "add_error": "Couldn't add to cart. Please try again.",
       "added": "{{ title }} added to cart",
       "adding": "Adding…",
-      "choose_options": "Choose options",
       "example_title": "Example product",
-      "quick_view": "Quick view"
+      "quick_view": "Quick"
     },
     "quick_view": {
       "loading": "Loading product…",
@@ -182,10 +178,11 @@
     }
   },
   "general": {
-    "pagination": "Pagination",
-    "pick_collection_hint": "Pick a collection to feature.",
+    "close": "Close",
     "footer_nav_label": "Footer",
+    "pagination": "Pagination",
     "payment_methods": "Payment methods accepted",
+    "pick_collection_hint": "Pick a collection to feature.",
     "social": {
       "instagram": "Instagram",
       "facebook": "Facebook",
@@ -193,12 +190,17 @@
       "youtube": "YouTube",
       "tiktok": "TikTok",
       "pinterest": "Pinterest"
-    }
+    },
+    "meta": {
+      "tags": "tagged \"{{ tags }}\"",
+      "page": "Page {{ page }}"
+    },
+    "utility_bar_label": "Store preferences"
   },
   "header": {
-    "menu": "Menu",
     "account": "Account",
     "cart": "Cart",
+    "menu": "Menu",
     "view_all_in": "All {{ title }}"
   },
   "facets": {

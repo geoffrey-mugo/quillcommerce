@@ -16,37 +16,33 @@
   },
   "cart": {
     "checkout": "Finalizar compra",
-    "title": "Carrito",
-    "update": "Actualizar",
-    "remove": "Eliminar",
-    "empty": "Tu carrito está vacío.",
+    "close": "Cerrar carrito",
     "continue_shopping": "Seguir comprando",
-    "summary": "Resumen del pedido",
+    "decrease": "Reducir la cantidad de {{ product }}",
+    "empty": "Tu carrito está vacío.",
+    "increase": "Aumentar la cantidad de {{ product }}",
+    "items_count": {
+      "one": "{{ count }} artículo",
+      "other": "{{ count }} artículos"
+    },
     "note_label": "Nota del pedido",
+    "note_saved": "Nota guardada",
+    "quantity_for": "Cantidad de {{ product }}",
+    "remove": "Eliminar",
     "subtotal": {
       "one": "Subtotal ({{ count }} artículo)",
       "other": "Subtotal ({{ count }} artículos)"
     },
-    "quantity_for": "Cantidad de {{ product }}",
-    "taxes_included_shipping_at_checkout": "Impuestos incluidos. El envío se calcula al finalizar la compra.",
+    "summary": "Resumen del pedido",
     "taxes_and_shipping_at_checkout": "Impuestos y envío se calculan al finalizar la compra.",
-    "view_cart": "Ver carrito",
-    "close": "Cerrar carrito",
+    "taxes_included_shipping_at_checkout": "Impuestos incluidos. El envío se calcula al finalizar la compra.",
+    "title": "Carrito",
+    "update": "Actualizar",
     "updated": "Carrito actualizado",
-    "note_saved": "Nota guardada",
-    "items_count": {
-      "one": "{{ count }} artículo",
-      "other": "{{ count }} artículos"
-    }
+    "view_cart": "Ver carrito",
+    "update_error": "No se pudo actualizar el carrito. Inténtalo de nuevo."
   },
-  "customers": {
-    "login": {
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "submit": "Iniciar sesión",
-      "title": "Inicio de sesión"
-    }
-  },
+  "customers": {},
   "collections": {
     "title": "Colecciones",
     "empty": "Esta colección aún no tiene productos.",
@@ -60,7 +56,6 @@
   },
   "gift_card": {
     "add_to_apple_wallet": "Añadir a Apple Wallet",
-    "card": "Tarjeta de regalo",
     "expired": "Esta tarjeta de regalo ha caducado",
     "expires_on": "Caduca el {{ expires_on }}",
     "use_at_checkout": "Usa esta tarjeta de regalo al finalizar la compra",
@@ -107,33 +102,9 @@
       "unit_price": "Precio por unidad"
     },
     "product": {
-      "options_label": "Opciones",
-      "quantity": "Cantidad",
       "add_to_cart": "Añadir al carrito",
-      "sold_out": "Agotado",
-      "unavailable": "No disponible",
-      "stock_in": "En stock",
-      "stock_low": "Pocas unidades — quedan {{ count }}",
-      "media_label": "Multimedia del producto",
-      "media_n_of": "Elemento {{ n }} de {{ total }}",
-      "zoom": "Ver imagen a tamaño completo",
-      "lightbox_label": "Multimedia a tamaño completo",
-      "lightbox_close": "Cerrar la vista a tamaño completo",
-      "lightbox_prev": "Imagen anterior",
-      "lightbox_next": "Imagen siguiente",
-      "purchase_options": "Opciones de compra",
-      "one_time": "Compra única",
-      "volume_pricing": "Precios por volumen",
       "break_row": "{{ quantity }}+ a {{ price }} cada uno",
-      "quantity_min": "Mínimo {{ min }}",
-      "quantity_increment": "Se vende en múltiplos de {{ step }}",
-      "quantity_max": "Máximo {{ max }}",
-      "pickup_available": "Recogida disponible en {{ location }}",
-      "pickup_unavailable": "Recogida no disponible actualmente en {{ location }}",
-      "pickup_other_locations": "Consultar disponibilidad en otras tiendas",
-      "pickup_in_stock": "Recogida disponible",
-      "pickup_out_of_stock": "Recogida no disponible",
-      "sticky_bar_label": "Barra de compra",
+      "description": "Descripción",
       "gift": {
         "label": "Enviar como regalo",
         "email": "Correo del destinatario",
@@ -142,15 +113,40 @@
         "max_chars": "{{ max }} caracteres máx.",
         "send_on": "Enviar el (opcional)"
       },
-      "preorder": "Reservar"
+      "lightbox_close": "Cerrar la vista a tamaño completo",
+      "lightbox_label": "Multimedia a tamaño completo",
+      "lightbox_next": "Imagen siguiente",
+      "lightbox_prev": "Imagen anterior",
+      "media_label": "Multimedia del producto",
+      "media_n_of": "Elemento {{ n }} de {{ total }}",
+      "one_time": "Compra única",
+      "options_label": "Opciones",
+      "pickup_available": "Recogida disponible en {{ location }}",
+      "pickup_in_stock": "Recogida disponible",
+      "pickup_other_locations": "Consultar disponibilidad en otras tiendas",
+      "pickup_out_of_stock": "Recogida no disponible",
+      "pickup_unavailable": "Recogida no disponible actualmente en {{ location }}",
+      "preorder": "Reservar",
+      "purchase_options": "Opciones de compra",
+      "quantity": "Cantidad",
+      "quantity_increment": "Se vende en múltiplos de {{ step }}",
+      "quantity_max": "Máximo {{ max }}",
+      "quantity_min": "Mínimo {{ min }}",
+      "sold_out": "Agotado",
+      "sticky_bar_label": "Barra de compra",
+      "stock_in": "En stock",
+      "stock_low": "Pocas unidades — quedan {{ count }}",
+      "unavailable": "No disponible",
+      "volume_pricing": "Precios por volumen",
+      "zoom": "Ver imagen a tamaño completo",
+      "stock_preorder": "Disponible para reservar"
     },
     "card": {
       "add_error": "No se pudo añadir al carrito. Inténtalo de nuevo.",
       "added": "{{ title }} añadido al carrito",
       "adding": "Añadiendo…",
-      "choose_options": "Elegir opciones",
       "example_title": "Producto de ejemplo",
-      "quick_view": "Vista rápida"
+      "quick_view": "Vista"
     },
     "quick_view": {
       "loading": "Cargando producto…",
@@ -182,10 +178,11 @@
     }
   },
   "general": {
-    "pagination": "Paginación",
-    "pick_collection_hint": "Elige una colección para destacar.",
+    "close": "Cerrar",
     "footer_nav_label": "Pie de página",
+    "pagination": "Paginación",
     "payment_methods": "Métodos de pago aceptados",
+    "pick_collection_hint": "Elige una colección para destacar.",
     "social": {
       "instagram": "Instagram",
       "facebook": "Facebook",
@@ -193,12 +190,17 @@
       "youtube": "YouTube",
       "tiktok": "TikTok",
       "pinterest": "Pinterest"
-    }
+    },
+    "meta": {
+      "tags": "etiquetado con \"{{ tags }}\"",
+      "page": "Página {{ page }}"
+    },
+    "utility_bar_label": "Preferencias de la tienda"
   },
   "header": {
-    "menu": "Menú",
     "account": "Cuenta",
     "cart": "Carrito",
+    "menu": "Menú",
     "view_all_in": "Todo en {{ title }}"
   },
   "facets": {

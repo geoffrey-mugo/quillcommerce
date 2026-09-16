@@ -108,6 +108,45 @@
     gap: var(--qc-space-m);
   }
 
+  /* changes auto-apply once JS runs; the Apply button is the no-JS path */
+  .qc-facets--enhanced .qc-facets__apply {
+    display: none;
+  }
+
+  /* with the 260px filter sidebar the grid loses width at 990px; cap
+     the card minimum in this band so columns never drop from 4 to 2
+     (min() keeps the dense setting's smaller value) */
+  @media (min-width: 990px) and (max-width: 1199px) {
+    .qc-collection__layout .qc-product-grid {
+      grid-template-columns: repeat(auto-fill, minmax(min(var(--qc-card-min, 220px), 190px), 1fr));
+    }
+  }
+
+  /* results dim while a filter change is fetched and swapped in place */
+  .qc-collection[aria-busy='true'] {
+    opacity: 0.55;
+    pointer-events: none;
+    transition: opacity var(--qc-dur-1) var(--qc-ease);
+  }
+
+  @media (max-width: 989px) {
+    .qc-facets__form {
+      gap: var(--qc-space-s);
+    }
+
+    /* compact toolbar: label sits beside the sort select */
+    .qc-facets__sort {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: var(--qc-space-xs);
+    }
+
+    .qc-facets__sort .qc-field__label {
+      margin: 0;
+    }
+  }
+
   .qc-facets__toggle {
     inline-size: 100%;
     justify-content: space-between;

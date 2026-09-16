@@ -14,6 +14,7 @@
   @param {number} [height] - The highest resolution height of the image to be rendered
   @param {string} [crop] - The crop position of the image
   @param {string} [loading] - 'lazy' (default) or 'eager' for above-the-fold images
+  @param {string} [sizes] - responsive sizes attribute so browsers pick a fitting srcset candidate
   @param {string} [fetchpriority] - e.g. 'high' for the LCP image
 
   @example
@@ -49,11 +50,8 @@
     href="{{ url }}"
   {% endif %}
 >
-  {% if fetchpriority %}
-    {{ image | image_url: width: width, height: height, crop: crop | image_tag: loading: loading, fetchpriority: fetchpriority }}
-  {% else %}
-    {{ image | image_url: width: width, height: height, crop: crop | image_tag: loading: loading }}
-  {% endif %}
+  {% comment %} image_tag omits attributes whose value is nil {% endcomment %}
+  {{ image | image_url: width: width, height: height, crop: crop | image_tag: loading: loading, sizes: sizes, fetchpriority: fetchpriority }}
 </{{ wrapper }}>
 
 {% stylesheet %}

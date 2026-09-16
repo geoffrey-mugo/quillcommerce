@@ -11,7 +11,7 @@
   data-product-id="{{ product.id }}"
   data-product-handle="{{ product.handle }}"
   data-money-format="{{ shop.money_format | strip_html }}"
-  data-low-stock="{{ section.settings.low_stock_threshold }}"
+  data-low-stock="{{ settings.low_stock_threshold }}"
   data-buy-label="{{ 'products.product.add_to_cart' | t }}"
   data-sold-out-label="{{ 'products.product.sold_out' | t }}"
   data-preorder-label="{{ 'products.product.preorder' | t }}"
@@ -24,6 +24,7 @@
   data-qty-max="{{ 'products.product.quantity_max' | t: max: '[n]' }}"
   data-stock-low="{{ 'products.product.stock_low' | t: count: '[count]' }}"
   data-stock-out="{{ 'products.product.sold_out' | t }}"
+  data-stock-preorder="{{ 'products.product.stock_preorder' | t }}"
 >
   {% render 'qc-breadcrumbs' %}
 
@@ -54,10 +55,10 @@
                     data-qc-zoom="{{ media.id }}"
                     aria-label="{{ 'products.product.zoom' | t }}"
                   >
-                    {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority %}
+                    {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority, sizes: '(min-width: 990px) 55vw, 100vw' %}
                   </a>
                 {% else %}
-                  {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority %}
+                  {% render 'image', image: media, class: 'qc-gallery__image', width: 1200, loading: media_loading, fetchpriority: media_priority, sizes: '(min-width: 990px) 55vw, 100vw' %}
                 {% endif %}
               {% when 'video', 'external_video' %}
                 {{ media | media_tag: class: 'qc-gallery__video' }}
@@ -83,7 +84,7 @@
               aria-label="{{ thumb_label }}"
               {% if media.id == current_variant.featured_media.id or current_variant.featured_media == blank and forloop.first %}aria-current="true"{% endif %}
             >
-              {% render 'image', image: media.preview_image, class: 'qc-gallery__thumb-image', width: 120, height: 120, crop: 'center' %}
+              {% render 'image', image: media.preview_image, class: 'qc-gallery__thumb-image', width: 120, height: 120, crop: 'center', sizes: '60px' %}
             </button>
           {% endfor %}
         </div>
@@ -115,7 +116,7 @@
                 data-qc-lightbox-slide="{{ media.id }}"
                 {% unless forloop.first %}hidden{% endunless %}
               >
-                {{ media | image_url: width: 2048 | image_tag: class: 'qc-lightbox__image', loading: 'lazy' }}
+                {{ media | image_url: width: 2048 | image_tag: class: 'qc-lightbox__image', loading: 'lazy', sizes: '100vw' }}
               </div>
             {% endfor %}
           </div>
@@ -202,13 +203,16 @@
         assign stock_state = 'in'
         if current_variant.available == false
           assign stock_state = 'out'
-        elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= section.settings.low_stock_threshold and section.settings.low_stock_threshold > 0
+        elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'continue' and current_variant.inventory_quantity <= 0
+          assign stock_state = 'preorder'
+        elsif current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= settings.low_stock_threshold and settings.low_stock_threshold > 0
           assign stock_state = 'low'
         endif
       -%}
       <p class="qc-product__stock" data-qc-stock data-qc-stock-state="{{ stock_state }}">
         {%- case stock_state -%}
           {%- when 'out' -%}{{ 'products.product.sold_out' | t }}
+          {%- when 'preorder' -%}{{ 'products.product.stock_preorder' | t }}
           {%- when 'low' -%}{{ 'products.product.stock_low' | t: count: current_variant.inventory_quantity }}
           {%- else -%}{{ 'products.product.stock_in' | t }}
         {%- endcase -%}
@@ -653,6 +657,21 @@
     object-fit: contain;
   }
 
+  /* photos fill the square frame like the cards do; the zoom lightbox
+     always shows the uncropped original. The image snippet renders a
+     div.image wrapper around the img, so both need sizing. */
+  .qc-gallery__zoom,
+  .qc-gallery__slide .image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .qc-gallery__slide .image > img {
+    block-size: 100%;
+    object-fit: cover;
+  }
+
   .qc-product__image--empty {
     color: var(--qc-ink-soft);
   }
@@ -729,6 +748,10 @@
     padding: 0;
     display: inline-grid;
     place-items: center;
+    /* stay above the slides and stay legible over photos */
+    z-index: 2;
+    background: var(--qc-surface);
+    border: var(--qc-line-w) solid var(--qc-line);
   }
 
   .qc-lightbox__close {
@@ -995,34 +1018,6 @@
     border-block-start: var(--qc-line-w) solid var(--qc-line);
   }
 
-  .qc-disclosure {
-    border-block-end: var(--qc-line-w) solid var(--qc-line);
-  }
-
-  .qc-disclosure summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--qc-space-s);
-    min-block-size: 44px;
-    padding-block: var(--qc-space-xs);
-    cursor: pointer;
-    font-weight: 600;
-  }
-
-  .qc-disclosure summary .qc-icon {
-    flex: none;
-    transition: transform var(--qc-dur-1) var(--qc-ease);
-  }
-
-  .qc-disclosure[open] summary .qc-icon {
-    transform: rotate(180deg);
-  }
-
-  .qc-disclosure__content {
-    padding-block-end: var(--qc-space-m);
-  }
-
   .qc-sticky-bar {
     position: fixed;
     inset-block-end: 0;
@@ -1032,6 +1027,7 @@
     align-items: center;
     gap: var(--qc-space-m);
     padding: var(--qc-space-xs) var(--qc-space-m);
+    padding-block-end: calc(var(--qc-space-xs) + env(safe-area-inset-bottom, 0px));
     background: var(--qc-surface);
     border-block-start: var(--qc-line-w) solid var(--qc-line);
     box-shadow: var(--qc-shadow-2);
@@ -1225,15 +1221,6 @@
       "id": "enable_sticky_bar",
       "label": "t:general.enable_sticky_bar",
       "default": true
-    },
-    {
-      "type": "range",
-      "id": "low_stock_threshold",
-      "label": "t:general.low_stock_threshold",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "default": 10
     }
   ],
   "disabled_on": {

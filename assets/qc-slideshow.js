@@ -46,14 +46,16 @@ if (!customElements.get('qc-slideshow')) {
 
         const seconds = Number(this.dataset.autoplay) || 0;
         const stillness = matchMedia('(prefers-reduced-motion: reduce)');
-        if (seconds > 0 && !stillness.matches) {
-          const start = () => {
+        const start = () => {
+          if (seconds > 0 && !stillness.matches) {
             this.timer ??= setInterval(() => this.go(this.index() + 1), seconds * 1000);
-          };
-          const stop = () => {
-            clearInterval(this.timer);
-            this.timer = null;
-          };
+          }
+        };
+        const stop = () => {
+          clearInterval(this.timer);
+          this.timer = null;
+        };
+        if (seconds > 0 && !stillness.matches) {
           start();
           this.addEventListener('pointerenter', stop, { signal });
           this.addEventListener('pointerleave', start, { signal });
@@ -65,12 +67,39 @@ if (!customElements.get('qc-slideshow')) {
             { signal }
           );
         }
+
+        /* Theme Editor: selecting a slide block shows that slide and
+           holds autoplay so the merchant can edit what they see */
+        document.addEventListener(
+          'shopify:block:select',
+          (e) => {
+            if (!this.contains(e.target)) return;
+            const slide = e.target.closest('[data-qc-slide]') || e.target.querySelector?.('[data-qc-slide]');
+            const i = this.slides.indexOf(slide);
+            if (i >= 0) {
+              stop();
+              this.go(i);
+            }
+          },
+          { signal }
+        );
+        document.addEventListener(
+          'shopify:block:deselect',
+          (e) => {
+            if (this.contains(e.target)) start();
+          },
+          { signal }
+        );
       }
 
       disconnectedCallback() {
         this.abort.abort();
         clearInterval(this.timer);
+        /* null it, or `this.timer ??=` keeps autoplay off after the
+           Theme Editor reorders this section (disconnect + reconnect) */
+        this.timer = null;
         if (this.raf) cancelAnimationFrame(this.raf);
+        this.raf = null;
       }
 
       index() {
@@ -80,7 +109,10 @@ if (!customElements.get('qc-slideshow')) {
       go(target) {
         const count = this.slides.length;
         const next = ((target % count) + count) % count; /* loop both ways */
-        this.track.scrollTo({ left: next * this.track.clientWidth, behavior: 'smooth' });
+        const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth';
+        this.track.scrollTo({ left: next * this.track.clientWidth, behavior });
       }
 
       markCurrent() {

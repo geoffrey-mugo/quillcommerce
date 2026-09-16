@@ -3,7 +3,7 @@
   Shopify localization selectors (only when multiple options exist).
 {% endcomment %}
 
-<div class="qc-utility">
+<div class="qc-utility" role="region" aria-label="{{ 'general.utility_bar_label' | t }}">
   <div class="qc-utility__row">
     {% if section.settings.message != blank %}
       <p class="qc-utility__message">{{ section.settings.message }}</p>
@@ -87,6 +87,14 @@
     display: flex;
     align-items: center;
     gap: var(--qc-space-2xs);
+  }
+
+  /* 16px on small screens: iOS Safari zooms the page when focusing
+     any control with a smaller font */
+  @media (max-width: 649px) {
+    .qc-utility__select {
+      font-size: 1rem;
+    }
   }
 
   .qc-utility__select {

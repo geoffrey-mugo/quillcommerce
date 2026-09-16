@@ -14,7 +14,9 @@ const confirmed = () => {
 };
 
 const gate = document.querySelector('[data-qc-age-gate]');
-if (gate && !confirmed() && !gate.open) {
+/* never trap a merchant inside the Theme Editor preview */
+const designMode = window.Shopify && window.Shopify.designMode;
+if (gate && !designMode && !confirmed() && !gate.open) {
   gate.showModal();
   gate.addEventListener('cancel', (e) => e.preventDefault());
   gate.querySelector('[data-qc-age-confirm]')?.addEventListener('click', () => {

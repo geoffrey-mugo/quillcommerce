@@ -44,7 +44,7 @@
           <a class="qc-catnav__tile" href="{{ url }}">
             <div class="qc-catnav__media">
               {% if tile_image %}
-                {% render 'image', image: tile_image, class: 'qc-catnav__image', width: 600, height: 450, crop: 'center' %}
+                {% render 'image', image: tile_image, class: 'qc-catnav__image', width: 600, height: 450, crop: 'center', sizes: '(min-width: 650px) 320px, 100vw' %}
               {% else %}
                 <div class="qc-catnav__image qc-catnav__image--empty" aria-hidden="true">
                   <span>{{ label | slice: 0 }}</span>
@@ -193,6 +193,9 @@
       "name": "t:general.catalog_navigator",
       "blocks": [{ "type": "collection" }, { "type": "collection" }, { "type": "collection" }]
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

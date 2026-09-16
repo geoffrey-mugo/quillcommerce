@@ -11,7 +11,7 @@
     {% for block in section.blocks %}
       <a class="qc-promo-tile" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
         {% if block.settings.image %}
-          {{ block.settings.image | image_url: width: 900 | image_tag: class: 'qc-promo-tile__image', alt: '', loading: 'lazy' }}
+          {{ block.settings.image | image_url: width: 900 | image_tag: class: 'qc-promo-tile__image', alt: '', loading: 'lazy', sizes: '(min-width: 650px) 33vw, 100vw' }}
         {% endif %}
         <span class="qc-promo-tile__scrim" aria-hidden="true"></span>
         <span class="qc-promo-tile__copy">
@@ -123,6 +123,9 @@
       "name": "t:general.promo_tiles",
       "blocks": [{ "type": "tile" }, { "type": "tile" }]
     }
-  ]
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

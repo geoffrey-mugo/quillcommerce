@@ -26,6 +26,21 @@ if (!customElements.get('qc-header')) {
           { capture: true, signal }
         );
 
+        /* backdrop / close-button dismiss for the mobile drawer */
+        this.addEventListener(
+          'click',
+          (e) => {
+            const dismiss = e.target.closest('[data-qc-drawer-dismiss]');
+            if (!dismiss) return;
+            const drawer = dismiss.closest('details[open]');
+            if (drawer) {
+              drawer.open = false;
+              drawer.querySelector('summary')?.focus();
+            }
+          },
+          { signal }
+        );
+
         this.addEventListener(
           'keydown',
           (e) => {

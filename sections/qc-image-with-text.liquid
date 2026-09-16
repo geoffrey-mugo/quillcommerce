@@ -6,7 +6,7 @@
 <div class="qc-iwt section-padding qc-iwt--image-{{ section.settings.image_position }}">
   <div class="qc-iwt__media">
     {% if section.settings.image %}
-      {% render 'image', image: section.settings.image, class: 'qc-iwt__image', width: 1200 %}
+      {% render 'image', image: section.settings.image, class: 'qc-iwt__image', width: 1200, sizes: '(min-width: 750px) 50vw, 100vw' %}
     {% else %}
       <div class="qc-iwt__image qc-iwt__image--empty" aria-hidden="true">
         {% render 'qc-icon', name: 'alert' %}
@@ -99,6 +99,9 @@
     { "type": "text", "id": "cta_label", "label": "t:general.cta_1_label" },
     { "type": "url", "id": "cta_link", "label": "t:general.cta_1_link" }
   ],
-  "presets": [{ "name": "t:general.image_with_text" }]
+  "presets": [{ "name": "t:general.image_with_text" }],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
 }
 {% endschema %}

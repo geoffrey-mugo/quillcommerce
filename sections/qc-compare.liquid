@@ -24,7 +24,7 @@
                 <th scope="col" class="qc-compare__product">
                   <a class="qc-compare__link" href="{{ product.url }}">
                     {% if product.featured_image %}
-                      {% render 'image', image: product.featured_image, class: 'qc-compare__image', width: 300, height: 300, crop: 'center' %}
+                      {% render 'image', image: product.featured_image, class: 'qc-compare__image', width: 300, height: 300, crop: 'center', sizes: '150px' %}
                     {% else %}
                       <span class="qc-compare__image qc-compare__image--empty" aria-hidden="true">
                         {% render 'qc-icon', name: 'alert' %}

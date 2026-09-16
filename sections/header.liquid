@@ -7,11 +7,16 @@
 <qc-header data-sticky="{{ section.settings.sticky }}">
   <header class="qc-header{% if section.settings.sticky != 'none' %} qc-header--sticky{% endif %}">
     <div class="qc-header__row">
-      <details class="qc-header__drawer">
+      <details class="qc-header__drawer" scroll-lock>
         <summary class="qc-header__icon-btn" aria-label="{{ 'header.menu' | t }}">
-          {% render 'qc-icon', name: 'menu' %}
+          <span class="qc-header__drawer-icon-open">{% render 'qc-icon', name: 'menu' %}</span>
+          <span class="qc-header__drawer-icon-close">{% render 'qc-icon', name: 'close' %}</span>
         </summary>
+        <div class="qc-header__drawer-backdrop" data-qc-drawer-dismiss></div>
         <div class="qc-header__drawer-panel">
+          <div class="qc-header__drawer-head">
+            <span class="qc-header__drawer-title">{{ 'header.menu' | t }}</span>
+          </div>
           <nav aria-label="{{ 'header.menu' | t }}">
             <ul class="qc-drawer-nav" role="list">
               {% for link in section.settings.menu.links %}
@@ -375,17 +380,70 @@
     position: relative;
   }
 
+  /* while open, the toggle itself becomes the panel's close chip: it
+     pins to the drawer's top corner above the backdrop (so closing
+     needs no JS) and morphs ☰ → ✕ */
+  .qc-header__drawer[open] > summary {
+    position: fixed;
+    z-index: 31;
+    inset-block-start: var(--qc-space-s);
+    inset-inline-start: calc(min(20rem, 86vw) - 56px);
+    background: var(--qc-surface-raised);
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-control);
+  }
+
+  .qc-header__drawer-icon-close,
+  .qc-header__drawer[open] .qc-header__drawer-icon-open {
+    display: none;
+  }
+
+  .qc-header__drawer[open] .qc-header__drawer-icon-close {
+    display: inline-flex;
+  }
+
+  .qc-header__drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 45%);
+    z-index: 28;
+  }
+
   .qc-header__drawer-panel {
-    position: absolute;
-    inset-inline-start: calc(-1 * var(--page-margin));
-    inline-size: 100vw;
-    max-block-size: calc(100svh - 64px);
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: min(20rem, 86vw);
+    block-size: 100vh;
+    block-size: 100dvh;
     overflow-y: auto;
+    overscroll-behavior: contain;
     background: var(--qc-surface);
-    border-block: var(--qc-line-w) solid var(--qc-line);
+    border-inline-end: var(--qc-line-w) solid var(--qc-line);
     box-shadow: var(--qc-shadow-2);
     padding: var(--qc-space-m);
     z-index: 30;
+    animation: qc-drawer-slide-in var(--qc-dur-2) var(--qc-ease);
+  }
+
+  @keyframes qc-drawer-slide-in {
+    from {
+      translate: -100% 0;
+    }
+  }
+
+  .qc-header__drawer-head {
+    display: flex;
+    align-items: center;
+    min-block-size: 44px;
+    padding-inline-end: 56px; /* clear the pinned close chip */
+    margin-block-end: var(--qc-space-s);
+    padding-block-end: var(--qc-space-s);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-header__drawer-title {
+    font-weight: 600;
   }
 
   .qc-drawer-nav,

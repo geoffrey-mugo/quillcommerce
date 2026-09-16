@@ -9,7 +9,8 @@
   {% if order.cancelled %}
     <p class="qc-account__notice" role="status">
       {% render 'qc-icon', name: 'alert' %}
-      {{ 'customer.order.cancelled' | t: date: order.cancelled_at | time_tag: format: 'date' }}
+      {% assign qc_cancelled_on = order.cancelled_at | time_tag: format: 'date' %}
+      {{ 'customer.order.cancelled' | t: date: qc_cancelled_on }}
     </p>
   {% endif %}
 

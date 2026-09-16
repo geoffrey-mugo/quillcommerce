@@ -46,7 +46,6 @@
     "catalog": "Catalog",
     "catalog_navigator": "Catalog navigator",
     "collection": "Collection",
-    "collection_card": "Collection card",
     "collections": "Collections",
     "collections_grid": "Collections grid",
     "colors": "Colors",
@@ -67,7 +66,6 @@
     "cta_2_link": "Second button link",
     "custom_liquid": "Custom Liquid",
     "custom_liquid_info": "Add app snippets or other Liquid code to create advanced customizations.",
-    "custom_section": "Custom section",
     "customer_account_menu": "Customer account menu",
     "density_comfortable": "Comfortable",
     "density_dense": "Dense",
@@ -93,7 +91,6 @@
     "footer": "Footer",
     "footer_blurb": "Text",
     "grid_density": "Grid density",
-    "group": "Group",
     "header": "Header",
     "heading": "Heading",
     "heading_is_h1": "Use as page heading (H1)",
@@ -123,7 +120,6 @@
     "logo": "Logo",
     "logo_width": "Logo width",
     "low_stock_threshold": "Low-stock threshold (0 = off)",
-    "main": "Main",
     "max_products": "Maximum products",
     "menu": "Menu",
     "menu_style_dropdown": "Dropdowns",
@@ -142,6 +138,7 @@
     "promo_tiles": "Promo tiles",
     "question": "Question",
     "quick_order": "Quick order list",
+    "quick_view": "Quick view",
     "quote": "Quote",
     "recently_viewed": "Recently viewed",
     "recommendation_intent": "Recommendation type",
@@ -149,15 +146,10 @@
     "register": "Registration",
     "reset_password": "Password reset",
     "rich_text": "Rich text",
-    "row": "Row",
     "search": "Search",
-    "secondary": "Secondary",
-    "section": "Section",
-    "settings": "Settings",
     "show_counts": "Show product counts",
     "show_sale_badge": "Show automatic Sale badge",
     "show_view_all": "Show \"View all\" link",
-    "sidebar": "Sidebar",
     "slide": "Slide",
     "slideshow": "Slideshow",
     "social_media": "Social media",
@@ -171,7 +163,6 @@
     "testimonial": "Testimonial",
     "testimonials": "Testimonials",
     "text": "Text",
-    "theme": "Theme",
     "tile": "Tile",
     "title_override": "Title (optional)",
     "tone": "Tone",
@@ -190,32 +181,16 @@
     "variant_picker_pills": "Pills"
   },
   "labels": {
-    "alignment": "Alignment",
     "background": "Background",
     "foreground": "Foreground",
     "grid_gap": "Grid spacing",
     "grid_item_width": "Grid item width",
-    "input_corner_radius": "Input corner radius",
-    "layout_direction": "Layout direction",
     "menu": "Menu",
-    "customer_account_menu": "Customer account menu",
-    "padding": "Padding",
     "page_margin": "Page margin",
     "page_width": "Page width",
-    "show_payment_icons": "Show payment icons",
-    "text_style": "Text style",
-    "text": "Text"
+    "show_payment_icons": "Show payment icons"
   },
   "options": {
-    "alignment": {
-      "left": "Left",
-      "center": "Center",
-      "right": "Right"
-    },
-    "direction": {
-      "horizontal": "Horizontal",
-      "vertical": "Vertical"
-    },
     "page_width": {
       "narrow": "Narrow",
       "wide": "Wide"
@@ -223,11 +198,6 @@
     "size": {
       "large": "Large",
       "small": "Small"
-    },
-    "text_style": {
-      "title": "Title",
-      "subtitle": "Subtitle",
-      "normal": "Normal text"
     }
   }
 }
