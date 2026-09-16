@@ -8,8 +8,9 @@ there.
 
 ## What ships there
 
-- Shipping dirs verbatim: `assets/ blocks/ config/ layout/ listings/
-  locales/ sections/ snippets/ templates/`
+- Shipping dirs verbatim: `assets/ config/ layout/ listings/
+  locales/ sections/ snippets/ templates/` (`blocks/` was removed
+  2026-09-16 — the Skeleton theme blocks were unreachable dead code)
 - `LICENSE.md`, `THIRD_PARTY_NOTICES.md`
 - `docs/MERCHANT-GUIDE.md`
 - `docs/DEMO-IMAGE-CREDITS.txt` **truncated before the "Retired"
