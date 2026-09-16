@@ -11,7 +11,7 @@ below is configurable from the Theme Editor — no code required.
 | Layout | Favicon, page width, and margins |
 | Colors | Background, text, and accent, plus four optional overrides (button text, cards and panels, borders, errors). Everything you leave unset derives automatically with accessible contrast. Corner style and input radius live here too. |
 | Cart | Cart type: **Drawer** (slide-in panel after every add — default) or **Page only** |
-| Catalog | **Enable product compare** (up to 4 products) and **Show second image on hover** for product cards |
+| Catalog | **Enable product compare** (up to 4 products), **Show second image on hover**, and the automatic **Sale badge**. Add your own card badges with product tags like `badge:Limited` (up to two show). |
 | Social media | Six profile URL fields; filled ones appear as footer icons |
 
 ## Theme styles
@@ -25,6 +25,13 @@ keep tuning.
 
 ## Sections you can add
 
+- **Promo banner** — full-width conversion strip in accent, ink, or
+  raised tones with one button.
+- **Promo tiles** — up to six clickable image tiles for campaigns and
+  shortcuts.
+- **Testimonials** — quote cards with attribution.
+- **Countdown timer** — a ticking deadline with an optional button;
+  shows your expired message when it ends.
 - **Slideshow** — up to five image slides with headings and buttons;
   swipeable without JavaScript, with arrows, dots, and optional
   auto-rotate (paused on hover, off for reduced-motion visitors).
@@ -82,6 +89,12 @@ Classic-accounts templates (login, registration, recovery, activation,
 reset, account, orders, addresses) are included and styled. Stores on
 Shopify's new customer accounts use Shopify-hosted pages instead —
 both work; nothing to configure.
+
+## Languages
+
+English, French, German, Spanish, and Italian storefront translations
+ship with the theme — add the language in your Shopify admin and the
+storefront follows.
 
 ## Accessibility & performance notes
 

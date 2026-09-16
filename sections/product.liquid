@@ -14,6 +14,7 @@
   data-low-stock="{{ section.settings.low_stock_threshold }}"
   data-buy-label="{{ 'products.product.add_to_cart' | t }}"
   data-sold-out-label="{{ 'products.product.sold_out' | t }}"
+  data-preorder-label="{{ 'products.product.preorder' | t }}"
   data-unavailable-label="{{ 'products.product.unavailable' | t }}"
   data-stock-in="{{ 'products.product.stock_in' | t }}"
   data-sale-label="{{ 'products.price.sale_price' | t }}"
@@ -28,6 +29,7 @@
 
   <div class="qc-product__layout">
     <qc-gallery class="qc-product__media">
+      {% render 'qc-product-badges', product: product %}
       <div class="qc-gallery__viewport">
         {% for media in product.media %}
           <div
@@ -426,13 +428,21 @@
           </ul>
         </div>
 
+        {%- liquid
+          assign qc_is_preorder = false
+          if current_variant.available and current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'continue' and current_variant.inventory_quantity <= 0
+            assign qc_is_preorder = true
+          endif
+        -%}
         <button
           type="submit"
           class="qc-btn qc-btn--primary qc-btn--full"
           data-qc-buy
           {% unless current_variant.available %}disabled{% endunless %}
         >
-          {% if current_variant.available %}
+          {% if qc_is_preorder %}
+            {{ 'products.product.preorder' | t }}
+          {% elsif current_variant.available %}
             {{ 'products.product.add_to_cart' | t }}
           {% else %}
             {{ 'products.product.sold_out' | t }}
@@ -455,6 +465,11 @@
             {% case block.type %}
               {% when '@app' %}
                 {% render block %}
+              {% when 'trust' %}
+                <div class="qc-trust" {{ block.shopify_attributes }}>
+                  {% render 'qc-icon', name: block.settings.icon %}
+                  <span>{{ block.settings.text }}</span>
+                </div>
               {% when 'disclosure' %}
                 <details class="qc-disclosure" {{ block.shopify_attributes }}>
                   <summary>
@@ -491,7 +506,9 @@
         data-qc-sticky-buy
         {% unless current_variant.available %}disabled{% endunless %}
       >
-        {% if current_variant.available %}
+        {% if qc_is_preorder %}
+          {{ 'products.product.preorder' | t }}
+        {% elsif current_variant.available %}
           {{ 'products.product.add_to_cart' | t }}
         {% else %}
           {{ 'products.product.sold_out' | t }}
@@ -567,6 +584,7 @@
   }
 
   .qc-product__media {
+    position: relative;
     display: grid;
     gap: var(--qc-space-s);
   }
@@ -752,6 +770,19 @@
 
   .qc-pill--swatch {
     gap: var(--qc-space-2xs);
+  }
+
+  .qc-trust {
+    display: flex;
+    align-items: center;
+    gap: var(--qc-space-s);
+    padding-block: var(--qc-space-2xs);
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-trust svg {
+    flex-shrink: 0;
+    color: var(--qc-accent);
   }
 
   .qc-pill .qc-swatch {
@@ -974,6 +1005,42 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "trust",
+      "name": "t:general.trust_badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:general.icon",
+          "default": "truck",
+          "options": [
+            {
+              "value": "truck",
+              "label": "t:general.icon_truck"
+            },
+            {
+              "value": "shield",
+              "label": "t:general.icon_shield"
+            },
+            {
+              "value": "lock",
+              "label": "t:general.icon_lock"
+            },
+            {
+              "value": "returns",
+              "label": "t:general.icon_returns"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:general.text",
+          "default": "Free shipping over $75"
+        }
+      ]
     },
     {
       "type": "disclosure",

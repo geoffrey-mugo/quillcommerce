@@ -446,9 +446,13 @@ if (!customElements.get('qc-product-page')) {
 
         {
           const ok = Boolean(variant?.available);
+          const preorder =
+            ok && variant.managed && variant.policy === 'continue' && variant.qty <= 0;
           const label = variant
             ? ok
-              ? this.dataset.buyLabel
+              ? preorder
+                ? this.dataset.preorderLabel || this.dataset.buyLabel
+                : this.dataset.buyLabel
               : this.dataset.soldOutLabel
             : this.dataset.unavailableLabel;
           if (this.buyBtn) {

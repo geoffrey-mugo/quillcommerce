@@ -1,0 +1,116 @@
+{% comment %}
+  Testimonials (SPEC-025 §7): quote cards with attribution. Pure Liquid.
+{% endcomment %}
+
+<div class="qc-testimonials section-padding">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-testimonials__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  <div class="qc-testimonials__grid">
+    {% for block in section.blocks %}
+      <figure class="qc-testimonial" {{ block.shopify_attributes }}>
+        <blockquote class="qc-testimonial__quote">
+          {{ block.settings.quote }}
+        </blockquote>
+        {% if block.settings.author != blank %}
+          <figcaption class="qc-testimonial__author">
+            <span>{{ block.settings.author }}</span>
+            {% if block.settings.detail != blank %}
+              <span class="qc-text-s qc-muted">{{ block.settings.detail }}</span>
+            {% endif %}
+          </figcaption>
+        {% endif %}
+      </figure>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .qc-testimonials {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-testimonials__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-testimonials__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--qc-space-m);
+  }
+
+  .qc-testimonial {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-s);
+    margin: 0;
+    padding: var(--qc-space-l);
+    padding-block-start: var(--qc-space-2xl);
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+    background: var(--qc-surface-raised);
+  }
+
+  .qc-testimonial::before {
+    content: '\201C';
+    position: absolute;
+    inset-block-start: var(--qc-space-xs);
+    inset-inline-start: var(--qc-space-l);
+    font-family: var(--qc-font-display);
+    font-size: var(--qc-text-3xl);
+    line-height: 1;
+    color: var(--qc-accent);
+  }
+
+  .qc-testimonial__quote {
+    margin: 0;
+  }
+
+  .qc-testimonial__quote > :first-child {
+    margin-block-start: 0;
+  }
+
+  .qc-testimonial__quote > :last-child {
+    margin-block-end: 0;
+  }
+
+  .qc-testimonial__author {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-weight: 600;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.testimonials",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "What customers say" }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "t:general.testimonial",
+      "settings": [
+        { "type": "richtext", "id": "quote", "label": "t:general.quote", "default": "<p>Quality gear and honest service.</p>" },
+        { "type": "text", "id": "author", "label": "t:general.author", "default": "A. Customer" },
+        { "type": "text", "id": "detail", "label": "t:general.author_detail" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.testimonials",
+      "blocks": [{ "type": "quote" }, { "type": "quote" }, { "type": "quote" }]
+    }
+  ]
+}
+{% endschema %}

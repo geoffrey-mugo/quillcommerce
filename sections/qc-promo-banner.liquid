@@ -1,0 +1,115 @@
+{% comment %}
+  Promo banner (SPEC-025 §1): full-width conversion strip — heading,
+  supporting line, one CTA, tone presets. Pure Liquid.
+{% endcomment %}
+
+<div class="qc-promo-banner full-width qc-promo-banner--{{ section.settings.tone }} qc-promo-banner--{{ section.settings.alignment }}">
+  <div class="qc-promo-banner__inner">
+    <div class="qc-promo-banner__copy">
+      {% if section.settings.heading != blank %}
+        <h2 class="qc-promo-banner__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.text != blank %}
+        <p class="qc-promo-banner__text">{{ section.settings.text }}</p>
+      {% endif %}
+    </div>
+    {% if section.settings.cta_label != blank %}
+      <a class="qc-btn qc-promo-banner__cta" href="{{ section.settings.cta_link | default: '#' }}">
+        {{ section.settings.cta_label }}
+      </a>
+    {% endif %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .qc-promo-banner {
+    padding-block: var(--qc-space-xl);
+    padding-inline: var(--qc-space-xl);
+  }
+
+  .qc-promo-banner--accent {
+    background: var(--qc-accent);
+    color: var(--qc-accent-ink);
+  }
+
+  .qc-promo-banner--ink {
+    background: var(--qc-ink);
+    color: var(--qc-surface);
+  }
+
+  .qc-promo-banner--raised {
+    background: var(--qc-surface-raised);
+  }
+
+  .qc-promo-banner__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--qc-space-m);
+    max-inline-size: var(--page-width);
+    margin-inline: auto;
+  }
+
+  .qc-promo-banner--center .qc-promo-banner__inner {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .qc-promo-banner__heading {
+    margin: 0;
+    font-size: var(--qc-text-xl);
+  }
+
+  .qc-promo-banner__text {
+    margin: var(--qc-space-2xs) 0 0;
+  }
+
+  .qc-promo-banner--accent .qc-promo-banner__cta,
+  .qc-promo-banner--ink .qc-promo-banner__cta {
+    background: transparent;
+    border: var(--qc-line-w) solid currentColor;
+    color: inherit;
+  }
+
+  .qc-promo-banner--raised .qc-promo-banner__cta {
+    background: var(--qc-accent);
+    border-color: var(--qc-accent);
+    color: var(--qc-accent-ink);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.promo_banner",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Free shipping over $75" },
+    { "type": "text", "id": "text", "label": "t:general.text" },
+    { "type": "text", "id": "cta_label", "label": "t:general.cta_1_label", "default": "Shop now" },
+    { "type": "url", "id": "cta_link", "label": "t:general.cta_1_link" },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "t:general.tone",
+      "options": [
+        { "value": "accent", "label": "t:general.tone_accent" },
+        { "value": "ink", "label": "t:general.tone_ink" },
+        { "value": "raised", "label": "t:general.tone_raised" }
+      ],
+      "default": "accent"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:general.alignment",
+      "options": [
+        { "value": "start", "label": "t:general.align_start" },
+        { "value": "center", "label": "t:general.align_center" }
+      ],
+      "default": "start"
+    }
+  ],
+  "presets": [{ "name": "t:general.promo_banner" }]
+}
+{% endschema %}

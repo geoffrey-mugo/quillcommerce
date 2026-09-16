@@ -1,0 +1,128 @@
+{% comment %}
+  Promo tiles (SPEC-025 §2): fully clickable image tiles with a
+  contrast scrim — campaign shortcuts beyond collections. Pure Liquid.
+{% endcomment %}
+
+<div class="qc-promo-tiles section-padding">
+  {% if section.settings.heading != blank %}
+    <h2 class="qc-promo-tiles__heading">{{ section.settings.heading }}</h2>
+  {% endif %}
+  <div class="qc-promo-tiles__grid">
+    {% for block in section.blocks %}
+      <a class="qc-promo-tile" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+        {% if block.settings.image %}
+          {{ block.settings.image | image_url: width: 900 | image_tag: class: 'qc-promo-tile__image', alt: '', loading: 'lazy' }}
+        {% endif %}
+        <span class="qc-promo-tile__scrim" aria-hidden="true"></span>
+        <span class="qc-promo-tile__copy">
+          <span class="qc-promo-tile__title">{{ block.settings.heading }}</span>
+          {% if block.settings.subtext != blank %}
+            <span class="qc-promo-tile__subtext qc-text-s">{{ block.settings.subtext }}</span>
+          {% endif %}
+        </span>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .qc-promo-tiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-xl);
+  }
+
+  .qc-promo-tiles__heading {
+    margin: 0;
+    font-size: var(--qc-text-2xl);
+  }
+
+  .qc-promo-tiles__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--qc-space-m);
+  }
+
+  .qc-promo-tile {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: 220px;
+    overflow: hidden;
+    border-radius: var(--qc-radius-surface);
+    background: var(--qc-surface-raised);
+    text-decoration: none;
+    color: #fff;
+    transition: transform var(--qc-dur-2) var(--qc-ease), box-shadow var(--qc-dur-2) var(--qc-ease);
+  }
+
+  .qc-promo-tile:hover,
+  .qc-promo-tile:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: var(--qc-shadow-2);
+  }
+
+  .qc-promo-tile__image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .qc-promo-tile__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(0 0 0 / 0%) 40%, rgb(0 0 0 / 55%));
+  }
+
+  .qc-promo-tile:not(:has(.qc-promo-tile__image)) {
+    color: var(--qc-ink);
+  }
+
+  .qc-promo-tile:not(:has(.qc-promo-tile__image)) .qc-promo-tile__scrim {
+    display: none;
+  }
+
+  .qc-promo-tile__copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-2xs);
+    padding: var(--qc-space-m);
+  }
+
+  .qc-promo-tile__title {
+    font-size: var(--qc-text-l);
+    font-weight: 600;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.promo_tiles",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:general.heading" }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "t:general.tile",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "t:general.image" },
+        { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Featured" },
+        { "type": "text", "id": "subtext", "label": "t:general.subheading" },
+        { "type": "url", "id": "link", "label": "t:general.cta_1_link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:general.promo_tiles",
+      "blocks": [{ "type": "tile" }, { "type": "tile" }]
+    }
+  ]
+}
+{% endschema %}

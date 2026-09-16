@@ -141,7 +141,8 @@
         "message": "Message (optional)",
         "max_chars": "{{ max }} characters max",
         "send_on": "Send on (optional)"
-      }
+      },
+      "preorder": "Pre-order"
     },
     "card": {
       "adding": "Adding…",
@@ -174,6 +175,9 @@
       "options": "Options",
       "available": "In stock",
       "product_column": "Product"
+    },
+    "badges": {
+      "sale": "Sale"
     }
   },
   "general": {
@@ -326,5 +330,13 @@
     "previous": "Previous slide",
     "next": "Next slide",
     "slide_n": "Slide {{ n }} of {{ total }}"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "until": "Ends {{ date }}",
+    "expired": "This offer has ended."
   }
 }

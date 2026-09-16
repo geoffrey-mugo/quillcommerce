@@ -323,6 +323,21 @@ main {
   line-height: 1.35;
 }
 
+.qc-product-badges {
+  position: absolute;
+  inset-block-start: var(--qc-space-xs);
+  inset-inline-start: var(--qc-space-xs);
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--qc-space-2xs);
+  pointer-events: none;
+}
+
+.qc-product-badges .qc-badge {
+  background: var(--qc-surface);
+}
+
 .qc-product-card__image--hover {
   position: absolute;
   inset: 0;

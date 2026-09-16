@@ -23,6 +23,7 @@
 
   <a class="qc-product-card__media-link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     <div class="qc-product-card__media">
+      {% render 'qc-product-badges', product: product %}
       {% if product.featured_image %}
         {% render 'image',
           image: product.featured_image,
@@ -117,8 +118,15 @@
         >
           <form action="{{ routes.cart_add_url }}" method="post">
             <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            {%- liquid
+              assign qc_card_variant = product.selected_or_first_available_variant
+              assign qc_card_preorder = false
+              if qc_card_variant.inventory_management == 'shopify' and qc_card_variant.inventory_policy == 'continue' and qc_card_variant.inventory_quantity <= 0
+                assign qc_card_preorder = true
+              endif
+            -%}
             <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
-              {{ 'products.product.add_to_cart' | t }}
+              {% if qc_card_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}
               <span class="qc-visually-hidden">— {{ product.title }}</span>
             </button>
           </form>
