@@ -338,5 +338,10 @@
     "seconds": "Sec",
     "until": "Ends {{ date }}",
     "expired": "This offer has ended."
+  },
+  "quick_order": {
+    "product": "Product",
+    "price": "Price",
+    "add": "Add"
   }
 }

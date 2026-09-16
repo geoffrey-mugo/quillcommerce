@@ -1,0 +1,25 @@
+{% doc %}
+  Age verifier (SPEC-026 §3). Rendered by theme.liquid when the theme
+  setting is on; qc-age-gate.js opens it for visitors without a stored
+  confirmation and blocks Escape. Without JS the gate stays closed
+  (fails open).
+{% enddoc %}
+{%- if settings.enable_age_gate -%}
+  <script src="{{ 'qc-age-gate.js' | asset_url }}" type="module"></script>
+  <dialog class="qc-age-gate" data-qc-age-gate scroll-lock aria-labelledby="qc-age-gate-heading">
+    <h2 id="qc-age-gate-heading" class="qc-age-gate__heading">
+      {{ settings.age_gate_heading }}
+    </h2>
+    {% if settings.age_gate_text != blank %}
+      <p class="qc-age-gate__text">{{ settings.age_gate_text }}</p>
+    {% endif %}
+    <div class="qc-age-gate__actions">
+      <button type="button" class="qc-btn qc-btn--primary" data-qc-age-confirm>
+        {{ settings.age_gate_confirm_label }}
+      </button>
+      <a class="qc-btn qc-btn--outline" href="{{ settings.age_gate_decline_url }}">
+        {{ settings.age_gate_decline_label }}
+      </a>
+    </div>
+  </dialog>
+{%- endif -%}

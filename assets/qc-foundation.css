@@ -972,3 +972,34 @@ main {
   min-block-size: 44px;
   cursor: pointer;
 }
+
+/* age gate (SPEC-026) */
+.qc-age-gate {
+  max-inline-size: min(26rem, calc(100% - 2rem));
+  border: var(--qc-line-w) solid var(--qc-line);
+  border-radius: var(--qc-radius-surface);
+  padding: var(--qc-space-xl);
+  text-align: center;
+}
+
+.qc-age-gate::backdrop {
+  background: rgb(0 0 0 / 60%);
+  backdrop-filter: blur(4px);
+}
+
+.qc-age-gate__heading {
+  margin: 0 0 var(--qc-space-s);
+  font-size: var(--qc-text-xl);
+}
+
+.qc-age-gate__text {
+  margin: 0 0 var(--qc-space-m);
+  color: var(--qc-ink-soft);
+}
+
+.qc-age-gate__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--qc-space-s);
+}

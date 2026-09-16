@@ -25,6 +25,11 @@ keep tuning.
 
 ## Sections you can add
 
+- **Quick order list** — a B2B-style table of every variant in a
+  chosen collection with quantity inputs and per-row add-to-cart;
+  works without JavaScript.
+- **Image hotspots** — pin up to six product dots onto one image; each
+  opens a mini product card.
 - **Promo banner** — full-width conversion strip in accent, ink, or
   raised tones with one button.
 - **Promo tiles** — up to six clickable image tiles for campaigns and
@@ -89,6 +94,13 @@ Classic-accounts templates (login, registration, recovery, activation,
 reset, account, orders, addresses) are included and styled. Stores on
 Shopify's new customer accounts use Shopify-hosted pages instead —
 both work; nothing to configure.
+
+## Age verifier
+
+Turn it on in Theme settings → Age verifier: a modal gate with your
+heading, message, confirm and decline labels, and a decline link.
+Confirmation is remembered per browser. Visitors with JavaScript
+disabled are not blocked.
 
 ## Languages
 

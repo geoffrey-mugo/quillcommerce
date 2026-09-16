@@ -164,7 +164,18 @@
     "icon_shield": "Shield check",
     "icon_lock": "Padlock",
     "icon_returns": "Returns arrows",
-    "show_sale_badge": "Show automatic Sale badge"
+    "show_sale_badge": "Show automatic Sale badge",
+    "quick_order": "Quick order list",
+    "hotspots": "Image hotspots",
+    "hotspot": "Hotspot",
+    "spot_x": "Horizontal position",
+    "spot_y": "Vertical position",
+    "age_gate": "Age verifier",
+    "enable_age_gate": "Enable age verifier",
+    "age_gate_info": "Shown once per browser. Visitors with JavaScript disabled are not blocked.",
+    "age_gate_confirm": "Confirm button label",
+    "age_gate_decline": "Decline button label",
+    "age_gate_decline_url": "Decline link"
   },
   "labels": {
     "alignment": "Alignment",

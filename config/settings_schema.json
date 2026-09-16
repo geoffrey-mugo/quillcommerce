@@ -220,5 +220,46 @@
         "label": "Pinterest"
       }
     ]
+  },
+  {
+    "name": "t:general.age_gate",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_age_gate",
+        "label": "t:general.enable_age_gate",
+        "info": "t:general.age_gate_info",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "age_gate_heading",
+        "label": "t:general.heading",
+        "default": "Are you of legal age?"
+      },
+      {
+        "type": "textarea",
+        "id": "age_gate_text",
+        "label": "t:general.text",
+        "default": "You must be of legal age in your region to enter this store."
+      },
+      {
+        "type": "text",
+        "id": "age_gate_confirm_label",
+        "label": "t:general.age_gate_confirm",
+        "default": "Yes, I am"
+      },
+      {
+        "type": "text",
+        "id": "age_gate_decline_label",
+        "label": "t:general.age_gate_decline",
+        "default": "No, take me back"
+      },
+      {
+        "type": "url",
+        "id": "age_gate_decline_url",
+        "label": "t:general.age_gate_decline_url"
+      }
+    ]
   }
 ]
