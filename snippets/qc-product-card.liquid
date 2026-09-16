@@ -103,6 +103,7 @@
       data-details-label="{{ 'products.quick_view.view_details' | t }}"
     >
       <a class="qc-btn qc-btn--ink" href="{{ product.url }}">
+        {% render 'qc-icon', name: 'eye' %}
         {{ 'products.card.quick_view' | t }}
         <span class="qc-visually-hidden">— {{ product.title }}</span>
       </a>
