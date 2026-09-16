@@ -16,6 +16,29 @@ function announce(message) {
   document.dispatchEvent(new CustomEvent(EVT_ANNOUNCE, { detail: { message } }));
 }
 
+/* Visual add-to-cart confirmation. Screen readers get the same text via
+   announce(), so the toast itself is aria-hidden. Mounted inside the
+   topmost open dialog when one is up (a plain fixed element would sit
+   below the dialog's top layer), otherwise on <body>. */
+let toastTimer = null;
+function showToast(message) {
+  if (!message) return;
+  document.querySelector('.qc-toast')?.remove();
+  const openDialogs = [...document.querySelectorAll('dialog[open]')];
+  const host = openDialogs[openDialogs.length - 1] || document.body;
+  const toast = document.createElement('div');
+  toast.className = 'qc-toast';
+  toast.setAttribute('aria-hidden', 'true');
+  const check = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  check.setAttribute('viewBox', '0 0 16 16');
+  check.setAttribute('class', 'qc-toast__check');
+  check.innerHTML = '<path d="M2.5 8.5 6 12l7.5-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  toast.append(check, document.createTextNode(message));
+  host.append(toast);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.remove(), 3500);
+}
+
 /* A page restored from the back/forward cache shows the cart as it was
    when the shopper left it; re-sync count and lines from the server. */
 window.addEventListener('pageshow', (event) => {
@@ -168,6 +191,7 @@ if (!customElements.get('qc-product-form')) {
             new CustomEvent(EVT_UPDATED, { detail: { cart, source: 'add' } })
           );
           announce(this.dataset.addedLabel || '');
+          showToast(this.dataset.addedLabel || '');
         } catch (err) {
           if (err.name !== 'AbortError') {
             const message = err.message || this.dataset.errorLabel || '';
@@ -340,13 +364,9 @@ if (!customElements.get('qc-cart-drawer')) {
             { signal }
           )
         );
-        document.addEventListener(
-          EVT_UPDATED,
-          (e) => {
-            if (e.detail.source === 'add') this.open();
-          },
-          { signal }
-        );
+        /* Adds confirm with the toast instead of springing the drawer
+           open (which buried whatever the shopper was doing under a
+           second layer); the drawer opens only from the cart link. */
       }
 
       disconnectedCallback() {

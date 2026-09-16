@@ -10,7 +10,7 @@ below is configurable from the Theme Editor — no code required.
 | Typography | Primary and display fonts (Work Sans / Assistant by default) |
 | Layout | Favicon, page width, and margins |
 | Colors | Background, text, and accent, plus four optional overrides (button text, cards and panels, borders, errors). Everything you leave unset derives automatically with accessible contrast. Corner style and input radius live here too. |
-| Cart | Cart type: **Drawer** (slide-in panel after every add — default) or **Page only** |
+| Cart | Cart type: **Drawer** (slide-in panel from the header cart icon — default) or **Page only**. Every add shows a brief added-to-cart confirmation toast. |
 | Catalog | **Enable product compare** (up to 4 products), **Show second image on hover**, and the automatic **Sale badge**. Add your own card badges with product tags like `badge:Limited` (up to two show). |
 | Social media | Six profile URL fields; filled ones appear as footer icons |
 
