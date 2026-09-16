@@ -184,10 +184,11 @@
     }
   },
   "general": {
-    "pagination": "Paginación",
-    "pick_collection_hint": "Elige una colección para destacar.",
+    "close": "Cerrar",
     "footer_nav_label": "Pie de página",
+    "pagination": "Paginación",
     "payment_methods": "Métodos de pago aceptados",
+    "pick_collection_hint": "Elige una colección para destacar.",
     "social": {
       "instagram": "Instagram",
       "facebook": "Facebook",

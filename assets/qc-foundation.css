@@ -495,6 +495,17 @@ main {
   background: color-mix(in oklab, var(--qc-accent) 85%, var(--qc-ink));
 }
 
+/* the toggle reads "Close" while the panel is up — its Add to cart
+   button lives in the panel, so the label never appears twice */
+.qc-card-picker__label-close,
+.qc-card-picker[open] .qc-card-picker__label-add {
+  display: none;
+}
+
+.qc-card-picker[open] .qc-card-picker__label-close {
+  display: inline;
+}
+
 .qc-card-picker__panel {
   position: absolute;
   inset-inline-end: 0;

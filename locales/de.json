@@ -184,10 +184,11 @@
     }
   },
   "general": {
-    "pagination": "Seitennummerierung",
-    "pick_collection_hint": "Wählen Sie eine Kategorie zum Hervorheben.",
+    "close": "Schließen",
     "footer_nav_label": "Fußzeile",
+    "pagination": "Seitennummerierung",
     "payment_methods": "Akzeptierte Zahlungsarten",
+    "pick_collection_hint": "Wählen Sie eine Kategorie zum Hervorheben.",
     "social": {
       "instagram": "Instagram",
       "facebook": "Facebook",

@@ -134,8 +134,11 @@
       {% else %}
         <details class="qc-card-picker">
           <summary class="qc-btn qc-btn--primary qc-btn--full">
-            {{ 'products.product.add_to_cart' | t }}
-            <span class="qc-visually-hidden">— {{ product.title }}</span>
+            <span class="qc-card-picker__label-add">
+              {{ 'products.product.add_to_cart' | t }}
+              <span class="qc-visually-hidden">— {{ product.title }}</span>
+            </span>
+            <span class="qc-card-picker__label-close">{{ 'general.close' | t }}</span>
           </summary>
           <qc-product-form
             class="qc-card-picker__panel"
