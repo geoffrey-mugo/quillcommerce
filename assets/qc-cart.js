@@ -391,15 +391,17 @@ if (!customElements.get('qc-cart-drawer')) {
           },
           { signal }
         );
-        document.querySelectorAll('[data-qc-cart-open]').forEach((link) =>
-          link.addEventListener(
-            'click',
-            (e) => {
-              e.preventDefault();
-              this.open();
-            },
-            { signal }
-          )
+        /* delegated so links re-rendered later (Theme Editor header
+           edits, swapped sections) keep working without rebinding */
+        document.addEventListener(
+          'click',
+          (e) => {
+            const opener = e.target.closest('[data-qc-cart-open]');
+            if (!opener) return;
+            e.preventDefault();
+            this.open();
+          },
+          { signal }
         );
         /* Adds confirm with the toast instead of springing the drawer
            open (which buried whatever the shopper was doing under a

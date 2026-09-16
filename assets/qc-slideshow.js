@@ -46,14 +46,16 @@ if (!customElements.get('qc-slideshow')) {
 
         const seconds = Number(this.dataset.autoplay) || 0;
         const stillness = matchMedia('(prefers-reduced-motion: reduce)');
-        if (seconds > 0 && !stillness.matches) {
-          const start = () => {
+        const start = () => {
+          if (seconds > 0 && !stillness.matches) {
             this.timer ??= setInterval(() => this.go(this.index() + 1), seconds * 1000);
-          };
-          const stop = () => {
-            clearInterval(this.timer);
-            this.timer = null;
-          };
+          }
+        };
+        const stop = () => {
+          clearInterval(this.timer);
+          this.timer = null;
+        };
+        if (seconds > 0 && !stillness.matches) {
           start();
           this.addEventListener('pointerenter', stop, { signal });
           this.addEventListener('pointerleave', start, { signal });
@@ -65,6 +67,29 @@ if (!customElements.get('qc-slideshow')) {
             { signal }
           );
         }
+
+        /* Theme Editor: selecting a slide block shows that slide and
+           holds autoplay so the merchant can edit what they see */
+        document.addEventListener(
+          'shopify:block:select',
+          (e) => {
+            if (!this.contains(e.target)) return;
+            const slide = e.target.closest('[data-qc-slide]') || e.target.querySelector?.('[data-qc-slide]');
+            const i = this.slides.indexOf(slide);
+            if (i >= 0) {
+              stop();
+              this.go(i);
+            }
+          },
+          { signal }
+        );
+        document.addEventListener(
+          'shopify:block:deselect',
+          (e) => {
+            if (this.contains(e.target)) start();
+          },
+          { signal }
+        );
       }
 
       disconnectedCallback() {
