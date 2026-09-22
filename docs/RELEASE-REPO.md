@@ -8,8 +8,10 @@ there.
 
 ## What ships there
 
-- Shipping dirs verbatim: `assets/ config/ layout/ listings/
-  locales/ sections/ snippets/ templates/` (`blocks/` was removed
+- Shipping dirs verbatim: `assets/ config/ layout/ locales/
+  sections/ snippets/ templates/` (`listings/` style presets were
+  withdrawn 2026-09-21 for a single-style 1.0 submission; the preset
+  files live in this repo's history for a future styles update) (`blocks/` was removed
   2026-09-16 — the Skeleton theme blocks were unreachable dead code)
 - `LICENSE.md`, `THIRD_PARTY_NOTICES.md`
 - `docs/MERCHANT-GUIDE.md`
