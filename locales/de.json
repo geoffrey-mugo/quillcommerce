@@ -146,7 +146,10 @@
       "added": "{{ title }} zum Warenkorb hinzugefügt",
       "adding": "Wird hinzugefügt…",
       "example_title": "Beispielprodukt",
-      "quick_view": "Ansicht"
+      "quick_view": "Ansicht",
+      "add_total": "Hinzufügen ({{ total }})",
+      "preorder_total": "Vorbestellen ({{ total }})",
+      "qty_rules": "Mengenregeln gelten"
     },
     "quick_view": {
       "loading": "Produkt wird geladen…",
@@ -178,7 +181,6 @@
     }
   },
   "general": {
-    "close": "Schließen",
     "footer_nav_label": "Fußzeile",
     "pagination": "Seitennummerierung",
     "payment_methods": "Akzeptierte Zahlungsarten",

@@ -1,13 +1,22 @@
 {% doc %}
-  Canonical QuillCommerce product card, v2 (SPEC-023): one bounding box —
-  compare toggle, media, price, title, and a
-  Quick view / Add to cart action row. The single card used by
+  Canonical QuillCommerce product card, v3 (SPEC-023): a buy card — media
+  with compare + quick-view overlays, title, live unit price, inline
+  variant dropdown, quantity stepper with a quantity-rules hint, and a
+  full-width Add button showing the line total. The single card used by
   collection, search, recommendations, recently-viewed, and
-  merchandising contexts.
+  merchandising contexts. Without JS: the select, quantity field, and
+  Add button still post natively to the cart.
 
   @param {object} product - product object (required)
   @param {boolean} [show_vendor] - render vendor line above the title
 {% enddoc %}
+{%- liquid
+  assign qc_card_variant = product.selected_or_first_available_variant
+  assign qc_card_preorder = false
+  if qc_card_variant.available and qc_card_variant.inventory_management == 'shopify' and qc_card_variant.inventory_policy == 'continue' and qc_card_variant.inventory_quantity <= 0
+    assign qc_card_preorder = true
+  endif
+-%}
 <article class="qc-product-card" data-qc-product-card="{{ product.handle }}">
   {% if settings.enable_compare %}
     <label class="qc-compare-toggle qc-text-s" hidden>
@@ -21,38 +30,49 @@
     </label>
   {% endif %}
 
-  <a class="qc-product-card__media-link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
-    <div class="qc-product-card__media">
-      {% render 'qc-product-badges', product: product %}
-      {% if product.featured_image %}
-        {% render 'image',
-          image: product.featured_image,
-          class: 'qc-product-card__image',
-          width: 600,
-          height: 600,
-          crop: 'center',
-          sizes: '(min-width: 990px) 300px, (min-width: 650px) 33vw, 50vw'
-        %}
-        {% if settings.enable_card_hover_image and product.images[1] %}
+  <div class="qc-product-card__media-wrap">
+    <a class="qc-product-card__media-link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+      <div class="qc-product-card__media">
+        {% render 'qc-product-badges', product: product %}
+        {% if product.featured_image %}
           {% render 'image',
-            image: product.images[1],
-            class: 'qc-product-card__image qc-product-card__image--hover',
+            image: product.featured_image,
+            class: 'qc-product-card__image',
             width: 600,
             height: 600,
             crop: 'center',
             sizes: '(min-width: 990px) 300px, (min-width: 650px) 33vw, 50vw'
           %}
+          {% if settings.enable_card_hover_image and product.images[1] %}
+            {% render 'image',
+              image: product.images[1],
+              class: 'qc-product-card__image qc-product-card__image--hover',
+              width: 600,
+              height: 600,
+              crop: 'center',
+              sizes: '(min-width: 990px) 300px, (min-width: 650px) 33vw, 50vw'
+            %}
+          {% endif %}
+        {% else %}
+          <div class="qc-product-card__image qc-product-card__image--empty" aria-hidden="true">
+            {% render 'qc-icon', name: 'alert' %}
+          </div>
         {% endif %}
-      {% else %}
-        <div class="qc-product-card__image qc-product-card__image--empty" aria-hidden="true">
-          {% render 'qc-icon', name: 'alert' %}
-        </div>
-      {% endif %}
-    </div>
-  </a>
-
-  <div class="qc-product-card__footer">
-    {% render 'qc-price', item: product %}
+      </div>
+    </a>
+    <qc-quick-view
+      class="qc-product-card__qv"
+      data-loading-label="{{ 'products.quick_view.loading' | t }}"
+      data-error-label="{{ 'products.quick_view.error' | t }}"
+      data-close-label="{{ 'products.quick_view.close' | t }}"
+      data-details-label="{{ 'products.quick_view.view_details' | t }}"
+    >
+      <a class="qc-btn qc-product-card__qv-btn" href="{{ product.url }}">
+        {{ 'products.card.quick_view' | t }}
+        {% render 'qc-icon', name: 'eye' %}
+        <span class="qc-visually-hidden">— {{ product.title }}</span>
+      </a>
+    </qc-quick-view>
   </div>
 
   <div class="qc-product-card__body">
@@ -62,6 +82,10 @@
     <h3 class="qc-product-card__title">
       <a class="qc-product-card__link" href="{{ product.url }}">{{ product.title }}</a>
     </h3>
+
+    <div class="qc-product-card__price" data-qc-card-price>
+      {% render 'qc-price', item: qc_card_variant %}
+    </div>
 
     {%- liquid
       assign qc_swatch_option = nil
@@ -97,85 +121,119 @@
     {% endif %}
   </div>
 
-  <div class="qc-product-card__actions">
-    <qc-quick-view
-      data-loading-label="{{ 'products.quick_view.loading' | t }}"
-      data-error-label="{{ 'products.quick_view.error' | t }}"
-      data-close-label="{{ 'products.quick_view.close' | t }}"
-      data-details-label="{{ 'products.quick_view.view_details' | t }}"
-    >
-      <a class="qc-btn qc-btn--ink" href="{{ product.url }}">
-        {{ 'products.card.quick_view' | t }}
-        {% render 'qc-icon', name: 'eye' %}
-        <span class="qc-visually-hidden">— {{ product.title }}</span>
-      </a>
-    </qc-quick-view>
-
+  <div class="qc-product-card__buy">
     {% if product.available %}
-      {% if product.has_only_default_variant %}
+      <qc-buy-card
+        data-money-format="{{ shop.money_format | strip_html }}"
+        data-add-label="{{ 'products.card.add_total' | t: total: '[total]' }}"
+        data-preorder-label="{{ 'products.card.preorder_total' | t: total: '[total]' }}"
+        data-sold-out-label="{{ 'products.product.sold_out' | t }}"
+        data-sale-label="{{ 'products.price.sale_price' | t }}"
+        {% unless product.has_only_default_variant %}data-has-select{% endunless %}
+      >
         <qc-product-form
-          class="qc-product-card__quick-add"
           data-adding-label="{{ 'products.card.adding' | t }}"
           data-added-label="{{ 'products.card.added' | t: title: product.title }}"
           data-error-label="{{ 'products.card.add_error' | t }}"
         >
-          <form action="{{ routes.cart_add_url }}" method="post">
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <form action="{{ routes.cart_add_url }}" method="post" class="qc-product-card__form">
+            {% if product.has_only_default_variant %}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ qc_card_variant.id }}"
+                data-qc-card-variant
+                data-price="{{ qc_card_variant.price }}"
+                data-compare="{{ qc_card_variant.compare_at_price | default: 0 }}"
+                data-min="{{ qc_card_variant.quantity_rule.min | default: 1 }}"
+                data-inc="{{ qc_card_variant.quantity_rule.increment | default: 1 }}"
+                {% if qc_card_variant.quantity_rule.max %}data-max="{{ qc_card_variant.quantity_rule.max }}"{% endif %}
+                {% if qc_card_preorder %}data-preorder{% endif %}
+              >
+            {% else %}
+              <label class="qc-visually-hidden" for="qc-card-variant-{{ product.id }}">
+                {{ 'products.product.options_label' | t }}
+              </label>
+              <select
+                id="qc-card-variant-{{ product.id }}"
+                name="id"
+                class="qc-card-select"
+                data-qc-card-variant
+              >
+                {% for variant in product.variants %}
+                  {%- liquid
+                    assign qc_v_preorder = false
+                    if variant.available and variant.inventory_management == 'shopify' and variant.inventory_policy == 'continue' and variant.inventory_quantity <= 0
+                      assign qc_v_preorder = true
+                    endif
+                  -%}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == qc_card_variant %}selected="selected"{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
+                    data-price="{{ variant.price }}"
+                    data-compare="{{ variant.compare_at_price | default: 0 }}"
+                    data-min="{{ variant.quantity_rule.min | default: 1 }}"
+                    data-inc="{{ variant.quantity_rule.increment | default: 1 }}"
+                    {% if variant.quantity_rule.max %}data-max="{{ variant.quantity_rule.max }}"{% endif %}
+                    {% if qc_v_preorder %}data-preorder{% endif %}
+                  >
+                    {{ variant.title }}
+                    {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            {% endif %}
+
+            <div class="qc-card-qty">
+              <button
+                type="button"
+                class="qc-qty__btn"
+                data-qc-card-step="-1"
+                aria-label="{{ 'cart.decrease' | t: product: product.title }}"
+              >&minus;</button>
+              <label class="qc-visually-hidden" for="qc-card-qty-{{ product.id }}">
+                {{ 'cart.quantity_for' | t: product: product.title }}
+              </label>
+              <input
+                id="qc-card-qty-{{ product.id }}"
+                class="qc-input qc-qty__input"
+                type="number"
+                name="quantity"
+                value="{{ qc_card_variant.quantity_rule.min | default: 1 }}"
+                min="{{ qc_card_variant.quantity_rule.min | default: 1 }}"
+                step="{{ qc_card_variant.quantity_rule.increment | default: 1 }}"
+                {% if qc_card_variant.quantity_rule.max %}max="{{ qc_card_variant.quantity_rule.max }}"{% endif %}
+                inputmode="numeric"
+              >
+              <button
+                type="button"
+                class="qc-qty__btn"
+                data-qc-card-step="1"
+                aria-label="{{ 'cart.increase' | t: product: product.title }}"
+              >+</button>
+            </div>
+
             {%- liquid
-              assign qc_card_variant = product.selected_or_first_available_variant
-              assign qc_card_preorder = false
-              if qc_card_variant.inventory_management == 'shopify' and qc_card_variant.inventory_policy == 'continue' and qc_card_variant.inventory_quantity <= 0
-                assign qc_card_preorder = true
+              assign qc_has_rules = false
+              if qc_card_variant.quantity_rule.min > 1 or qc_card_variant.quantity_rule.increment > 1 or qc_card_variant.quantity_rule.max
+                assign qc_has_rules = true
               endif
             -%}
-            <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
+            <p class="qc-card-rules qc-text-s" data-qc-card-rules {% unless qc_has_rules %}hidden{% endunless %}>
+              {% render 'qc-icon', name: 'info' %}
+              {{ 'products.card.qty_rules' | t }}
+            </p>
+
+            <button type="submit" class="qc-btn qc-btn--primary qc-btn--full" data-qc-card-add>
               {% if qc_card_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}
               <span class="qc-visually-hidden">— {{ product.title }}</span>
             </button>
           </form>
         </qc-product-form>
-      {% else %}
-        <details class="qc-card-picker">
-          <summary class="qc-btn qc-btn--primary qc-btn--full">
-            <span class="qc-card-picker__label-add">
-              {{ 'products.product.add_to_cart' | t }}
-              <span class="qc-visually-hidden">— {{ product.title }}</span>
-            </span>
-            <span class="qc-card-picker__label-close">{{ 'general.close' | t }}</span>
-          </summary>
-          <qc-product-form
-            class="qc-card-picker__panel"
-            data-adding-label="{{ 'products.card.adding' | t }}"
-            data-added-label="{{ 'products.card.added' | t: title: product.title }}"
-            data-error-label="{{ 'products.card.add_error' | t }}"
-          >
-            <form action="{{ routes.cart_add_url }}" method="post" class="qc-card-picker__form">
-              <select
-                name="id"
-                class="qc-card-picker__select"
-                aria-label="{{ 'products.product.options_label' | t }}"
-              >
-                {% for variant in product.variants %}
-                  <option
-                    value="{{ variant.id }}"
-                    {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                    {% unless variant.available %}disabled{% endunless %}
-                  >
-                    {{ variant.title }} — {{ variant.price | money }}
-                    {%- unless variant.available %} ({{ 'products.product.sold_out' | t }}){% endunless %}
-                  </option>
-                {% endfor %}
-              </select>
-              <button type="submit" class="qc-btn qc-btn--primary qc-btn--full">
-                {{ 'products.product.add_to_cart' | t }}
-                <span class="qc-visually-hidden">— {{ product.title }}</span>
-              </button>
-            </form>
-          </qc-product-form>
-        </details>
-      {% endif %}
+      </qc-buy-card>
     {% else %}
-      <button type="button" class="qc-btn qc-btn--muted" disabled>
+      <button type="button" class="qc-btn qc-btn--muted qc-btn--full" disabled>
         {{ 'products.product.sold_out' | t }}
         <span class="qc-visually-hidden">— {{ product.title }}</span>
       </button>

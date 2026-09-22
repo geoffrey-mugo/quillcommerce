@@ -2,7 +2,7 @@
   QuillCommerce icon primitive (SPEC-002 §12). Original 24×24 stroke set.
 
   @param {string} name - one of: cart, account, search, chevron, close,
-    check, alert, arrow, eye, truck, shield, lock, returns
+    check, alert, arrow, eye, info, truck, shield, lock, returns
   @param {string} [label] - accessible name; omitted = decorative (aria-hidden)
   @param {string} [class] - extra classes
 {% enddoc %}
@@ -33,6 +33,8 @@
       <circle cx="12" cy="12" r="8.5"/><path d="M12 7.8v5"/><path d="M12 16.2h.01"/>
     {%- when 'arrow' -%}
       <path d="M4.5 12h15M14 6.5l5.5 5.5L14 17.5"/>
+    {%- when 'info' -%}
+      <circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8v.01"/>
     {%- when 'eye' -%}
       <path d="M2.8 12S6.2 5.8 12 5.8 21.2 12 21.2 12 17.8 18.2 12 18.2 2.8 12 2.8 12Z"/><circle cx="12" cy="12" r="2.7"/>
     {%- when 'truck' -%}

@@ -207,8 +207,6 @@ if (!customElements.get('qc-product-form')) {
           );
           announce(this.dataset.addedLabel || '');
           showToast(this.dataset.addedLabel || '');
-          /* a card's variant popover has done its job once the item is in */
-          this.closest('details.qc-card-picker')?.removeAttribute('open');
         } catch (err) {
           if (err.name !== 'AbortError') {
             /* a network-level TypeError carries browser prose
