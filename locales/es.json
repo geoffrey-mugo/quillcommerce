@@ -146,7 +146,10 @@
       "added": "{{ title }} añadido al carrito",
       "adding": "Añadiendo…",
       "example_title": "Producto de ejemplo",
-      "quick_view": "Vista"
+      "quick_view": "Vista",
+      "add_total": "Añadir ({{ total }})",
+      "preorder_total": "Reservar ({{ total }})",
+      "qty_rules": "Se aplican reglas de cantidad"
     },
     "quick_view": {
       "loading": "Cargando producto…",
@@ -178,7 +181,6 @@
     }
   },
   "general": {
-    "close": "Cerrar",
     "footer_nav_label": "Pie de página",
     "pagination": "Paginación",
     "payment_methods": "Métodos de pago aceptados",

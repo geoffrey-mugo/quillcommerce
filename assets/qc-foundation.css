@@ -293,16 +293,9 @@ main {
   color: var(--qc-ink-soft);
 }
 
-.qc-product-card__footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--qc-space-xs);
-  flex-wrap: wrap;
-}
-
-.qc-product-card .qc-price {
+.qc-product-card__price .qc-price {
   font-size: var(--qc-text-l);
+  font-weight: 600;
 }
 
 .qc-product-card__title {
@@ -334,6 +327,34 @@ main {
 .qc-product-card__media-link {
   position: relative;
   display: block;
+}
+
+/* quick view rides the image as a quiet chip so the buy column below
+   stays exactly title / price / options / quantity / Add */
+.qc-product-card__media-wrap {
+  position: relative;
+}
+
+.qc-product-card__qv {
+  position: absolute;
+  inset-block-end: var(--qc-space-xs);
+  inset-inline-end: var(--qc-space-xs);
+  z-index: 2;
+}
+
+.qc-product-card__qv-btn {
+  min-block-size: 36px;
+  padding: var(--qc-space-2xs) var(--qc-space-xs);
+  font-size: var(--qc-text-s);
+  background: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-line);
+  color: var(--qc-ink);
+  box-shadow: var(--qc-shadow-1);
+}
+
+.qc-product-card__qv-btn:hover {
+  background: var(--qc-surface-raised);
+  color: var(--qc-ink);
 }
 
 .qc-product-card .qc-product-card__image--hover {
@@ -393,41 +414,107 @@ main {
   color: inherit;
 }
 
-.qc-product-card__actions {
+.qc-product-card__buy {
   margin-block-start: auto;
-  /* always one row of two equal buttons; they shrink, never wrap or
-     overflow the card */
+}
+
+.qc-product-card__form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: var(--qc-space-xs);
 }
 
-.qc-product-card__actions > * {
-  min-inline-size: 0;
-}
-
-.qc-product-card__actions .qc-btn {
+.qc-card-select {
   inline-size: 100%;
   min-inline-size: 0;
-  padding-inline: var(--qc-space-2xs);
-  font-size: var(--qc-text-s);
-  white-space: nowrap;
+  min-block-size: 44px;
+  padding: var(--qc-space-2xs) var(--qc-space-xs);
+  border: var(--qc-line-w) solid var(--qc-line-strong);
+  border-radius: var(--qc-radius-control);
+  background: var(--qc-surface);
+  color: var(--qc-ink);
 }
 
-/* dense-grid guard: buttons keep fitting even on very narrow cards, and
+/* quantity: one bordered − / count / + group; the buttons appear only
+   once qc-buy-card is running (no-JS keeps the bare input) */
+.qc-card-qty {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-radius: var(--qc-radius-control);
+  overflow: hidden;
+}
+
+.qc-buy-card--enhanced .qc-card-qty {
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+}
+
+.qc-card-qty .qc-qty__btn {
+  display: none;
+  inline-size: 100%;
+  min-block-size: 44px;
+  place-items: center;
+  font-size: var(--qc-text-l);
+  line-height: 1;
+  background: var(--qc-surface);
+  color: var(--qc-ink);
+  border: var(--qc-line-w) solid var(--qc-line-strong);
+  cursor: pointer;
+}
+
+.qc-buy-card--enhanced .qc-card-qty .qc-qty__btn {
+  display: inline-grid;
+}
+
+.qc-card-qty .qc-qty__btn:first-of-type {
+  border-inline-end: 0;
+}
+
+.qc-card-qty .qc-qty__btn:last-of-type {
+  border-inline-start: 0;
+}
+
+.qc-card-qty .qc-qty__input {
+  inline-size: 100%;
+  min-inline-size: 0;
+  text-align: center;
+  border-radius: 0;
+  appearance: textfield;
+}
+
+.qc-card-qty .qc-qty__input::-webkit-outer-spin-button,
+.qc-card-qty .qc-qty__input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.qc-card-rules {
+  display: flex;
+  align-items: center;
+  gap: var(--qc-space-2xs);
+  margin: 0;
+  color: var(--qc-ink-soft);
+}
+
+.qc-card-rules .qc-icon {
+  inline-size: 1em;
+  block-size: 1em;
+  flex-shrink: 0;
+}
+
+/* dense-grid guard: controls keep fitting on very narrow cards, and
    titles get a third line instead of truncating harder */
 @container (max-width: 200px) {
-  .qc-product-card__actions .qc-btn {
-    font-size: 0.75rem;
+  .qc-product-card__buy .qc-btn,
+  .qc-card-select {
+    font-size: 0.8rem;
+  }
+
+  .qc-buy-card--enhanced .qc-card-qty {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
   }
 
   .qc-product-card__link {
     -webkit-line-clamp: 3;
   }
-}
-
-.qc-product-card__quick-add form {
-  display: contents;
 }
 
 /* add-to-cart confirmation toast (visual only; SR text goes through the
@@ -464,67 +551,6 @@ main {
     opacity: 0;
     translate: 0 0.5rem;
   }
-}
-
-/* inline option picker: multi-variant quick add expands a small anchored
-   panel under the card's buttons — never a modal */
-.qc-card-picker {
-  position: relative;
-}
-
-.qc-card-picker summary {
-  list-style: none;
-  cursor: pointer;
-}
-
-.qc-card-picker summary::-webkit-details-marker {
-  display: none;
-}
-
-.qc-card-picker[open] summary {
-  background: color-mix(in oklab, var(--qc-accent) 85%, var(--qc-ink));
-}
-
-/* the toggle reads "Close" while the panel is up — its Add to cart
-   button lives in the panel, so the label never appears twice */
-.qc-card-picker__label-close,
-.qc-card-picker[open] .qc-card-picker__label-add {
-  display: none;
-}
-
-.qc-card-picker[open] .qc-card-picker__label-close {
-  display: inline;
-}
-
-.qc-card-picker__panel {
-  position: absolute;
-  inset-inline-end: 0;
-  /* opens upward so it never falls below the fold on cards near the
-     bottom of the screen */
-  inset-block-end: calc(100% + var(--qc-space-2xs));
-  min-inline-size: max(100%, 14rem);
-  z-index: 3;
-  background: var(--qc-surface);
-  border: var(--qc-line-w) solid var(--qc-line);
-  border-radius: var(--qc-radius-surface);
-  padding: var(--qc-space-s);
-  box-shadow: var(--qc-shadow-2);
-}
-
-.qc-card-picker__form {
-  display: grid;
-  gap: var(--qc-space-xs);
-}
-
-.qc-card-picker__select {
-  inline-size: 100%;
-  min-inline-size: 0;
-  min-block-size: 44px;
-  padding: var(--qc-space-2xs) var(--qc-space-xs);
-  border: var(--qc-line-w) solid var(--qc-line-strong);
-  border-radius: var(--qc-radius-control);
-  background: var(--qc-surface);
-  color: var(--qc-ink);
 }
 
 .qc-btn--ink {
