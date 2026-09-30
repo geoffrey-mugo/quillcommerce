@@ -10,7 +10,7 @@
   <div class="qc-footer__inner">
     <div class="qc-footer__masthead">
       <div class="qc-footer__brand">
-        <p class="qc-footer__wordmark">{{ shop.name }}</p>
+        <p class="qc-footer__wordmark">{{ settings.brand_name | default: shop.name }}</p>
         {% if section.settings.closing != blank %}
           <p class="qc-footer__closing qc-editorial">{{ section.settings.closing }}</p>
         {% endif %}
@@ -77,7 +77,7 @@
 
     <div class="qc-footer__terminal qc-mono">
       <p class="qc-footer__legal">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }} · {{ powered_by_link }}
+        &copy; {{ 'now' | date: '%Y' }} {{ settings.brand_name | default: shop.name }} · {{ powered_by_link }}
       </p>
       {% if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 %}
         <div class="qc-footer__payment">

@@ -99,9 +99,9 @@
             class: 'qc-header__logo-image',
             width: section.settings.logo_width
           %}
-          <span class="qc-visually-hidden">{{ shop.name }}</span>
+          <span class="qc-visually-hidden">{{ settings.brand_name | default: shop.name }}</span>
         {% else %}
-          <span class="qc-header__wordmark">{{ shop.name }}</span>
+          <span class="qc-header__wordmark">{{ settings.brand_name | default: shop.name }}</span>
         {% endif %}
       </a>
 

@@ -1,5 +1,7 @@
 {
-  "current": {},
+  "current": {
+    "brand_name": "Tailwater Supply Co."
+  },
   "presets": {
     "QuillCommerce": {
       "background_color": "#FFFFFF",
