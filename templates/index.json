@@ -5,60 +5,60 @@
       "settings": {
         "image": "shopify://shop_images/qc-hero-cast-2.jpg",
         "image_position": "end",
-        "eyebrow": "N 44.267° W 121.876° — Tailwater Supply Co.",
+        "eyebrow": "Tailwater Supply Co. · Bend, Oregon",
         "heading": "Built for the waterline",
         "heading_is_h1": true,
-        "statement": "Shells, layers, and packs made for wet mornings and long days in moving water.",
-        "cta_1_label": "Shop shells",
-        "cta_1_link": "shopify://collections/apparel",
-        "cta_2_label": "The field system",
-        "cta_2_link": "shopify://collections/all"
+        "statement": "Rods, reels, and flies for the river — with the layers our guides fish in.",
+        "cta_1_label": "Shop rods",
+        "cta_1_link": "shopify://collections/rods",
+        "cta_2_label": "Field notes",
+        "cta_2_link": "shopify://blogs/journal"
       },
       "blocks": {
-        "d1": { "type": "datum", "settings": { "label": "Waterproofing", "value": "20K mm" } },
-        "d2": { "type": "datum", "settings": { "label": "Shell weight", "value": "380 g" } },
-        "d3": { "type": "datum", "settings": { "label": "Seams", "value": "Fully taped" } }
+        "d1": { "type": "datum", "settings": { "label": "Home water", "value": "Deschutes River" } },
+        "d2": { "type": "datum", "settings": { "label": "Repairs", "value": "In-house" } },
+        "d3": { "type": "datum", "settings": { "label": "Shipping", "value": "Free over $150" } }
       },
       "block_order": ["d1", "d2", "d3"]
     },
     "conditions": {
       "type": "qc-shop-by-condition",
       "settings": {
-        "eyebrow": "Field index",
-        "heading": "Shop by condition",
-        "intro": "Start with the weather you are heading into, not the department."
+        "eyebrow": "The shop",
+        "heading": "Start with what you fish",
+        "intro": "Rods, reels, flies, and the layers to fish them."
       },
       "blocks": {
         "c1": {
           "type": "condition",
           "settings": {
-            "collection": "apparel",
-            "title": "Cold water",
-            "note": "Insulated layers for shoulder-season mornings."
+            "collection": "rods",
+            "title": "Rods",
+            "note": "9-foot, 4-piece graphite for every river."
           }
         },
         "c2": {
           "type": "condition",
           "settings": {
-            "collection": "accessories",
-            "title": "Wet weather",
-            "note": "Taped shells and gear that keep the rain out for good."
+            "collection": "reels",
+            "title": "Reels",
+            "note": "Sealed-drag reels, balanced to your rod."
           }
         },
         "c3": {
           "type": "condition",
           "settings": {
-            "collection": "reels",
-            "title": "High sun",
-            "note": "Light kit for bright, open water."
+            "collection": "flies",
+            "title": "Flies",
+            "note": "Dries, nymphs, and streamers — shop-picked."
           }
         },
         "c4": {
           "type": "condition",
           "settings": {
-            "collection": "rods",
-            "title": "Base camp",
-            "note": "Rods and hardware for the long haul."
+            "collection": "apparel",
+            "title": "Apparel",
+            "note": "Layers and shells cut for the water."
           }
         }
       },

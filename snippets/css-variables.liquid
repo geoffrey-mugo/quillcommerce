@@ -85,16 +85,21 @@
     --qc-measure: 65ch;
 
     /* ---- corners ---- */
+    {%- comment -%}
+      SPEC-029 §3: hard editorial crops are the identity. Surfaces (media,
+      panels, tiles) are square by default; radius is reserved for interactive
+      controls. Merchants can opt into rounded via the corner-style setting.
+    {%- endcomment -%}
     {%- case settings.corner_style %}
     {%- when 'sharp' %}
     --qc-radius-control: 0px;
     --qc-radius-surface: 0px;
     {%- when 'rounded' %}
-    --qc-radius-control: 12px;
-    --qc-radius-surface: 18px;
+    --qc-radius-control: 10px;
+    --qc-radius-surface: 14px;
     {%- else %}
-    --qc-radius-control: 6px;
-    --qc-radius-surface: 10px;
+    --qc-radius-control: 5px;
+    --qc-radius-surface: 0px;
     {%- endcase %}
     --qc-radius-pill: 999px;
     --style-border-radius-inputs: var(--qc-radius-control);
@@ -116,6 +121,18 @@
     :root {
       --qc-dur-1: 0ms;
       --qc-dur-2: 0ms;
+    }
+  }
+
+  {%- comment -%}
+    SPEC-029: tighten the large section rhythm on phones so the page is not
+    punishingly long (the small/medium spacings are unchanged).
+  {%- endcomment -%}
+  @media (max-width: 749px) {
+    :root {
+      --qc-space-xl: 1.75rem;
+      --qc-space-2xl: 2.5rem;
+      --qc-space-3xl: 3.75rem;
     }
   }
 
