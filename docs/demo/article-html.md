@@ -11,9 +11,16 @@ they exercise the theme's rich-text styling.
 Author for all three: `Tailwater Supply Co.` (change to a staff name if preferred).
 Blog: **Field Notes** (`journal`).
 
-**Figures:** each figure contains only a `<figcaption>`. After pasting, place the
-cursor inside the figure (just before the caption) and insert the generated image
-with the editor's image tool, so no broken `src` is ever pasted.
+**Figures (verified in Shopify 2026-09-30):** a complete
+`<figure><img src="…"><figcaption>…</figcaption></figure>` survives the save
+intact, with the image kept *inside* the figure. So the reliable method is:
+upload the image to **Content → Files**, copy its URL, then in the `< >` (Show
+HTML) editor add the image as the figure's first child — e.g.
+`<img src="YOUR_FILES_URL" alt="Morning three on the Deschutes, before the wind came up.">`
+immediately before the `<figcaption>`. **Do not** use the visual image button — it
+can place the image *outside* the figure. (The blocks below keep the figure as
+`<figcaption>`-only so nothing pasted has a broken `src`; add the `<img>` line
+after uploading.)
 
 ---
 ## Article 1 — field report
