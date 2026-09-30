@@ -255,6 +255,7 @@ main {
 
 .qc-product-card {
   container-type: inline-size;
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--qc-space-s);
@@ -331,27 +332,82 @@ main {
   border: var(--qc-line-w) solid var(--qc-line);
 }
 
-/* purchase disclosure: one entry, revealed on hover/focus, shown on touch */
+/* Purchase disclosure (SPEC-027 §6): a single entry that never competes with
+   the image/title path to the PDP.
+   Pointer: a slim bar over the media's bottom edge, revealed only on hover or
+   keyboard focus (identical state), so it can't shift layout or cover the
+   subject at rest. At rest it is invisible and can't intercept clicks on the
+   image, yet the control stays in the tab order so focus can reveal it.
+   Touch: a compact, secondary control placed below the card. */
 .qc-product-card__disclose {
   position: absolute;
-  inset-inline: var(--qc-space-xs);
-  inset-block-end: var(--qc-space-xs);
+  inset-block-start: 0;
+  inset-inline: 0;
   z-index: 3;
+  aspect-ratio: 4 / 5;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
   opacity: 0;
-  transform: translateY(0.35rem);
-  transition: opacity var(--qc-dur-1) var(--qc-ease), transform var(--qc-dur-1) var(--qc-ease);
+  transition: opacity var(--qc-dur-1) var(--qc-ease);
 }
 
 .qc-product-card:hover .qc-product-card__disclose,
 .qc-product-card:focus-within .qc-product-card__disclose {
   opacity: 1;
-  transform: none;
 }
 
+.qc-product-card__action {
+  pointer-events: none;
+  inline-size: 100%;
+  min-block-size: 46px;
+  justify-content: center;
+  gap: var(--qc-space-2xs);
+  font-family: var(--qc-font-display);
+  font-size: var(--qc-text-s);
+  font-weight: var(--qc-font-display-weight);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--qc-ink);
+  color: var(--qc-surface);
+  border: 0;
+  border-radius: 0 0 var(--qc-radius-control) var(--qc-radius-control);
+}
+
+.qc-product-card:hover .qc-product-card__action,
+.qc-product-card:focus-within .qc-product-card__action {
+  pointer-events: auto;
+}
+
+.qc-product-card__action:hover {
+  background: color-mix(in oklab, var(--qc-ink) 86%, var(--qc-surface));
+  color: var(--qc-surface);
+}
+
+/* Touch: drop the overlay below the card as a compact, quiet control. The
+   photo is never covered and the action reads as secondary to the PDP link. */
 @media (hover: none) {
   .qc-product-card__disclose {
+    position: static;
+    aspect-ratio: auto;
     opacity: 1;
-    transform: none;
+    pointer-events: auto;
+    justify-content: flex-start;
+  }
+  .qc-product-card__action {
+    pointer-events: auto;
+    inline-size: auto;
+    min-block-size: 38px;
+    padding-inline: var(--qc-space-m);
+    font-size: 0.72rem;
+    background: transparent;
+    color: var(--qc-ink);
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    border-radius: var(--qc-radius-control);
+  }
+  .qc-product-card__action:hover {
+    background: transparent;
+    color: var(--qc-ink);
   }
 }
 
@@ -359,26 +415,6 @@ main {
   .qc-product-card__disclose {
     transition: none;
   }
-}
-
-.qc-product-card__action {
-  inline-size: 100%;
-  min-block-size: 44px;
-  justify-content: center;
-  gap: var(--qc-space-2xs);
-  font-family: var(--qc-font-display);
-  font-size: var(--qc-text-s);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  background: var(--qc-ink);
-  color: var(--qc-surface);
-  border: var(--qc-line-w) solid var(--qc-ink);
-  box-shadow: var(--qc-shadow-2);
-}
-
-.qc-product-card__action:hover {
-  background: color-mix(in oklab, var(--qc-ink) 85%, var(--qc-surface));
-  color: var(--qc-surface);
 }
 
 /* info stack: condition metadata, title, price, optional swatches */
@@ -399,10 +435,11 @@ main {
 
 .qc-product-card__title {
   margin: 0;
-  font-family: var(--qc-font-editorial);
-  font-size: var(--qc-text-l);
-  font-weight: 400;
-  line-height: 1.15;
+  font-family: var(--qc-font-display);
+  font-size: var(--qc-text-m);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
 }
 
 .qc-product-card__link {

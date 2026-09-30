@@ -146,12 +146,8 @@
       "added": "{{ title }} zum Warenkorb hinzugefügt",
       "adding": "Wird hinzugefügt…",
       "example_title": "Beispielprodukt",
-      "quick_view": "Ansicht",
-      "add_total": "Hinzufügen ({{ total }})",
-      "preorder_total": "Vorbestellen ({{ total }})",
-      "qty_rules": "Mengenregeln gelten",
       "quick_add": "Schnell hinzufügen",
-      "choose_options": "Optionen wählen"
+      "options": "Optionen"
     },
     "quick_view": {
       "loading": "Produkt wird geladen…",

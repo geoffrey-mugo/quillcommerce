@@ -4,9 +4,11 @@
   (e.g. `badge:Limited`). Renders nothing when there is nothing to say.
 
   @param {object} product - product object (required)
+  @param {boolean} [suppress_sale] - skip the automatic sale badge (the card
+    signals sale through the price strike-through instead)
 {% enddoc %}
 {%- capture qc_badge_html -%}
-  {%- if settings.show_sale_badge and product.compare_at_price_min > product.price_min -%}
+  {%- if settings.show_sale_badge and suppress_sale != true and product.compare_at_price_min > product.price_min -%}
     <span class="qc-badge qc-badge--accent">{{ 'products.badges.sale' | t }}</span>
   {%- endif -%}
   {%- assign qc_badges_shown = 0 -%}

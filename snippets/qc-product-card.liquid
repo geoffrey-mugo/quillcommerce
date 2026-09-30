@@ -1,13 +1,15 @@
 {% doc %}
   Canonical QuillCommerce product card (SPEC-027 §6). Image-led: the media
-  dominates, the info stack is condition metadata, title, price, and optional
-  swatches, and purchase is a single disclosed entry — a direct add for
+  dominates; the info stack is condition metadata, title, price, and optional
+  swatches. Purchase is a single disclosed entry — a direct add for
   single-variant products, or the shared options surface (quick view) for
-  multi-variant — revealed on hover and keyboard focus, always shown on touch.
-  No compare, quantity stepper, variant dropdown, or line total on the card.
-  No-JS: the add posts natively; the options entry falls back to the product
-  page. The single card used by collection, search, recommendations,
-  recently-viewed, and merchandising contexts.
+  multi-variant. On a pointer it reveals as a slim bar over the media bottom
+  on hover and keyboard focus; on touch it sits as a compact, secondary
+  control below the card, so it never covers the photo and never competes
+  with the image/title path to the product page. No compare, quantity stepper,
+  variant dropdown, or line total on the card. Metadata prefers material/use
+  facts and collapses cleanly when absent. No-JS: the add posts natively; the
+  options entry falls back to the product page.
 
   @param {object} product - product object (required)
   @param {boolean} [show_vendor] - render vendor line above the title
@@ -18,13 +20,16 @@
   if qc_v.available and qc_v.inventory_management == 'shopify' and qc_v.inventory_policy == 'continue' and qc_v.inventory_quantity <= 0
     assign qc_preorder = true
   endif
-  assign qc_kind = product.type | default: product.vendor
+  assign qc_kind = product.metafields.custom.material.value | default: product.metafields.custom.use.value
+  if qc_kind == blank
+    assign qc_kind = product.type
+  endif
 -%}
 <article class="qc-product-card" data-qc-product-card="{{ product.handle }}">
   <div class="qc-product-card__media-wrap">
     <a class="qc-product-card__media-link" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
       <div class="qc-product-card__media">
-        {% render 'qc-product-badges', product: product %}
+        {% render 'qc-product-badges', product: product, suppress_sale: true %}
         {% if product.featured_image %}
           {% render 'image',
             image: product.featured_image,
@@ -51,38 +56,6 @@
         {% endif %}
       </div>
     </a>
-
-    {% if product.available %}
-      <div class="qc-product-card__disclose">
-        {% if product.has_only_default_variant %}
-          <qc-product-form
-            data-adding-label="{{ 'products.card.adding' | t }}"
-            data-added-label="{{ 'products.card.added' | t: title: product.title }}"
-            data-error-label="{{ 'products.card.add_error' | t }}"
-          >
-            <form action="{{ routes.cart_add_url }}" method="post">
-              <input type="hidden" name="id" value="{{ qc_v.id }}">
-              <button type="submit" class="qc-btn qc-product-card__action">
-                {% if qc_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.card.quick_add' | t }}{% endif %}
-                <span class="qc-visually-hidden">— {{ product.title }}</span>
-              </button>
-            </form>
-          </qc-product-form>
-        {% else %}
-          <qc-quick-view
-            data-loading-label="{{ 'products.quick_view.loading' | t }}"
-            data-error-label="{{ 'products.quick_view.error' | t }}"
-            data-close-label="{{ 'products.quick_view.close' | t }}"
-            data-details-label="{{ 'products.quick_view.view_details' | t }}"
-          >
-            <a class="qc-btn qc-product-card__action" href="{{ product.url }}">
-              {{ 'products.card.choose_options' | t }}
-              <span class="qc-visually-hidden">— {{ product.title }}</span>
-            </a>
-          </qc-quick-view>
-        {% endif %}
-      </div>
-    {% endif %}
   </div>
 
   <div class="qc-product-card__body">
@@ -136,4 +109,36 @@
       </ul>
     {% endif %}
   </div>
+
+  {% if product.available %}
+    <div class="qc-product-card__disclose">
+      {% if product.has_only_default_variant %}
+        <qc-product-form
+          data-adding-label="{{ 'products.card.adding' | t }}"
+          data-added-label="{{ 'products.card.added' | t: title: product.title }}"
+          data-error-label="{{ 'products.card.add_error' | t }}"
+        >
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ qc_v.id }}">
+            <button type="submit" class="qc-btn qc-product-card__action">
+              {% if qc_preorder %}{{ 'products.product.preorder' | t }}{% else %}{{ 'products.card.quick_add' | t }}{% endif %}
+              <span class="qc-visually-hidden">— {{ product.title }}</span>
+            </button>
+          </form>
+        </qc-product-form>
+      {% else %}
+        <qc-quick-view
+          data-loading-label="{{ 'products.quick_view.loading' | t }}"
+          data-error-label="{{ 'products.quick_view.error' | t }}"
+          data-close-label="{{ 'products.quick_view.close' | t }}"
+          data-details-label="{{ 'products.quick_view.view_details' | t }}"
+        >
+          <a class="qc-btn qc-product-card__action" href="{{ product.url }}">
+            {{ 'products.card.options' | t }}
+            <span class="qc-visually-hidden">— {{ product.title }}</span>
+          </a>
+        </qc-quick-view>
+      {% endif %}
+    </div>
+  {% endif %}
 </article>

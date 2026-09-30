@@ -146,12 +146,8 @@
       "added": "{{ title }} added to cart",
       "adding": "Adding…",
       "example_title": "Example product",
-      "quick_view": "Quick",
-      "add_total": "Add ({{ total }})",
-      "preorder_total": "Pre-order ({{ total }})",
-      "qty_rules": "Qty rules apply",
       "quick_add": "Quick add",
-      "choose_options": "Choose options"
+      "options": "Options"
     },
     "quick_view": {
       "loading": "Loading product…",
