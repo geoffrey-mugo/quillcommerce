@@ -64,20 +64,45 @@
       },
       "block_order": ["c1", "c2", "c3", "c4"]
     },
-    "kit": {
-      "type": "qc-field-kit",
+    "loadout": {
+      "type": "qc-loadout",
       "settings": {
-        "eyebrow": "Featured field kit",
-        "heading": "Packed and ready to fish",
-        "collection": "automated-collection",
-        "limit": 6,
-        "show_view_all": true,
-        "lead_kicker": "The guide's kit",
-        "lead_heading": "Everything a full day on the water asks for",
-        "lead_body": "The layers, shell, and pack our guides carry from put-in to takeout.",
-        "lead_link_label": "See the full kit",
-        "lead_link": "shopify://collections/automated-collection"
-      }
+        "eyebrow": "Guided loadout",
+        "heading": "Build your kit for the day",
+        "intro": "Pick the conditions. We compose the layers that work together.",
+        "use_case_label": "Condition",
+        "add_label": "Add loadout",
+        "role_1_label": "Base",
+        "role_2_label": "Mid",
+        "role_3_label": "Shell",
+        "role_4_label": "Accessory",
+        "role_5_label": "Pack"
+      },
+      "blocks": {
+        "cold": {
+          "type": "loadout",
+          "settings": {
+            "use_case": "Cold water",
+            "summary": "Layers for shoulder-season mornings, when the water bites and the sun is slow.",
+            "role_1_product": "shop-logo-tee",
+            "role_2_product": "river-hoodie",
+            "role_3_product": "qc-test-parka",
+            "role_4_product": "guide-cap"
+          }
+        },
+        "wet": {
+          "type": "loadout",
+          "settings": {
+            "use_case": "Wet weather",
+            "summary": "A taped, quiet setup for a full day of moving water in the rain.",
+            "role_1_product": "shop-logo-tee",
+            "role_2_product": "river-hoodie",
+            "role_3_product": "qc-test-parka",
+            "role_4_product": "magnetic-net-release"
+          }
+        }
+      },
+      "block_order": ["cold", "wet"]
     },
     "material": {
       "type": "qc-material-note",
@@ -120,5 +145,5 @@
       "block_order": ["p1", "p2", "p3", "p4"]
     }
   },
-  "order": ["hero", "conditions", "kit", "material", "report", "proof"]
+  "order": ["hero", "conditions", "loadout", "material", "report", "proof"]
 }

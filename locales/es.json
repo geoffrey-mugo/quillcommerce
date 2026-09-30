@@ -176,6 +176,17 @@
     },
     "badges": {
       "sale": "Oferta"
+    },
+    "loadout": {
+      "adding": "Añadiendo…",
+      "added": "Equipo añadido al carrito",
+      "error": "No se pudo añadir el equipo. Inténtalo de nuevo.",
+      "total": "Total del equipo",
+      "from": "Desde",
+      "pieces": {
+        "one": "{{ count }} pieza",
+        "other": "{{ count }} piezas"
+      }
     }
   },
   "general": {

@@ -39,6 +39,10 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.remove(), 3500);
 }
 
+/* Shared confirmation toast for other modules (e.g. the guided loadout),
+   so there is one toast implementation. detail: { message } */
+document.addEventListener('qc:toast', (e) => showToast(e.detail?.message || ''));
+
 /* A page restored via back/forward shows the cart as it was when the
    HTML was produced — whether from the bfcache (event.persisted) or
    re-served from the HTTP cache (persisted false, but the navigation
