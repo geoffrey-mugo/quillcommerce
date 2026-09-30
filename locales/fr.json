@@ -176,17 +176,6 @@
     },
     "badges": {
       "sale": "Promo"
-    },
-    "loadout": {
-      "adding": "Ajout…",
-      "added": "Équipement ajouté au panier",
-      "error": "Impossible d'ajouter l'équipement. Veuillez réessayer.",
-      "total": "Total de l'équipement",
-      "from": "À partir de",
-      "pieces": {
-        "one": "{{ count }} pièce",
-        "other": "{{ count }} pièces"
-      }
     }
   },
   "general": {

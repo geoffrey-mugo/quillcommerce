@@ -176,17 +176,6 @@
     },
     "badges": {
       "sale": "Offerta"
-    },
-    "loadout": {
-      "adding": "Aggiunta in corso…",
-      "added": "Kit aggiunto al carrello",
-      "error": "Impossibile aggiungere il kit. Riprova.",
-      "total": "Totale kit",
-      "from": "Da",
-      "pieces": {
-        "one": "{{ count }} pezzo",
-        "other": "{{ count }} pezzi"
-      }
     }
   },
   "general": {

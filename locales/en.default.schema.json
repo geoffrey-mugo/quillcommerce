@@ -207,16 +207,7 @@
     "kicker": "Kicker",
     "excerpt": "Excerpt",
     "proof": "Service item",
-    "detail": "Detail",
-    "loadout": "Guided loadout",
-    "use_case_label": "Use-case label",
-    "use_case_label_info": "The name of the selector axis (e.g. Condition, Room, Sport). Rename it to fit your catalog.",
-    "add_label": "Add-loadout button label",
-    "roles": "System roles",
-    "role_n_label": "Role label",
-    "role_n_product": "Product",
-    "use_case": "Use case",
-    "summary": "Summary"
+    "detail": "Detail"
   },
   "labels": {
     "background": "Background",

@@ -176,17 +176,6 @@
     },
     "badges": {
       "sale": "Sale"
-    },
-    "loadout": {
-      "adding": "Adding…",
-      "added": "Loadout added to cart",
-      "error": "Couldn't add the loadout. Please try again.",
-      "total": "Loadout total",
-      "from": "From",
-      "pieces": {
-        "one": "{{ count }} piece",
-        "other": "{{ count }} pieces"
-      }
     }
   },
   "general": {

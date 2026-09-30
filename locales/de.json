@@ -176,17 +176,6 @@
     },
     "badges": {
       "sale": "Angebot"
-    },
-    "loadout": {
-      "adding": "Wird hinzugefügt…",
-      "added": "Ausrüstung zum Warenkorb hinzugefügt",
-      "error": "Ausrüstung konnte nicht hinzugefügt werden. Bitte erneut versuchen.",
-      "total": "Gesamt",
-      "from": "Ab",
-      "pieces": {
-        "one": "{{ count }} Teil",
-        "other": "{{ count }} Teile"
-      }
     }
   },
   "general": {
