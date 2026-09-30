@@ -20,6 +20,7 @@ then imported by the owner in admin. No Admin API token is used.
 - `photography.md` — visual system, shot list, and the production-method decision.
 - `image-generation-brief.md` — chosen method: art-directed generated set; style contract + per-asset prompts + provenance rules.
 - `provenance-ledger.md` — asset provenance ledger (fill as assets are chosen).
+- `admin-setup-runbook.md` — step-by-step admin build (click paths, preview checks, stop conditions, rollback).
 - `verification-checklist.md` — post-import storefront audit.
 
 ## Execution order (SPEC-030 §8, owner-run)
