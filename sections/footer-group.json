@@ -14,9 +14,14 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "menu": "main-menu",
-        "show_payment_icons": true
-      }
+        "show_payment_icons": true,
+        "show_newsletter": true
+      },
+      "blocks": {
+        "m1": { "type": "menu", "settings": { "heading": "Catalog", "menu": "main-menu" } },
+        "m2": { "type": "menu", "settings": { "heading": "Support", "menu": "footer" } }
+      },
+      "block_order": ["m1", "m2"]
     }
   },
   "order": [

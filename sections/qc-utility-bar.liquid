@@ -1,47 +1,56 @@
 {% comment %}
-  Utility bar (SPEC-010 B): quiet single row with optional message/link and
-  Shopify localization selectors (only when multiple options exist).
+  Operational rail (SPEC-029 §3): a compact top row of merchant-configurable,
+  factual operational facts (shipping threshold, dispatch, service link, region)
+  in the mono role, with Shopify localization selectors. Desktop only — on mobile
+  it is removed from the first viewport and its localization moves into the
+  header drawer. No fictional coordinates or decorative "field status".
 {% endcomment %}
 
-<div class="qc-utility" role="region" aria-label="{{ 'general.utility_bar_label' | t }}">
-  <div class="qc-utility__row">
-    {% if section.settings.message != blank %}
-      <p class="qc-utility__message">{{ section.settings.message }}</p>
+<div class="qc-oprail" role="region" aria-label="{{ 'general.utility_bar_label' | t }}">
+  <div class="qc-oprail__row">
+    {% if section.blocks.size > 0 %}
+      <ul class="qc-oprail__facts qc-mono" role="list">
+        {% for block in section.blocks %}
+          <li class="qc-oprail__fact" {{ block.shopify_attributes }}>
+            {% if block.settings.url != blank %}
+              <a class="qc-oprail__fact-link" href="{{ block.settings.url }}">{{ block.settings.text }}</a>
+            {% else %}
+              <span>{{ block.settings.text }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
     {% endif %}
 
-    {% if section.settings.link_label != blank and section.settings.link_url != blank %}
-      <a class="qc-utility__link" href="{{ section.settings.link_url }}">{{ section.settings.link_label }}</a>
-    {% endif %}
-
-    <div class="qc-utility__selectors">
+    <div class="qc-oprail__selectors">
       {% if localization.available_countries.size > 1 %}
         <qc-auto-form>
-          {% form 'localization', class: 'qc-utility__form' %}
+          {% form 'localization', class: 'qc-oprail__form' %}
             <label class="qc-visually-hidden" for="qc-country">{{ 'localization.country_label' | t }}</label>
-            <select id="qc-country" class="qc-utility__select" name="country_code">
+            <select id="qc-country" class="qc-oprail__select qc-mono" name="country_code">
               {% for country in localization.available_countries %}
                 <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
                   {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
                 </option>
               {% endfor %}
             </select>
-            <button type="submit" class="qc-btn qc-btn--quiet qc-utility__apply">{{ 'localization.update' | t }}</button>
+            <button type="submit" class="qc-btn qc-btn--quiet qc-oprail__apply">{{ 'localization.update' | t }}</button>
           {% endform %}
         </qc-auto-form>
       {% endif %}
 
       {% if localization.available_languages.size > 1 %}
         <qc-auto-form>
-          {% form 'localization', class: 'qc-utility__form' %}
+          {% form 'localization', class: 'qc-oprail__form' %}
             <label class="qc-visually-hidden" for="qc-language">{{ 'localization.language_label' | t }}</label>
-            <select id="qc-language" class="qc-utility__select" name="locale_code">
+            <select id="qc-language" class="qc-oprail__select qc-mono" name="locale_code">
               {% for language in localization.available_languages %}
                 <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>
                   {{ language.endonym_name | capitalize }}
                 </option>
               {% endfor %}
             </select>
-            <button type="submit" class="qc-btn qc-btn--quiet qc-utility__apply">{{ 'localization.update' | t }}</button>
+            <button type="submit" class="qc-btn qc-btn--quiet qc-oprail__apply">{{ 'localization.update' | t }}</button>
           {% endform %}
         </qc-auto-form>
       {% endif %}
@@ -52,89 +61,103 @@
 <script src="{{ 'qc-facets.js' | asset_url }}" type="module"></script>
 
 {% stylesheet %}
-  .qc-utility {
-    background: var(--qc-surface-raised);
-    border-block-end: var(--qc-line-w) solid var(--qc-line);
-    font-size: var(--qc-text-s);
-    color: var(--qc-ink-soft);
+  .qc-oprail {
+    background: var(--qc-ink);
+    color: color-mix(in oklab, var(--qc-surface) 82%, var(--qc-ink));
+    border-block-end: var(--qc-line-w) solid var(--qc-ink);
   }
 
-  .qc-utility__row {
+  .qc-oprail__row {
     display: flex;
     align-items: center;
-    gap: var(--qc-space-m);
-    min-block-size: 36px;
+    gap: var(--qc-space-l);
+    min-block-size: 30px;
+  }
+
+  .qc-oprail__facts {
+    display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    padding-block: var(--qc-space-2xs);
-  }
-
-  .qc-utility__message {
+    gap: 0;
     margin: 0;
+    padding: 0;
+    list-style: none;
+    min-inline-size: 0;
   }
 
-  .qc-utility__link {
-    color: inherit;
+  .qc-oprail__fact {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
   }
 
-  .qc-utility__selectors {
+  .qc-oprail__fact + .qc-oprail__fact::before {
+    content: '';
+    inline-size: 3px;
+    block-size: 3px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--qc-surface) 45%, var(--qc-ink));
+    margin-inline: var(--qc-space-m);
+  }
+
+  .qc-oprail__fact-link { color: var(--qc-surface); text-decoration: none; text-underline-offset: 0.2em; }
+  .qc-oprail__fact-link:hover { color: var(--qc-signal); text-decoration: underline; }
+
+  .qc-oprail__selectors {
     display: flex;
     align-items: center;
     gap: var(--qc-space-s);
     margin-inline-start: auto;
   }
 
-  .qc-utility__form {
-    display: flex;
-    align-items: center;
-    gap: var(--qc-space-2xs);
-  }
+  .qc-oprail__form { display: flex; align-items: center; gap: var(--qc-space-2xs); }
 
-  /* 16px on small screens: iOS Safari zooms the page when focusing
-     any control with a smaller font */
-  @media (max-width: 649px) {
-    .qc-utility__select {
-      font-size: 1rem;
-    }
+  .qc-oprail__select {
+    min-block-size: 24px;
+    border: 0;
+    background: transparent;
+    color: color-mix(in oklab, var(--qc-surface) 82%, var(--qc-ink));
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    padding-inline: 0;
+    cursor: pointer;
   }
+  .qc-oprail__select option { color: var(--qc-ink); }
 
-  .qc-utility__select {
-    min-block-size: 28px;
-    border: var(--qc-line-w) solid var(--qc-line);
-    border-radius: var(--qc-radius-control);
-    background: var(--qc-surface);
-    color: var(--qc-ink);
-    font-size: var(--qc-text-s);
-    padding-inline: var(--qc-space-2xs);
-  }
+  qc-auto-form:defined .qc-oprail__apply { display: none; }
 
-  qc-auto-form:defined .qc-utility__apply {
-    display: none;
+  /* removed from the first mobile viewport; localization lives in the drawer */
+  @media (max-width: 989px) {
+    .qc-oprail { display: none; }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.utility_bar",
-  "settings": [
+  "settings": [],
+  "blocks": [
     {
-      "type": "text",
-      "id": "message",
-      "label": "t:general.utility_message"
-    },
-    {
-      "type": "text",
-      "id": "link_label",
-      "label": "t:general.utility_link_label"
-    },
-    {
-      "type": "url",
-      "id": "link_url",
-      "label": "t:general.utility_link_url"
+      "type": "item",
+      "name": "t:general.utility_message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "t:general.utility_message", "default": "Free shipping over $150" },
+        { "type": "url", "id": "url", "label": "t:general.utility_link_url" }
+      ]
     }
   ],
-  "enabled_on": {
-    "groups": ["header"]
-  },
-  "presets": [{ "name": "t:general.utility_bar" }]
+  "max_blocks": 4,
+  "enabled_on": { "groups": ["header"] },
+  "presets": [
+    {
+      "name": "t:general.utility_bar",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Free shipping over $150" } },
+        { "type": "item", "settings": { "text": "Ships in 1–2 business days" } },
+        { "type": "item", "settings": { "text": "Repairs & returns" } }
+      ]
+    }
+  ]
 }
 {% endschema %}

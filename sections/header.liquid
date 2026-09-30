@@ -58,6 +58,37 @@
               {% endfor %}
             </ul>
           </nav>
+
+          {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+            <div class="qc-drawer-region">
+              {% if localization.available_countries.size > 1 %}
+                <qc-auto-form>
+                  {% form 'localization', class: 'qc-drawer-region__form' %}
+                    <label class="qc-drawer-region__label qc-mono" for="qc-country-d">{{ 'localization.country_label' | t }}</label>
+                    <select id="qc-country-d" class="qc-drawer-region__select" name="country_code">
+                      {% for country in localization.available_countries %}
+                        <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>{{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})</option>
+                      {% endfor %}
+                    </select>
+                    <button type="submit" class="qc-btn qc-btn--quiet qc-drawer-region__apply">{{ 'localization.update' | t }}</button>
+                  {% endform %}
+                </qc-auto-form>
+              {% endif %}
+              {% if localization.available_languages.size > 1 %}
+                <qc-auto-form>
+                  {% form 'localization', class: 'qc-drawer-region__form' %}
+                    <label class="qc-drawer-region__label qc-mono" for="qc-language-d">{{ 'localization.language_label' | t }}</label>
+                    <select id="qc-language-d" class="qc-drawer-region__select" name="locale_code">
+                      {% for language in localization.available_languages %}
+                        <option value="{{ language.iso_code }}" {% if language.iso_code == localization.language.iso_code %}selected{% endif %}>{{ language.endonym_name | capitalize }}</option>
+                      {% endfor %}
+                    </select>
+                    <button type="submit" class="qc-btn qc-btn--quiet qc-drawer-region__apply">{{ 'localization.update' | t }}</button>
+                  {% endform %}
+                </qc-auto-form>
+              {% endif %}
+            </div>
+          {%- endif -%}
         </div>
       </details>
 
@@ -205,7 +236,7 @@
   .qc-header {
     position: relative; /* containing block for the mega panel */
     background: var(--qc-surface);
-    border-block-end: var(--qc-line-w) solid var(--qc-line);
+    border-block-end: var(--qc-line-w) solid var(--qc-line-strong);
   }
 
   /* the SECTION WRAPPER must carry the sticky position: a sticky
@@ -238,7 +269,7 @@
     display: flex;
     align-items: center;
     gap: var(--qc-space-m);
-    min-block-size: 64px;
+    min-block-size: 60px;
   }
 
   .qc-header__logo {
@@ -248,10 +279,42 @@
 
   .qc-header__wordmark {
     font-family: var(--qc-font-display);
-    font-weight: var(--qc-font-display-weight);
+    font-weight: 700;
     font-size: var(--qc-text-xl);
-    letter-spacing: 0.01em;
+    letter-spacing: -0.01em;
   }
+
+  /* ---- mobile drawer: region (localization) footer ---- */
+  .qc-drawer-region {
+    margin-block-start: var(--qc-space-m);
+    padding-block-start: var(--qc-space-m);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-m);
+  }
+
+  .qc-drawer-region__form { display: flex; flex-direction: column; gap: var(--qc-space-2xs); }
+
+  .qc-drawer-region__label {
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-drawer-region__select {
+    min-block-size: 44px;
+    inline-size: 100%;
+    border: var(--qc-line-w) solid var(--qc-line-strong);
+    border-radius: var(--qc-radius-control);
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    font-size: 1rem;
+    padding-inline: var(--qc-space-s);
+  }
+
+  qc-auto-form:defined .qc-drawer-region__apply { display: none; }
 
   .qc-header__nav {
     display: none;
@@ -481,39 +544,60 @@
   /* ---- desktop nav ---- */
 
   @media (min-width: 990px) {
+    .qc-header__row {
+      min-block-size: 72px;
+    }
+
     .qc-header__drawer {
       display: none;
     }
 
     .qc-header__nav {
       display: block;
+      margin-inline-start: var(--qc-space-m);
     }
 
+    /* primary category axes as a field index: mono index numbers on the
+       top-level axes only (SPEC-029 §3), never on utility links */
     .qc-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--qc-space-xs);
+      gap: 0 var(--qc-space-xs);
       list-style: none;
       margin: 0;
       padding: 0;
+      counter-reset: qc-axis;
     }
 
     .qc-nav__item {
       position: relative;
+      counter-increment: qc-axis;
     }
 
     .qc-nav__link {
       display: inline-flex;
       align-items: center;
-      gap: var(--qc-space-2xs);
+      gap: 0.5em;
       min-block-size: 44px;
       padding-inline: var(--qc-space-s);
       text-decoration: none;
       color: var(--qc-ink);
-      font-weight: 500;
+      font-family: var(--qc-font-display);
+      font-weight: 600;
+      font-size: var(--qc-text-s);
+      letter-spacing: 0.005em;
       cursor: pointer;
       list-style: none;
       border-block-end: 2px solid transparent;
+    }
+
+    .qc-nav__link::before {
+      content: counter(qc-axis, decimal-leading-zero);
+      font-family: var(--qc-font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--qc-line-strong);
+      transition: color var(--qc-dur-1) var(--qc-ease);
     }
 
     .qc-nav__link::-webkit-details-marker {
@@ -522,7 +606,13 @@
 
     .qc-nav__link:hover,
     .qc-nav__link[aria-current='page'] {
-      border-block-end-color: var(--qc-accent);
+      border-block-end-color: var(--qc-signal);
+    }
+
+    .qc-nav__link:hover::before,
+    .qc-nav__disclosure[open] > .qc-nav__link::before,
+    .qc-nav__link[aria-current='page']::before {
+      color: var(--qc-signal);
     }
 
     .qc-nav__disclosure[open] > .qc-nav__link .qc-icon {
