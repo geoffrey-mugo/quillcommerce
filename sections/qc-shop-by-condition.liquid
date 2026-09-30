@@ -1,0 +1,212 @@
+{% comment %}
+  Shop by condition (SPEC-027 §5.4): four high-signal use conditions presented
+  as a numbered field index, not generic collection tiles. Each entry links to
+  a collection or URL. Pure Liquid — no JS.
+{% endcomment %}
+
+<section class="qc-cond" aria-labelledby="qc-cond-h-{{ section.id }}">
+  <header class="qc-cond__head">
+    <div>
+      {% if section.settings.eyebrow != blank %}
+        <p class="qc-cond__eyebrow qc-mono">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h2 id="qc-cond-h-{{ section.id }}" class="qc-cond__heading">{{ section.settings.heading }}</h2>
+    </div>
+    {% if section.settings.intro != blank %}
+      <p class="qc-cond__intro">{{ section.settings.intro }}</p>
+    {% endif %}
+  </header>
+
+  <ul class="qc-cond__grid" role="list">
+    {% for block in section.blocks %}
+      {%- liquid
+        assign col = block.settings.collection
+        assign link = block.settings.link
+        if link == blank and col
+          assign link = col.url
+        endif
+        assign tile_img = block.settings.image
+        if tile_img == blank and col
+          assign tile_img = col.featured_image
+          if tile_img == blank and col.products.first
+            assign tile_img = col.products.first.featured_image
+          endif
+        endif
+      -%}
+      <li class="qc-cond__item" {{ block.shopify_attributes }}>
+        <a class="qc-cond__tile" href="{{ link | default: '#' }}">
+          <span class="qc-cond__media">
+            {% if tile_img %}
+              {{ tile_img | image_url: width: 900 | image_tag: class: 'qc-cond__img', alt: '', loading: 'lazy', sizes: '(min-width: 1000px) 22vw, 45vw', widths: '400, 600, 900' }}
+            {% else %}
+              <span class="qc-cond__img qc-cond__img--empty" aria-hidden="true"></span>
+            {% endif %}
+            <span class="qc-cond__index qc-mono">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          </span>
+          <span class="qc-cond__body">
+            <span class="qc-cond__name">{{ block.settings.title }}</span>
+            {% if block.settings.note != blank %}
+              <span class="qc-cond__note">{{ block.settings.note }}</span>
+            {% endif %}
+          </span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% stylesheet %}
+  .qc-cond {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xl);
+    padding-block: var(--qc-space-2xl);
+  }
+
+  .qc-cond__head {
+    display: grid;
+    gap: var(--qc-space-m);
+    align-items: end;
+  }
+
+  @media (min-width: 800px) {
+    .qc-cond__head { grid-template-columns: 1fr auto; }
+    .qc-cond__intro { text-align: end; }
+  }
+
+  .qc-cond__eyebrow {
+    margin: 0 0 var(--qc-space-xs);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--qc-accent);
+  }
+
+  .qc-cond__heading { margin: 0; font-size: var(--qc-text-2xl); letter-spacing: -0.01em; }
+
+  .qc-cond__intro { margin: 0; color: var(--qc-ink-soft); max-inline-size: 42ch; }
+
+  .qc-cond__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--qc-space-m);
+  }
+
+  .qc-cond__tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-s);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .qc-cond__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--qc-surface-raised);
+    border-radius: var(--qc-radius-surface);
+  }
+
+  .qc-cond__img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform var(--qc-dur-2) var(--qc-ease);
+  }
+
+  .qc-cond__img--empty {
+    background: linear-gradient(160deg, var(--qc-mist, var(--qc-surface-raised)), var(--qc-surface-raised));
+  }
+
+  .qc-cond__tile:hover .qc-cond__img { transform: scale(1.04); }
+
+  .qc-cond__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(21 36 31 / 0.28) 0%, rgb(21 36 31 / 0) 34%);
+    pointer-events: none;
+  }
+
+  .qc-cond__index {
+    position: absolute;
+    inset-block-start: var(--qc-space-s);
+    inset-inline-start: var(--qc-space-s);
+    z-index: 1;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    color: var(--qc-surface);
+  }
+
+  .qc-cond__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding-block-start: var(--qc-space-2xs);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-cond__name {
+    font-family: var(--qc-font-display);
+    font-weight: 600;
+    font-size: var(--qc-text-l);
+    letter-spacing: -0.01em;
+  }
+
+  .qc-cond__tile:hover .qc-cond__name { color: var(--qc-accent); }
+
+  .qc-cond__note { font-size: var(--qc-text-s); color: var(--qc-ink-soft); line-height: 1.4; }
+
+  @media (max-width: 999px) {
+    .qc-cond__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--qc-space-m) var(--qc-space-s); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qc-cond__img { transition: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:home.shop_by_condition",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:home.eyebrow", "default": "Field index" },
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Shop by condition" },
+    { "type": "textarea", "id": "intro", "label": "t:home.intro", "default": "Start with the weather you are heading into, not the department." }
+  ],
+  "blocks": [
+    {
+      "type": "condition",
+      "name": "t:home.condition",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "t:general.image" },
+        { "type": "collection", "id": "collection", "label": "t:general.collection" },
+        { "type": "url", "id": "link", "label": "t:general.utility_link_url" },
+        { "type": "text", "id": "title", "label": "t:general.title_override", "default": "Cold water" },
+        { "type": "text", "id": "note", "label": "t:home.note", "default": "Insulated layers for shoulder-season mornings." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "t:home.shop_by_condition",
+      "blocks": [
+        { "type": "condition", "settings": { "title": "Cold water", "note": "Insulated layers for shoulder-season mornings." } },
+        { "type": "condition", "settings": { "title": "Wet weather", "note": "Taped shells that keep the rain out for good." } },
+        { "type": "condition", "settings": { "title": "High sun", "note": "Breathable sun cover for bright open water." } },
+        { "type": "condition", "settings": { "title": "Base camp", "note": "Packs and camp layers for the long haul." } }
+      ]
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

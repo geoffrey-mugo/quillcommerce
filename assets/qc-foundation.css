@@ -50,6 +50,18 @@ small,
   max-inline-size: var(--qc-measure);
 }
 
+/* data / field-record labels: the mono role, used sparingly (SPEC-027 §4.1) */
+.qc-mono {
+  font-family: var(--qc-font-mono);
+}
+
+/* short serif editorial statements: the Newsreader role (SPEC-027 §4.1) */
+.qc-editorial {
+  font-family: var(--qc-font-editorial);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
 /* ---- focus (SPEC-002 §6): global, never removed by components ---- */
 
 :focus-visible {

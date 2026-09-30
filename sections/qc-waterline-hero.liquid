@@ -1,0 +1,278 @@
+{% comment %}
+  Waterline hero (SPEC-027 §5.3): asymmetric, image-led. A dark editorial
+  panel carries a field-record eyebrow, a short display statement, one primary
+  and one quiet action, and a technical data rail; a full-bleed image holds the
+  opposite column. No centered text floating over an arbitrary image. Pure
+  Liquid — no JS.
+{% endcomment %}
+
+{%- liquid
+  assign img = section.settings.image
+  assign flip = section.settings.image_position
+-%}
+
+<div class="qc-whero full-width qc-whero--img-{{ flip }}{% unless img %} qc-whero--noimg{% endunless %}">
+  <div class="qc-whero__panel">
+    <div class="qc-whero__panel-inner">
+      {% if section.settings.eyebrow != blank %}
+        <p class="qc-whero__eyebrow qc-mono">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        {% if section.settings.heading_is_h1 %}
+          <h1 class="qc-whero__heading">{{ section.settings.heading }}</h1>
+        {% else %}
+          <h2 class="qc-whero__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+      {% endif %}
+
+      {% if section.settings.statement != blank %}
+        <p class="qc-whero__statement">{{ section.settings.statement }}</p>
+      {% endif %}
+
+      {% if section.settings.cta_1_label != blank or section.settings.cta_2_label != blank %}
+        <div class="qc-whero__actions">
+          {% if section.settings.cta_1_label != blank %}
+            <a class="qc-btn qc-whero__cta" href="{{ section.settings.cta_1_link | default: '#' }}">
+              {{ section.settings.cta_1_label }}
+            </a>
+          {% endif %}
+          {% if section.settings.cta_2_label != blank %}
+            <a class="qc-whero__quiet" href="{{ section.settings.cta_2_link | default: '#' }}">
+              {{ section.settings.cta_2_label }}
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if section.blocks.size > 0 %}
+        <dl class="qc-whero__rail">
+          {% for block in section.blocks %}
+            <div class="qc-whero__datum" {{ block.shopify_attributes }}>
+              <dt class="qc-mono">{{ block.settings.label }}</dt>
+              <dd>{{ block.settings.value }}</dd>
+            </div>
+          {% endfor %}
+        </dl>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if img %}
+    <div class="qc-whero__media">
+      {{
+        img
+        | image_url: width: 1800
+        | image_tag:
+          class: 'qc-whero__image',
+          alt: img.alt | default: section.settings.heading,
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '(min-width: 1000px) 52vw, 100vw',
+          widths: '600, 900, 1200, 1800'
+      }}
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .qc-whero {
+    --qc-gutter: max(var(--page-margin), calc((100vw - var(--page-width)) / 2));
+    display: grid;
+    background: var(--qc-ink);
+    color: var(--qc-surface);
+  }
+
+  .qc-whero__panel {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  .qc-whero__panel-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-l);
+    padding-block: var(--qc-space-2xl);
+    padding-inline: var(--qc-gutter) var(--qc-space-xl);
+    inline-size: 100%;
+    max-inline-size: 40rem;
+  }
+
+  .qc-whero__eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--qc-surface) 62%, var(--qc-ink));
+  }
+
+  .qc-whero__heading {
+    margin: 0;
+    font-size: clamp(2.1rem, 1.4rem + 3vw, 3.6rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--qc-surface);
+    text-wrap: balance;
+  }
+
+  .qc-whero__statement {
+    margin: 0;
+    font-size: var(--qc-text-l);
+    line-height: 1.4;
+    max-inline-size: 32ch;
+    color: color-mix(in oklab, var(--qc-surface) 84%, var(--qc-ink));
+  }
+
+  .qc-whero__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--qc-space-m) var(--qc-space-l);
+    margin-block-start: var(--qc-space-2xs);
+  }
+
+  .qc-whero__cta.qc-btn {
+    background: var(--qc-surface);
+    color: var(--qc-ink);
+    border: 0;
+    padding-inline: var(--qc-space-l);
+    min-block-size: 48px;
+    font-weight: var(--qc-font-display-weight);
+  }
+
+  .qc-whero__cta.qc-btn:hover {
+    background: color-mix(in oklab, var(--qc-surface) 88%, var(--qc-ink));
+    color: var(--qc-ink);
+  }
+
+  .qc-whero__quiet {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--qc-surface);
+    text-decoration: none;
+    font-family: var(--qc-font-display);
+    font-weight: 500;
+    border-block-end: var(--qc-line-w) solid color-mix(in oklab, var(--qc-surface) 45%, transparent);
+    padding-block-end: 2px;
+    transition: border-color var(--qc-dur-1) var(--qc-ease);
+  }
+
+  .qc-whero__quiet:hover {
+    color: var(--qc-surface);
+    border-block-end-color: var(--qc-surface);
+  }
+
+  .qc-whero__quiet span { transition: transform var(--qc-dur-1) var(--qc-ease); }
+  .qc-whero__quiet:hover span { transform: translateX(0.2em); }
+
+  .qc-whero__rail {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: var(--qc-space-l);
+    margin: 0;
+    margin-block-start: var(--qc-space-s);
+    padding-block-start: var(--qc-space-l);
+    border-block-start: var(--qc-line-w) solid color-mix(in oklab, var(--qc-surface) 22%, var(--qc-ink));
+  }
+
+  .qc-whero__datum { display: flex; flex-direction: column; gap: 0.35rem; min-inline-size: 0; }
+
+  .qc-whero__datum dt {
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--qc-surface) 58%, var(--qc-ink));
+  }
+
+  .qc-whero__datum dd {
+    margin: 0;
+    font-family: var(--qc-font-display);
+    font-size: var(--qc-text-l);
+    font-weight: 500;
+    color: var(--qc-surface);
+  }
+
+  .qc-whero__media { position: relative; min-block-size: 58vw; background: var(--qc-surface-raised); }
+
+  .qc-whero__image {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .qc-whero--noimg { min-block-size: 60vb; }
+
+  @media (min-width: 1000px) {
+    .qc-whero { grid-template-columns: 1.02fr 0.98fr; align-items: stretch; min-block-size: min(80vb, 780px); }
+    .qc-whero--img-start { grid-template-columns: 0.98fr 1.02fr; }
+    .qc-whero--img-start .qc-whero__panel { order: 2; }
+    .qc-whero--img-start .qc-whero__media { order: 1; }
+    .qc-whero--img-start .qc-whero__panel-inner { padding-inline: var(--qc-space-xl) var(--qc-gutter); margin-inline-start: auto; }
+    .qc-whero__media { min-block-size: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qc-whero__quiet span { transition: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:home.waterline_hero",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:general.image" },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:general.image_position",
+      "options": [
+        { "value": "end", "label": "t:general.align_end" },
+        { "value": "start", "label": "t:general.align_start" }
+      ],
+      "default": "end"
+    },
+    { "type": "text", "id": "eyebrow", "label": "t:home.eyebrow", "default": "N 44.267° W 121.876° — Tailwater Supply Co." },
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Built for the waterline" },
+    {
+      "type": "checkbox",
+      "id": "heading_is_h1",
+      "label": "t:general.heading_is_h1",
+      "info": "t:general.heading_is_h1_info",
+      "default": true
+    },
+    { "type": "textarea", "id": "statement", "label": "t:home.statement", "default": "Shells, layers, and packs made for wet mornings and long days in moving water." },
+    { "type": "text", "id": "cta_1_label", "label": "t:general.cta_1_label", "default": "Shop shells" },
+    { "type": "url", "id": "cta_1_link", "label": "t:general.cta_1_link" },
+    { "type": "text", "id": "cta_2_label", "label": "t:general.cta_2_label", "default": "The field system" },
+    { "type": "url", "id": "cta_2_link", "label": "t:general.cta_2_link" }
+  ],
+  "blocks": [
+    {
+      "type": "datum",
+      "name": "t:home.datum",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:home.datum_label", "default": "Waterproofing" },
+        { "type": "text", "id": "value", "label": "t:home.datum_value", "default": "20K mm" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "t:home.waterline_hero",
+      "blocks": [
+        { "type": "datum", "settings": { "label": "Waterproofing", "value": "20K mm" } },
+        { "type": "datum", "settings": { "label": "Shell weight", "value": "380 g" } },
+        { "type": "datum", "settings": { "label": "Seams", "value": "Fully taped" } }
+      ]
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

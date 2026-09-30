@@ -1,0 +1,148 @@
+{% comment %}
+  Material note (SPEC-027 §5.6): a close-up material image, a short serif
+  editorial statement, and three verifiable construction facts in the mono
+  field-record role. Pure Liquid — no JS.
+{% endcomment %}
+
+<section class="qc-matnote" aria-labelledby="qc-matnote-h-{{ section.id }}">
+  <div class="qc-matnote__media">
+    {% if section.settings.image %}
+      {{ section.settings.image | image_url: width: 1200 | image_tag: class: 'qc-matnote__img', alt: section.settings.image.alt | default: '', loading: 'lazy', sizes: '(min-width: 900px) 44vw, 100vw', widths: '500, 800, 1200' }}
+    {% else %}
+      <span class="qc-matnote__img qc-matnote__img--empty" aria-hidden="true"></span>
+    {% endif %}
+  </div>
+
+  <div class="qc-matnote__body">
+    {% if section.settings.eyebrow != blank %}
+      <p class="qc-matnote__eyebrow qc-mono">{{ section.settings.eyebrow }}</p>
+    {% endif %}
+    <h2 id="qc-matnote-h-{{ section.id }}" class="qc-matnote__statement qc-editorial">{{ section.settings.statement }}</h2>
+
+    {% if section.blocks.size > 0 %}
+      <dl class="qc-matnote__facts">
+        {% for block in section.blocks %}
+          <div class="qc-matnote__fact" {{ block.shopify_attributes }}>
+            <dt class="qc-mono">{{ block.settings.label }}</dt>
+            <dd>{{ block.settings.value }}</dd>
+          </div>
+        {% endfor %}
+      </dl>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .qc-matnote {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--qc-space-xl);
+    align-items: center;
+    padding-block: var(--qc-space-2xl);
+  }
+
+  @media (min-width: 900px) {
+    .qc-matnote { grid-template-columns: 0.9fr 1.1fr; gap: var(--qc-space-2xl); }
+  }
+
+  .qc-matnote__media {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--qc-radius-surface);
+    background: var(--qc-surface-raised);
+  }
+
+  @media (min-width: 900px) {
+    .qc-matnote__media { aspect-ratio: 5 / 6; }
+  }
+
+  .qc-matnote__img { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
+
+  .qc-matnote__img--empty { background: linear-gradient(150deg, var(--qc-surface-raised), color-mix(in oklab, var(--qc-ink) 12%, var(--qc-surface))); }
+
+  .qc-matnote__body { display: flex; flex-direction: column; gap: var(--qc-space-l); }
+
+  .qc-matnote__eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--qc-accent);
+  }
+
+  .qc-matnote__statement {
+    margin: 0;
+    font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+    line-height: 1.22;
+    font-weight: 400;
+    max-inline-size: 24ch;
+    text-wrap: balance;
+  }
+
+  .qc-matnote__facts {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    margin-block-start: var(--qc-space-2xs);
+    border-block-start: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-matnote__fact {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: var(--qc-space-m);
+    padding-block: var(--qc-space-s);
+    border-block-end: var(--qc-line-w) solid var(--qc-line);
+  }
+
+  .qc-matnote__fact dt {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-matnote__fact dd {
+    margin: 0;
+    font-family: var(--qc-font-display);
+    font-weight: 500;
+    font-size: var(--qc-text-m);
+    text-align: end;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:home.material_note",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:general.image" },
+    { "type": "text", "id": "eyebrow", "label": "t:home.eyebrow", "default": "Material note" },
+    { "type": "textarea", "id": "statement", "label": "t:home.statement", "default": "We build with a three-layer recycled nylon that stays quiet, sheds rain, and breaks in instead of down." }
+  ],
+  "blocks": [
+    {
+      "type": "fact",
+      "name": "t:home.fact",
+      "settings": [
+        { "type": "text", "id": "label", "label": "t:home.datum_label", "default": "Face fabric" },
+        { "type": "text", "id": "value", "label": "t:home.datum_value", "default": "Recycled 40D nylon" }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "t:home.material_note",
+      "blocks": [
+        { "type": "fact", "settings": { "label": "Face fabric", "value": "Recycled 40D nylon" } },
+        { "type": "fact", "settings": { "label": "Membrane", "value": "20K / 20K taped" } },
+        { "type": "fact", "settings": { "label": "Repair", "value": "Free season-one fixes" } }
+      ]
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

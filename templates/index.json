@@ -1,132 +1,124 @@
 {
   "sections": {
     "hero": {
-      "type": "qc-hero",
+      "type": "qc-waterline-hero",
       "settings": {
         "image": "shopify://shop_images/qc-hero-cast-2.jpg",
-        "overlay": 45,
-        "heading": "Gear for the water ahead",
+        "image_position": "end",
+        "eyebrow": "N 44.267° W 121.876° — Tailwater Supply Co.",
+        "heading": "Built for the waterline",
         "heading_is_h1": true,
-        "subheading": "Original equipment and everyday essentials, built to be used hard and kept for seasons.",
-        "cta_1_label": "Shop the catalog",
-        "cta_1_link": "/collections/all",
-        "cta_2_label": "Our story",
-        "cta_2_link": "",
-        "alignment": "start",
-        "height": "medium"
-      }
+        "statement": "Shells, layers, and packs made for wet mornings and long days in moving water.",
+        "cta_1_label": "Shop shells",
+        "cta_1_link": "shopify://collections/apparel",
+        "cta_2_label": "The field system",
+        "cta_2_link": "shopify://collections/all"
+      },
+      "blocks": {
+        "d1": { "type": "datum", "settings": { "label": "Waterproofing", "value": "20K mm" } },
+        "d2": { "type": "datum", "settings": { "label": "Shell weight", "value": "380 g" } },
+        "d3": { "type": "datum", "settings": { "label": "Seams", "value": "Fully taped" } }
+      },
+      "block_order": ["d1", "d2", "d3"]
     },
-    "intro": {
-      "type": "qc-rich-text",
+    "conditions": {
+      "type": "qc-shop-by-condition",
       "settings": {
-        "heading": "Made to be out there",
-        "body": "<p>Every product in the catalog is chosen for one reason: it works. Simple materials, honest construction, and prices that respect the people using them.</p>",
-        "alignment": "center"
-      }
+        "eyebrow": "Field index",
+        "heading": "Shop by condition",
+        "intro": "Start with the weather you are heading into, not the department."
+      },
+      "blocks": {
+        "c1": {
+          "type": "condition",
+          "settings": {
+            "collection": "apparel",
+            "title": "Cold water",
+            "note": "Insulated layers for shoulder-season mornings."
+          }
+        },
+        "c2": {
+          "type": "condition",
+          "settings": {
+            "collection": "accessories",
+            "title": "Wet weather",
+            "note": "Taped shells and gear that keep the rain out for good."
+          }
+        },
+        "c3": {
+          "type": "condition",
+          "settings": {
+            "collection": "reels",
+            "title": "High sun",
+            "note": "Light kit for bright, open water."
+          }
+        },
+        "c4": {
+          "type": "condition",
+          "settings": {
+            "collection": "rods",
+            "title": "Base camp",
+            "note": "Rods and hardware for the long haul."
+          }
+        }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"]
     },
-    "featured": {
-      "type": "qc-featured-collection",
+    "kit": {
+      "type": "qc-field-kit",
       "settings": {
-        "heading": "Featured gear",
+        "eyebrow": "Featured field kit",
+        "heading": "Packed and ready to fish",
         "collection": "automated-collection",
-        "limit": 4,
-        "show_view_all": true
+        "limit": 6,
+        "show_view_all": true,
+        "lead_kicker": "The guide's kit",
+        "lead_heading": "Everything a full day on the water asks for",
+        "lead_body": "The layers, shell, and pack our guides carry from put-in to takeout.",
+        "lead_link_label": "See the full kit",
+        "lead_link": "shopify://collections/automated-collection"
       }
     },
-    "catnav": {
-      "type": "qc-catalog-navigator",
-      "blocks": {
-        "b1": {
-          "type": "collection",
-          "settings": {
-            "collection": "automated-collection"
-          }
-        },
-        "b2": {
-          "type": "collection",
-          "settings": {
-            "collection": "hydrogen"
-          }
-        },
-        "b3": {
-          "type": "collection",
-          "settings": {
-            "collection": "frontpage"
-          }
-        }
-      },
-      "block_order": [
-        "b1",
-        "b2",
-        "b3"
-      ],
-      "settings": {
-        "heading": "Browse the catalog",
-        "layout": "tiles",
-        "show_counts": true
-      }
-    },
-    "values": {
-      "type": "qc-multi-column",
-      "blocks": {
-        "v1": {
-          "type": "column",
-          "settings": {
-            "heading": "Chosen, not listed",
-            "body": "<p>Every item earns its place in the catalog by being used first.</p>"
-          }
-        },
-        "v2": {
-          "type": "column",
-          "settings": {
-            "heading": "Straight answers",
-            "body": "<p>Honest stock levels, honest pricing, and pickup you can count on.</p>"
-          }
-        },
-        "v3": {
-          "type": "column",
-          "settings": {
-            "heading": "Here after the sale",
-            "body": "<p>Questions, repairs, or returns — reach a person, not a queue.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "v1",
-        "v2",
-        "v3"
-      ],
-      "settings": {
-        "heading": "Why shop with us"
-      }
-    },
-    "story": {
-      "type": "qc-image-with-text",
+    "material": {
+      "type": "qc-material-note",
       "settings": {
         "image": "shopify://shop_images/qc-story-stream.jpg",
-        "image_position": "end",
-        "heading": "Field-tested, not focus-grouped",
-        "body": "<p>We carry what we use. Read the field notes for what held up, what didn't, and what earned a permanent place in the kit.</p>",
-        "cta_label": "Read the field notes",
-        "cta_link": "/blogs/news"
+        "eyebrow": "Material note",
+        "statement": "We build with a three-layer recycled nylon that stays quiet, sheds rain, and breaks in instead of down."
+      },
+      "blocks": {
+        "f1": { "type": "fact", "settings": { "label": "Face fabric", "value": "Recycled 40D nylon" } },
+        "f2": { "type": "fact", "settings": { "label": "Membrane", "value": "20K / 20K taped" } },
+        "f3": { "type": "fact", "settings": { "label": "Repair", "value": "Free season-one fixes" } }
+      },
+      "block_order": ["f1", "f2", "f3"]
+    },
+    "report": {
+      "type": "qc-field-report",
+      "settings": {
+        "place": "Deschutes River, OR",
+        "date": "October 2026",
+        "kicker": "Field report",
+        "heading": "Three cold mornings testing the new taped shell",
+        "excerpt": "We took the shell through rain, wind, and one accidental swim. Here is what held up and what we changed before it shipped.",
+        "link_label": "Read the report",
+        "link": "shopify://blogs/news"
       }
     },
-    "signup": {
-      "type": "qc-newsletter",
+    "proof": {
+      "type": "qc-service-proof",
       "settings": {
-        "heading": "Stay in the loop",
-        "subheading": "New arrivals, field notes, and offers — no noise.",
-        "alignment": "center"
-      }
+        "eyebrow": "How we operate",
+        "heading": "Bought once, backed for the long run"
+      },
+      "blocks": {
+        "p1": { "type": "proof", "settings": { "title": "Repairs", "detail": "Send any shell back in its first season and we fix it, no charge." } },
+        "p2": { "type": "proof", "settings": { "title": "Returns", "detail": "30 days to decide, with a prepaid label in every order." } },
+        "p3": { "type": "proof", "settings": { "title": "Shipping", "detail": "Flat-rate carbon-neutral shipping, free over $150." } },
+        "p4": { "type": "proof", "settings": { "title": "Warranty", "detail": "A lifetime guarantee against defects in build and materials." } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4"]
     }
   },
-  "order": [
-    "hero",
-    "intro",
-    "featured",
-    "catnav",
-    "values",
-    "story",
-    "signup"
-  ]
+  "order": ["hero", "conditions", "kit", "material", "report", "proof"]
 }

@@ -1,0 +1,217 @@
+{% comment %}
+  Featured field kit (SPEC-027 §5.5): one editorial lead that occupies more
+  visual area than the adjacent products, set beside the canonical product
+  cards on a shared grid — content and commerce in one section. Pure Liquid;
+  cards carry their own progressive-enhancement contracts.
+{% endcomment %}
+
+{%- liquid
+  assign col = section.settings.collection
+  assign lead_img = section.settings.lead_image
+  if lead_img == blank and col
+    assign lead_img = col.featured_image
+    if lead_img == blank and col.products.first
+      assign lead_img = col.products.first.featured_image
+    endif
+  endif
+  assign lead_link = section.settings.lead_link
+  if lead_link == blank and col
+    assign lead_link = col.url
+  endif
+-%}
+
+<section class="qc-kit" aria-labelledby="qc-kit-h-{{ section.id }}">
+  <header class="qc-kit__head">
+    <div>
+      {% if section.settings.eyebrow != blank %}
+        <p class="qc-kit__eyebrow qc-mono">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      <h2 id="qc-kit-h-{{ section.id }}" class="qc-kit__heading">{{ section.settings.heading }}</h2>
+    </div>
+    {% if col and section.settings.show_view_all %}
+      <a class="qc-btn qc-btn--quiet" href="{{ col.url }}">
+        {{ 'collections.view_all' | t }}
+        <span class="qc-visually-hidden">— {{ col.title }}</span>
+      </a>
+    {% endif %}
+  </header>
+
+  <div class="qc-kit__layout">
+    <article class="qc-kit__lead">
+      <a class="qc-kit__lead-link" href="{{ lead_link | default: '#' }}">
+        <span class="qc-kit__lead-media">
+          {% if lead_img %}
+            {{ lead_img | image_url: width: 1200 | image_tag: class: 'qc-kit__lead-img', alt: '', loading: 'lazy', sizes: '(min-width: 1000px) 42vw, 100vw', widths: '600, 900, 1200' }}
+          {% else %}
+            <span class="qc-kit__lead-img qc-kit__lead-img--empty" aria-hidden="true"></span>
+          {% endif %}
+        </span>
+        <span class="qc-kit__lead-body">
+          {% if section.settings.lead_kicker != blank %}
+            <span class="qc-kit__lead-kicker qc-mono">{{ section.settings.lead_kicker }}</span>
+          {% endif %}
+          <span class="qc-kit__lead-title">{{ section.settings.lead_heading }}</span>
+          {% if section.settings.lead_body != blank %}
+            <span class="qc-kit__lead-text">{{ section.settings.lead_body }}</span>
+          {% endif %}
+          {% if section.settings.lead_link_label != blank %}
+            <span class="qc-kit__lead-cta">{{ section.settings.lead_link_label }} <span aria-hidden="true">&rarr;</span></span>
+          {% endif %}
+        </span>
+      </a>
+    </article>
+
+    {% if col %}
+      <ul class="qc-product-grid qc-kit__products" role="list" style="--qc-card-min: 210px;">
+        {% for product in col.products limit: section.settings.limit %}
+          <li>{% render 'qc-product-card', product: product %}</li>
+        {% endfor %}
+      </ul>
+    {% elsif request.design_mode %}
+      <p class="qc-muted qc-kit__hint">{{ 'general.pick_collection_hint' | t }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .qc-kit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xl);
+    padding-block: var(--qc-space-2xl);
+  }
+
+  .qc-kit__head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--qc-space-m);
+    flex-wrap: wrap;
+  }
+
+  .qc-kit__eyebrow {
+    margin: 0 0 var(--qc-space-xs);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--qc-accent);
+  }
+
+  .qc-kit__heading { margin: 0; font-size: var(--qc-text-2xl); letter-spacing: -0.01em; }
+
+  .qc-kit__layout { display: grid; grid-template-columns: 1fr; gap: var(--qc-space-l); }
+
+  @media (min-width: 1000px) {
+    .qc-kit__layout { grid-template-columns: 5fr 7fr; align-items: stretch; }
+  }
+
+  .qc-kit__lead { display: flex; min-inline-size: 0; }
+
+  .qc-kit__lead-link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    inline-size: 100%;
+    min-block-size: 22rem;
+    overflow: hidden;
+    border-radius: var(--qc-radius-surface);
+    text-decoration: none;
+    color: var(--qc-surface);
+    background: var(--qc-ink);
+    isolation: isolate;
+  }
+
+  .qc-kit__lead-media { position: absolute; inset: 0; z-index: 0; }
+
+  .qc-kit__lead-img {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform var(--qc-dur-2) var(--qc-ease);
+  }
+
+  .qc-kit__lead-img--empty { background: linear-gradient(150deg, color-mix(in oklab, var(--qc-accent) 60%, var(--qc-ink)), var(--qc-ink)); }
+
+  .qc-kit__lead-link:hover .qc-kit__lead-img { transform: scale(1.03); }
+
+  .qc-kit__lead-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgb(21 36 31 / 0.82) 0%, rgb(21 36 31 / 0.34) 42%, rgb(21 36 31 / 0) 72%);
+  }
+
+  .qc-kit__lead-body {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    padding: var(--qc-space-xl);
+  }
+
+  .qc-kit__lead-kicker {
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--qc-surface) 74%, var(--qc-ink));
+  }
+
+  .qc-kit__lead-title {
+    font-family: var(--qc-font-editorial);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .qc-kit__lead-text {
+    font-size: var(--qc-text-m);
+    line-height: 1.5;
+    max-inline-size: 42ch;
+    color: color-mix(in oklab, var(--qc-surface) 86%, var(--qc-ink));
+  }
+
+  .qc-kit__lead-cta {
+    margin-block-start: var(--qc-space-2xs);
+    font-family: var(--qc-font-display);
+    font-weight: 600;
+    font-size: var(--qc-text-s);
+  }
+
+  .qc-kit__lead-cta span { display: inline-block; transition: transform var(--qc-dur-1) var(--qc-ease); }
+  .qc-kit__lead-link:hover .qc-kit__lead-cta span { transform: translateX(0.25em); }
+
+  .qc-kit__products { margin: 0; }
+
+  .qc-kit__hint { align-self: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qc-kit__lead-img, .qc-kit__lead-cta span { transition: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:home.field_kit",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:home.eyebrow", "default": "Featured field kit" },
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Packed and ready to fish" },
+    { "type": "collection", "id": "collection", "label": "t:general.collection" },
+    { "type": "range", "id": "limit", "label": "t:general.max_products", "min": 2, "max": 8, "step": 1, "default": 6 },
+    { "type": "checkbox", "id": "show_view_all", "label": "t:general.show_view_all", "default": true },
+    { "type": "header", "content": "t:home.lead" },
+    { "type": "image_picker", "id": "lead_image", "label": "t:general.image" },
+    { "type": "text", "id": "lead_kicker", "label": "t:home.lead_kicker", "default": "The guide's kit" },
+    { "type": "text", "id": "lead_heading", "label": "t:general.heading", "default": "Everything a full day on the water asks for" },
+    { "type": "textarea", "id": "lead_body", "label": "t:general.text", "default": "The layers, shell, and pack our guides carry from put-in to takeout." },
+    { "type": "text", "id": "lead_link_label", "label": "t:general.cta_1_label", "default": "See the full kit" },
+    { "type": "url", "id": "lead_link", "label": "t:general.cta_1_link" }
+  ],
+  "presets": [{ "name": "t:home.field_kit" }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

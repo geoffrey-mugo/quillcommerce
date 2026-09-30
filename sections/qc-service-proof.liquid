@@ -1,0 +1,140 @@
+{% comment %}
+  Service proof (SPEC-027 §5.8): repairs, returns, shipping, and warranty
+  facts expressed as calm operational content aligned to a sand rule — not
+  generic icon badges. Pure Liquid — no JS.
+{% endcomment %}
+
+<section class="qc-proof" aria-labelledby="qc-proof-h-{{ section.id }}">
+  <div class="qc-proof__inner">
+    <header class="qc-proof__head">
+      {% if section.settings.eyebrow != blank %}
+        <p class="qc-proof__eyebrow qc-mono">{{ section.settings.eyebrow }}</p>
+      {% endif %}
+      {% if section.settings.heading != blank %}
+        <h2 id="qc-proof-h-{{ section.id }}" class="qc-proof__heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+    </header>
+
+    <ul class="qc-proof__grid" role="list">
+      {% for block in section.blocks %}
+        <li class="qc-proof__item" {{ block.shopify_attributes }}>
+          <span class="qc-proof__num qc-mono">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <span class="qc-proof__title">{{ block.settings.title }}</span>
+          {% if block.settings.detail != blank %}
+            <span class="qc-proof__detail">{{ block.settings.detail }}</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .qc-proof { padding-block: var(--qc-space-xl); }
+
+  .qc-proof__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xl);
+    padding: var(--qc-space-2xl) var(--qc-space-xl);
+    background: var(--qc-ink);
+    color: var(--qc-surface);
+    border-radius: var(--qc-radius-surface);
+  }
+
+  .qc-proof__head { display: flex; flex-direction: column; gap: var(--qc-space-xs); }
+
+  .qc-proof__eyebrow {
+    margin: 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--qc-surface) 60%, var(--qc-ink));
+  }
+
+  .qc-proof__heading { margin: 0; font-size: var(--qc-text-xl); color: var(--qc-surface); letter-spacing: -0.01em; }
+
+  .qc-proof__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .qc-proof__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qc-space-xs);
+    padding-inline: var(--qc-space-l);
+    padding-block: var(--qc-space-2xs) var(--qc-space-s);
+    border-inline-start: var(--qc-line-w) solid color-mix(in oklab, var(--qc-surface) 24%, var(--qc-ink));
+  }
+
+  .qc-proof__item:first-child { padding-inline-start: 0; border-inline-start: 0; }
+
+  .qc-proof__num {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--qc-accent);
+  }
+
+  .qc-proof__title {
+    font-family: var(--qc-font-display);
+    font-weight: 600;
+    font-size: var(--qc-text-l);
+    letter-spacing: -0.01em;
+  }
+
+  .qc-proof__detail {
+    font-size: var(--qc-text-s);
+    line-height: 1.5;
+    color: color-mix(in oklab, var(--qc-surface) 78%, var(--qc-ink));
+  }
+
+  @media (max-width: 899px) {
+    .qc-proof__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--qc-space-l) 0; }
+    .qc-proof__item:nth-child(odd) { padding-inline-start: 0; border-inline-start: 0; }
+  }
+
+  @media (max-width: 479px) {
+    .qc-proof__grid { grid-template-columns: 1fr; }
+    .qc-proof__item { padding-inline-start: 0; border-inline-start: 0; padding-block: var(--qc-space-s); border-block-start: var(--qc-line-w) solid color-mix(in oklab, var(--qc-surface) 24%, var(--qc-ink)); }
+    .qc-proof__item:first-child { border-block-start: 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:home.service_proof",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:home.eyebrow", "default": "How we operate" },
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Bought once, backed for the long run" }
+  ],
+  "blocks": [
+    {
+      "type": "proof",
+      "name": "t:home.proof",
+      "settings": [
+        { "type": "text", "id": "title", "label": "t:general.title_override", "default": "Repairs" },
+        { "type": "textarea", "id": "detail", "label": "t:home.detail", "default": "Send any shell back in its first season and we fix it, no charge." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "t:home.service_proof",
+      "blocks": [
+        { "type": "proof", "settings": { "title": "Repairs", "detail": "Send any shell back in its first season and we fix it, no charge." } },
+        { "type": "proof", "settings": { "title": "Returns", "detail": "30 days to decide, with a prepaid label in every order." } },
+        { "type": "proof", "settings": { "title": "Shipping", "detail": "Flat-rate carbon-neutral shipping, free over $150." } },
+        { "type": "proof", "settings": { "title": "Warranty", "detail": "A lifetime guarantee against defects in build and materials." } }
+      ]
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

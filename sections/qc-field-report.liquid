@@ -1,0 +1,156 @@
+{% comment %}
+  Field report (SPEC-027 §5.7): a journal story with place/date metadata and a
+  single reading action, styled as editorial rather than product promotion.
+  Pure Liquid — no JS.
+{% endcomment %}
+
+<section class="qc-report" aria-labelledby="qc-report-h-{{ section.id }}">
+  <div class="qc-report__frame{% unless section.settings.image %} qc-report__frame--noimg{% endunless %}">
+    <div class="qc-report__text">
+      <p class="qc-report__meta qc-mono">
+        {% if section.settings.place != blank %}<span>{{ section.settings.place }}</span>{% endif %}
+        {% if section.settings.date != blank %}<span>{{ section.settings.date }}</span>{% endif %}
+      </p>
+      {% if section.settings.kicker != blank %}
+        <p class="qc-report__kicker">{{ section.settings.kicker }}</p>
+      {% endif %}
+      <h2 id="qc-report-h-{{ section.id }}" class="qc-report__title qc-editorial">{{ section.settings.heading }}</h2>
+      {% if section.settings.excerpt != blank %}
+        <p class="qc-report__excerpt">{{ section.settings.excerpt }}</p>
+      {% endif %}
+      {% if section.settings.link_label != blank %}
+        <a class="qc-report__link" href="{{ section.settings.link | default: '#' }}">
+          {{ section.settings.link_label }} <span aria-hidden="true">&rarr;</span>
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.image %}
+      <div class="qc-report__media">
+        {{ section.settings.image | image_url: width: 1100 | image_tag: class: 'qc-report__img', alt: section.settings.image.alt | default: '', loading: 'lazy', sizes: '(min-width: 900px) 38vw, 100vw', widths: '500, 800, 1100' }}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .qc-report { padding-block: var(--qc-space-2xl); }
+
+  .qc-report__frame {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--qc-space-xl);
+    align-items: center;
+    padding: var(--qc-space-xl);
+    background: var(--qc-surface-raised);
+    border: var(--qc-line-w) solid var(--qc-line);
+    border-radius: var(--qc-radius-surface);
+  }
+
+  @media (min-width: 900px) {
+    .qc-report__frame { grid-template-columns: 1.1fr 0.9fr; gap: var(--qc-space-2xl); padding: var(--qc-space-2xl); }
+    .qc-report__frame--noimg { grid-template-columns: 1fr; padding: var(--qc-space-3xl) var(--qc-space-2xl); }
+  }
+
+  .qc-report__frame--noimg .qc-report__title { max-inline-size: 26ch; font-size: clamp(1.8rem, 1.2rem + 2.4vw, 3rem); }
+  .qc-report__frame--noimg .qc-report__text { gap: var(--qc-space-l); }
+
+  .qc-report__text { display: flex; flex-direction: column; gap: var(--qc-space-m); min-inline-size: 0; }
+
+  .qc-report__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--qc-space-s);
+    margin: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-report__meta span { display: inline-flex; align-items: center; gap: var(--qc-space-s); }
+  .qc-report__meta span + span::before {
+    content: '';
+    inline-size: 4px;
+    block-size: 4px;
+    border-radius: 50%;
+    background: var(--qc-accent);
+    margin-inline-end: var(--qc-space-s);
+  }
+
+  .qc-report__kicker {
+    margin: 0;
+    font-family: var(--qc-font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--qc-accent);
+  }
+
+  .qc-report__title {
+    margin: 0;
+    font-size: clamp(1.65rem, 1.2rem + 1.8vw, 2.5rem);
+    line-height: 1.16;
+    font-weight: 400;
+    max-inline-size: 20ch;
+    text-wrap: balance;
+  }
+
+  .qc-report__excerpt {
+    margin: 0;
+    font-size: var(--qc-text-m);
+    line-height: 1.6;
+    max-inline-size: 58ch;
+    color: var(--qc-ink-soft);
+  }
+
+  .qc-report__link {
+    align-self: start;
+    margin-block-start: var(--qc-space-2xs);
+    font-family: var(--qc-font-display);
+    font-weight: 600;
+    font-size: var(--qc-text-s);
+    text-decoration: none;
+    color: var(--qc-ink);
+    border-block-end: var(--qc-line-w) solid var(--qc-ink);
+    padding-block-end: 3px;
+  }
+
+  .qc-report__link span { display: inline-block; transition: transform var(--qc-dur-1) var(--qc-ease); }
+  .qc-report__link:hover { color: var(--qc-accent); border-block-end-color: var(--qc-accent); }
+  .qc-report__link:hover span { transform: translateX(0.25em); }
+
+  .qc-report__media {
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    border-radius: var(--qc-radius-control);
+    background: var(--qc-surface);
+  }
+
+  .qc-report__img { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
+  .qc-report__img--empty { background: linear-gradient(150deg, color-mix(in oklab, var(--qc-ink) 10%, var(--qc-surface)), var(--qc-surface-raised)); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .qc-report__link span { transition: none; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:home.field_report",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:general.image" },
+    { "type": "text", "id": "place", "label": "t:home.place", "default": "Deschutes River, OR" },
+    { "type": "text", "id": "date", "label": "t:home.date", "default": "October 2026" },
+    { "type": "text", "id": "kicker", "label": "t:home.kicker", "default": "Field report" },
+    { "type": "text", "id": "heading", "label": "t:general.heading", "default": "Three cold mornings testing the new taped shell" },
+    { "type": "textarea", "id": "excerpt", "label": "t:home.excerpt", "default": "We took the shell through rain, wind, and one accidental swim. Here is what held up and what we changed before it shipped." },
+    { "type": "text", "id": "link_label", "label": "t:general.cta_1_label", "default": "Read the report" },
+    { "type": "url", "id": "link", "label": "t:general.cta_1_link" }
+  ],
+  "presets": [{ "name": "t:home.field_report" }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}
