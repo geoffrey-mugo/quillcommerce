@@ -43,3 +43,20 @@ home template is now composed from original QuillCommerce merchandising
 sections (SPEC-020). No Skeleton demo markup remains in rendered
 output; Skeleton structural files (layout, config, image snippet,
 critical.css) continue under the recorded dependency.
+
+## D-006 · 2026-09-28 · Theme Store release readiness reopened
+Shopify rejected QuillCommerce at the pre-review design-quality gate before
+technical review. The historical `submission-ready` verdicts are retained as
+evidence of the checks that were run, but no longer represent current release
+status. Phase 0 is reopened to reconcile the release record, demo-asset
+provenance, install-state portability, and the approved redesign brief before
+more storefront code is changed.
+
+## D-007 · 2026-09-28 · Tailwater Field System art direction
+The owner approved a technical/outdoor-apparel demo named **Tailwater Supply
+Co.** QuillCommerce will be redesigned around an original **Tailwater Field
+System**: editorial field notes, restrained topographic/specification motifs,
+image-led product cards, and one shared overlay grammar. The first implementation
+slice is the home page plus canonical product card at desktop and mobile widths.
+The approved references are used only to study customer outcomes; no source,
+markup, assets, copy, or proprietary composition may be copied.

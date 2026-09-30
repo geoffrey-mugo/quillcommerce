@@ -1,5 +1,9 @@
 # Theme Store listing — QuillCommerce
 
+> **Status:** held after Shopify's design-quality pre-review. This listing is a
+> working draft and must not be resubmitted until the Tailwater redesign, demo
+> rebuild, and fresh release qualification are complete.
+
 ## Name
 QuillCommerce
 
@@ -11,8 +15,8 @@ with or without JavaScript.
 QuillCommerce is built for merchants who sell real gear to people who
 use it. Three brand colors become a complete, accessible palette; the
 type scale, corner style, and motion all follow from a handful of
-settings — no designer required. Three ready-made styles (Headwater,
-Driftwood, Slate) give three different stores out of the box.
+settings — no designer required. One QuillCommerce preset ships in the current
+1.0 package.
 
 Every flow is progressively enhanced: shoppers on any device, any
 connection, or any assistive technology can browse, filter, and buy.
@@ -49,7 +53,8 @@ else is stripped away.
   right-to-left locales supported
 
 **Performance & accessibility**
-- ~87 KB of first-party CSS+JS total (before Shopify's CDN
+- ~110 KB of tracked first-party files in `assets/` (unminified, before
+  Shopify's CDN
   minification), zero external dependencies
 - Lighthouse accessibility 100 on home, product, and collection:
   keyboard-complete, screen-reader announcements, 44px targets,
@@ -73,11 +78,11 @@ value speed and clarity; quick order list covers light B2B.
 | 08-search-desktop | Search results |
 | 09–11 mobile | Home / product / collection |
 
-## Demo imagery
-Rights-clean stock photography from Pexels (free for commercial use, no
-attribution required) — see docs/DEMO-IMAGE-CREDITS.txt for photo IDs
-and the retired-files ledger from the copyright audit. All 21 fixture
-products are photographed; no merchant-store photography is used.
+## Demo imagery (superseded for the next submission)
+The current demo uses Pexels stock under the Pexels license. Its provisional
+ledger is in `docs/DEMO-IMAGE-CREDITS.txt`. The next submission replaces this
+set with a coherent Tailwater technical-apparel art direction and completes
+per-image contributor, source, acquisition, and depicted-rights records.
 
 ## Listing form details
 - Documentation URL: https://saasquill.com/docs/quillcommerce (live)

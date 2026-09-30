@@ -1,5 +1,11 @@
-Demo imagery: Pexels (https://www.pexels.com/license/) — free for
-commercial use, no attribution required. Photo IDs:
+PROVISIONAL DEMO-ASSET LEDGER — NOT RELEASE-COMPLETE
+
+Demo imagery: Pexels (https://www.pexels.com/license/) — licensed for
+commercial website/template use and attribution is not required. Pexels also
+warns that depicted people, trademarks, brands, and copyrighted works can carry
+separate rights. Before the next submission, add the contributor, direct photo
+URL, acquisition date, store filename, and depicted-rights review for every
+retained photo. Photo IDs currently recorded:
   qc-dry-fly-assortment-2.jpg = pexels.com/photo/5396318
   qc-nymph-assortment-2.jpg = pexels.com/photo/6739265
   qc-local-favorites-box-2.jpg = pexels.com/photo/6738842

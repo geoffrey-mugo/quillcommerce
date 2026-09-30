@@ -16,12 +16,10 @@ below is configurable from the Theme Editor — no code required.
 
 ## Theme styles
 
-Three ready-made styles ship with the theme — **Headwater** (deep
-green on white), **Driftwood** (serif display on warm paper with
-copper), and **Slate** (condensed headings on cool grey with steel
-blue). Pick one at install or from Theme settings; every style is just
-the six brand settings above, so you can start from any of them and
-keep tuning.
+One ready-made style named **QuillCommerce** ships with the current release.
+It uses the theme's color, typography, corner, and layout settings as its
+starting point. Additional historical styles are not included in the 1.0
+submission.
 
 ## Sections you can add
 
