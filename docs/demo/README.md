@@ -17,7 +17,8 @@ then imported by the owner in admin. No Admin API token is used.
   guide, Contact, FAQ).
 - `field-reports.md` — two complete field reports + one guide (blog "Journal").
 - `merchandising.md` — homepage merchandising map.
-- `photography.md` — shot/sourcing list mapped to every product and editorial slot.
+- `photography.md` — visual system, shot list, and the production-method decision.
+- `image-generation-brief.md` — chosen method: art-directed generated set; style contract + per-asset prompts + provenance rules.
 - `provenance-ledger.md` — asset provenance ledger (fill as assets are chosen).
 - `verification-checklist.md` — post-import storefront audit.
 
