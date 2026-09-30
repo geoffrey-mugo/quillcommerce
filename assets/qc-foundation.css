@@ -251,7 +251,7 @@ main {
   font-weight: 400;
 }
 
-/* ---- canonical product card v2, one bounding box (SPEC-023) ---- */
+/* ---- canonical product card (SPEC-027 §6): image-led, disclosed purchase ---- */
 
 .qc-product-card {
   container-type: inline-size;
@@ -259,53 +259,57 @@ main {
   flex-direction: column;
   gap: var(--qc-space-s);
   min-inline-size: 0;
-  border: var(--qc-line-w) solid var(--qc-line);
-  border-radius: var(--qc-radius-surface);
-  background: var(--qc-surface);
-  padding: var(--qc-space-m);
+}
+
+.qc-product-card__media-wrap {
+  position: relative;
 }
 
 .qc-product-card__media-link {
+  position: relative;
   display: block;
 }
 
 .qc-product-card__media {
   position: relative;
   overflow: hidden;
+  aspect-ratio: 4 / 5;
   border-radius: var(--qc-radius-control);
   background: var(--qc-surface-raised);
 }
 
 .qc-product-card__image {
   inline-size: 100%;
-  aspect-ratio: 1;
+  block-size: 100%;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   transition: transform var(--qc-dur-2) var(--qc-ease);
 }
 
 .qc-product-card__media-link:hover .qc-product-card__image {
-  transform: scale(1.03);
+  transform: scale(1.04);
+}
+
+.qc-product-card .qc-product-card__image--hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--qc-dur-2) var(--qc-ease);
+}
+
+.qc-product-card:hover .qc-product-card__image--hover,
+.qc-product-card:focus-within .qc-product-card__image--hover {
+  opacity: 1;
 }
 
 .qc-product-card__image--empty {
   display: grid;
   place-items: center;
   color: var(--qc-ink-soft);
+  min-block-size: 12rem;
 }
 
-.qc-product-card__price .qc-price {
-  font-size: var(--qc-text-l);
-  font-weight: 600;
-}
-
-.qc-product-card__title {
-  margin: 0;
-  font-family: inherit;
-  font-size: var(--qc-text-m);
-  font-weight: 400;
-  line-height: 1.35;
-}
-
+/* field-record badge chips, top-start; the snippet renders at most two */
 .qc-product-badges {
   position: absolute;
   inset-block-start: var(--qc-space-xs);
@@ -318,55 +322,128 @@ main {
 }
 
 .qc-product-badges .qc-badge {
+  font-family: var(--qc-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   background: var(--qc-surface);
-}
-
-/* the image snippet's wrapper carries `.image { position: relative }`,
-   so this needs the extra specificity to actually leave the flow —
-   otherwise the hidden hover image stacks below the first one */
-.qc-product-card__media-link {
-  position: relative;
-  display: block;
-}
-
-/* quick view rides the image as a quiet chip so the buy column below
-   stays exactly title / price / options / quantity / Add */
-.qc-product-card__media-wrap {
-  position: relative;
-}
-
-.qc-product-card__qv {
-  position: absolute;
-  inset-block-end: var(--qc-space-xs);
-  inset-inline-end: var(--qc-space-xs);
-  z-index: 2;
-}
-
-.qc-product-card__qv-btn {
-  min-block-size: 36px;
-  padding: var(--qc-space-2xs) var(--qc-space-xs);
-  font-size: var(--qc-text-s);
-  background: var(--qc-surface);
+  color: var(--qc-ink);
   border: var(--qc-line-w) solid var(--qc-line);
-  color: var(--qc-ink);
-  box-shadow: var(--qc-shadow-1);
 }
 
-.qc-product-card__qv-btn:hover {
-  background: var(--qc-surface-raised);
-  color: var(--qc-ink);
-}
-
-.qc-product-card .qc-product-card__image--hover {
+/* purchase disclosure: one entry, revealed on hover/focus, shown on touch */
+.qc-product-card__disclose {
   position: absolute;
-  inset: 0;
+  inset-inline: var(--qc-space-xs);
+  inset-block-end: var(--qc-space-xs);
+  z-index: 3;
   opacity: 0;
-  transition: opacity var(--qc-dur-2) var(--qc-ease);
+  transform: translateY(0.35rem);
+  transition: opacity var(--qc-dur-1) var(--qc-ease), transform var(--qc-dur-1) var(--qc-ease);
 }
 
-.qc-product-card__media-link:hover .qc-product-card__image--hover,
-.qc-product-card:has(.qc-product-card__link:focus-visible) .qc-product-card__image--hover {
+.qc-product-card:hover .qc-product-card__disclose,
+.qc-product-card:focus-within .qc-product-card__disclose {
   opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .qc-product-card__disclose {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qc-product-card__disclose {
+    transition: none;
+  }
+}
+
+.qc-product-card__action {
+  inline-size: 100%;
+  min-block-size: 44px;
+  justify-content: center;
+  gap: var(--qc-space-2xs);
+  font-family: var(--qc-font-display);
+  font-size: var(--qc-text-s);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--qc-ink);
+  color: var(--qc-surface);
+  border: var(--qc-line-w) solid var(--qc-ink);
+  box-shadow: var(--qc-shadow-2);
+}
+
+.qc-product-card__action:hover {
+  background: color-mix(in oklab, var(--qc-ink) 85%, var(--qc-surface));
+  color: var(--qc-surface);
+}
+
+/* info stack: condition metadata, title, price, optional swatches */
+.qc-product-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qc-space-2xs);
+}
+
+.qc-product-card__kind {
+  margin: 0;
+  font-family: var(--qc-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--qc-ink-soft);
+}
+
+.qc-product-card__title {
+  margin: 0;
+  font-family: var(--qc-font-editorial);
+  font-size: var(--qc-text-l);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.qc-product-card__link {
+  text-decoration: none;
+  color: inherit;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.qc-product-card__link:hover {
+  color: var(--qc-accent);
+}
+
+.qc-product-card__price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--qc-space-xs);
+  margin-block-start: var(--qc-space-2xs);
+}
+
+.qc-product-card__price .qc-price {
+  font-family: var(--qc-font-mono);
+  font-size: var(--qc-text-s);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.qc-product-card__price .qc-price__compare {
+  color: var(--qc-ink-soft);
+  font-weight: 400;
+}
+
+.qc-product-card__soldout {
+  font-family: var(--qc-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--qc-ink-soft);
 }
 
 .qc-product-card__swatches {
@@ -379,8 +456,8 @@ main {
 }
 
 .qc-swatch {
-  inline-size: 1rem;
-  block-size: 1rem;
+  inline-size: 0.85rem;
+  block-size: 0.85rem;
   flex-shrink: 0;
   border-radius: var(--qc-radius-pill);
   border: var(--qc-line-w) solid var(--qc-line-strong);
@@ -396,122 +473,15 @@ main {
 }
 
 .qc-product-card__swatch-more {
+  font-family: var(--qc-font-mono);
+  font-size: 0.6rem;
   color: var(--qc-ink-soft);
 }
 
-.qc-product-card__link {
-  text-decoration: none;
-  color: inherit;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.qc-product-card__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  color: inherit;
-}
-
-.qc-product-card__buy {
-  margin-block-start: auto;
-}
-
-.qc-product-card__form {
-  display: grid;
-  gap: var(--qc-space-xs);
-}
-
-.qc-card-select {
-  inline-size: 100%;
-  min-inline-size: 0;
-  min-block-size: 44px;
-  padding: var(--qc-space-2xs) var(--qc-space-xs);
-  border: var(--qc-line-w) solid var(--qc-line-strong);
-  border-radius: var(--qc-radius-control);
-  background: var(--qc-surface);
-  color: var(--qc-ink);
-}
-
-/* quantity: one bordered − / count / + group; the buttons appear only
-   once qc-buy-card is running (no-JS keeps the bare input) */
-.qc-card-qty {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  border-radius: var(--qc-radius-control);
-  overflow: hidden;
-}
-
-.qc-buy-card--enhanced .qc-card-qty {
-  grid-template-columns: 44px minmax(0, 1fr) 44px;
-}
-
-.qc-card-qty .qc-qty__btn {
-  display: none;
-  inline-size: 100%;
-  min-block-size: 44px;
-  place-items: center;
-  font-size: var(--qc-text-l);
-  line-height: 1;
-  background: var(--qc-surface);
-  color: var(--qc-ink);
-  border: var(--qc-line-w) solid var(--qc-line-strong);
-  cursor: pointer;
-}
-
-.qc-buy-card--enhanced .qc-card-qty .qc-qty__btn {
-  display: inline-grid;
-}
-
-.qc-card-qty .qc-qty__btn:first-of-type {
-  border-inline-end: 0;
-}
-
-.qc-card-qty .qc-qty__btn:last-of-type {
-  border-inline-start: 0;
-}
-
-.qc-card-qty .qc-qty__input {
-  inline-size: 100%;
-  min-inline-size: 0;
-  text-align: center;
-  border-radius: 0;
-  appearance: textfield;
-}
-
-.qc-card-qty .qc-qty__input::-webkit-outer-spin-button,
-.qc-card-qty .qc-qty__input::-webkit-inner-spin-button {
-  appearance: none;
-  margin: 0;
-}
-
-.qc-card-rules {
-  display: flex;
-  align-items: center;
-  gap: var(--qc-space-2xs);
-  margin: 0;
-  color: var(--qc-ink-soft);
-}
-
-.qc-card-rules .qc-icon {
-  inline-size: 1em;
-  block-size: 1em;
-  flex-shrink: 0;
-}
-
-/* dense-grid guard: controls keep fitting on very narrow cards, and
-   titles get a third line instead of truncating harder */
 @container (max-width: 200px) {
-  .qc-product-card__buy .qc-btn,
-  .qc-card-select {
-    font-size: 0.8rem;
+  .qc-product-card__action {
+    font-size: 0.72rem;
   }
-
-  .qc-buy-card--enhanced .qc-card-qty {
-    grid-template-columns: 36px minmax(0, 1fr) 36px;
-  }
-
   .qc-product-card__link {
     -webkit-line-clamp: 3;
   }

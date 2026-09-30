@@ -149,7 +149,9 @@
       "quick_view": "Vista",
       "add_total": "Añadir ({{ total }})",
       "preorder_total": "Reservar ({{ total }})",
-      "qty_rules": "Se aplican reglas de cantidad"
+      "qty_rules": "Se aplican reglas de cantidad",
+      "quick_add": "Añadir rápido",
+      "choose_options": "Elegir opciones"
     },
     "quick_view": {
       "loading": "Cargando producto…",

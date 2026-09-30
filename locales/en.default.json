@@ -149,7 +149,9 @@
       "quick_view": "Quick",
       "add_total": "Add ({{ total }})",
       "preorder_total": "Pre-order ({{ total }})",
-      "qty_rules": "Qty rules apply"
+      "qty_rules": "Qty rules apply",
+      "quick_add": "Quick add",
+      "choose_options": "Choose options"
     },
     "quick_view": {
       "loading": "Loading product…",
