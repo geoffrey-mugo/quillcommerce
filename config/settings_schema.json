@@ -16,15 +16,27 @@
       },
       {
         "type": "font_picker",
+        "id": "type_display_font",
+        "label": "t:general.type_display_font",
+        "default": "archivo_n7"
+      },
+      {
+        "type": "font_picker",
         "id": "type_primary_font",
-        "default": "work_sans_n4",
+        "default": "archivo_n4",
         "label": "t:general.primary"
       },
       {
         "type": "font_picker",
-        "id": "type_display_font",
-        "label": "t:general.type_display_font",
-        "default": "assistant_n4"
+        "id": "type_editorial_font",
+        "default": "newsreader_n4",
+        "label": "t:general.type_editorial_font"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_mono_font",
+        "default": "ibm_plex_mono_n4",
+        "label": "t:general.type_mono_font"
       }
     ]
   },
@@ -71,20 +83,27 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
+        "default": "#F2EFE5",
         "label": "t:labels.background"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
+        "default": "#15241F",
         "label": "t:labels.foreground"
       },
       {
         "type": "color",
         "id": "accent_color",
         "label": "t:general.accent_color",
-        "default": "#1E4A3C"
+        "default": "#2D5446"
+      },
+      {
+        "type": "color",
+        "id": "signal_color",
+        "label": "t:general.signal_color",
+        "info": "t:general.signal_color_info",
+        "default": "#F05A32"
       },
       {
         "type": "paragraph",

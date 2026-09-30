@@ -1,7 +1,9 @@
 {
   "general": {
     "404": "Not found",
-    "accent_color": "Accent",
+    "accent_color": "Brand",
+    "signal_color": "Signal",
+    "signal_color_info": "A rare, high-attention accent for the primary purchase action and status. Keep it sparse.",
     "account": "Account",
     "activate_account": "Account activation",
     "addresses": "Addresses",
@@ -171,6 +173,8 @@
     "tone_raised": "Raised surface",
     "trust_badge": "Trust badge",
     "type_display_font": "Display font (headings)",
+    "type_editorial_font": "Editorial font (statements & field notes)",
+    "type_mono_font": "Data font (specs, prices, labels)",
     "typography": "Typography",
     "utility_bar": "Utility bar",
     "utility_link_label": "Link label",

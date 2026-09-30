@@ -9,14 +9,19 @@
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_display_font | font_face: font_display: 'swap' }}
   {{ settings.type_display_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.type_editorial_font | font_face: font_display: 'swap' }}
+  {{ settings.type_editorial_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.type_mono_font | font_face: font_display: 'swap' }}
 
   :root {
-    /* ---- fonts ---- */
+    /* ---- fonts (SPEC-027: structural / editorial / data) ---- */
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
     --qc-font-display: {{ settings.type_display_font.family }}, {{ settings.type_display_font.fallback_families }};
     --qc-font-display-weight: {{ settings.type_display_font.weight | at_least: 500 }};
+    --qc-font-editorial: {{ settings.type_editorial_font.family }}, {{ settings.type_editorial_font.fallback_families }};
+    --qc-font-mono: {{ settings.type_mono_font.family }}, {{ settings.type_mono_font.fallback_families }};
 
     /* ---- layout ---- */
     --page-width: {{ settings.max_page_width }};
@@ -28,6 +33,9 @@
     --qc-surface: {{ settings.background_color }};
     --qc-ink: {{ settings.foreground_color }};
     --qc-accent: {{ settings.accent_color }};
+    {%- comment -%} SPEC-027 §4.2: rare high-attention signal; falls back to brand accent {%- endcomment -%}
+    --qc-signal: {{ settings.signal_color | default: settings.accent_color }};
+    --qc-signal-ink: #ffffff;
 
     /* ---- color roles (derived, palette-agnostic) ---- */
     {%- comment -%} 76% keeps derived muted text at or above 4.5:1 on the surface {%- endcomment -%}
