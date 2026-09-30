@@ -89,9 +89,10 @@ Copy from `pages.md`:
 ## 6. Blog + articles
 Path: **Online Store → Blog posts → Manage blogs → Add blog** →
 - ☐ Blog: Title `Field Notes`, handle `journal`.
-- ☐ Add 3 articles from `field-reports.md`: set Blog = Field Notes, paste content,
-  set **tags** (`field-report` ×2, `guide` ×1), set the **published date to the
-  past date given**, add a lead image (Step 8), Visibility = Visible.
+- ☐ Add 3 articles: paste each HTML block from `article-html.md` via the `< >`
+  (Show HTML) editor; set handle, author, past date, tags (`field-report` ×2,
+  `guide` ×1) and excerpt from that file; insert each figure image (Step 8);
+  Visibility = Visible.
 - **Expected:** `/blogs/journal` lists 3 posts; `/blogs/journal/tagged/guide`
   resolves to 1.
 - **STOP** if any article date is in the future or a post is hidden.

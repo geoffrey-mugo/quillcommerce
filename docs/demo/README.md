@@ -15,7 +15,8 @@ then imported by the owner in admin. No Admin API token is used.
 - `navigation.md` — primary + footer menu trees with destination handles.
 - `pages.md` — page and policy copy (About, Shipping, Returns & repairs, Size
   guide, Contact, FAQ).
-- `field-reports.md` — two complete field reports + one guide (blog "Journal").
+- `field-reports.md` — the field reports + guide as plain reference copy.
+- `article-html.md` — paste-ready semantic HTML for the 3 articles (+ `validate_articles.py`).
 - `merchandising.md` — homepage merchandising map.
 - `photography.md` — visual system, shot list, and the production-method decision.
 - `image-generation-brief.md` — chosen method: art-directed generated set; style contract + per-asset prompts + provenance rules.
