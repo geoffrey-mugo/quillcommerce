@@ -5,9 +5,11 @@ Offline, reviewable content for building the Tailwater Supply Co. demo store
 then imported by the owner in admin. No Admin API token is used.
 
 ## Contents
-- `products.csv` — Shopify product import (19 products, 49 variant rows), generated
-  from structured data and mechanically validated (unique handles; sale, sold-out,
-  price-range, long-title, and single/multi-variant states all present).
+- `products.csv` — Shopify product import (18 products, 45 variant rows),
+  generated from structured data and cross-validated (Shopify column contract,
+  unique handles + SKUs, drafted/unpublished, title↔variant truth, collection
+  and nav references, state coverage). The **gift card is not here** — Shopify
+  cannot create gift-card products by CSV; it is created manually in Admin.
 - `metafields.md` — metafield definitions + per-product values.
 - `collections.md` — collection definitions and membership rules.
 - `navigation.md` — primary + footer menu trees with destination handles.
@@ -21,12 +23,13 @@ then imported by the owner in admin. No Admin API token is used.
 
 ## Execution order (SPEC-030 §8, owner-run)
 1. Review and approve this pack.
-2. Source and approve the coherent photography set (`photography.md`), logging
-   each asset in `provenance-ledger.md`.
-3. Import `products.csv` (Admin → Products → Import). Do not publish sales channels
-   until images and metafields are set.
-4. Create collections, pages, articles, and menus in Admin per the specs.
-5. Populate metafields and assign imagery per product.
+2. **Choose the product-imagery production method** (photography.md §Sourcing) and
+   produce one consistent set; log every asset in `provenance-ledger.md`.
+3. Import `products.csv` (Admin → Products → Import). Products arrive as **drafts**
+   — keep them unpublished until images and metafields are assigned.
+4. **Create the gift card manually** (Products → Add → Gift card), then create
+   collections, pages, articles, and menus per the specs.
+5. Populate metafields and assign imagery per product; publish when complete.
 6. Run `verification-checklist.md` — every nav link resolves, every state renders.
 7. Only then unfreeze theme code and resume shell design against real data.
 

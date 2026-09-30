@@ -1,41 +1,42 @@
 # Metafields
 
-Keep the model minimal and truthful. One product metafield drives the card's
-"kind" line; the rest is optional spec text shown on the PDP. No computed or
-invented performance scores.
+The theme card reads the "kind" line in this order:
+`custom.material` → `custom.use` → `product.type`. All three consumers are
+defined below (the earlier pack referenced `custom.material` without defining it —
+fixed). No computed or invented performance scores; factual attributes only.
 
 ## Definitions (Settings → Custom data → Products)
 | Namespace.key | Name | Type | Purpose |
 |---|---|---|---|
-| custom.use | Primary use | Single line text | The card's kind line when more useful than the product Type. Blank → theme falls back to `product.type`. |
-| custom.spec | Spec line | Single line text | Short factual spec shown on the PDP (length, weight, material). Optional. |
+| custom.material | Material | Single line text | Apparel fabric; shown as the card kind line when set. Blank on non-apparel. |
+| custom.use | Primary use | Single line text | A factual use, shown when more useful than Type and when material is blank. |
+| custom.spec | Spec line | Single line text | Short factual spec shown on the PDP. Optional. |
 
-The theme card reads `custom.material` → `custom.use` → `product.type` (in that
-order). We populate `custom.use` where it adds signal and leave it blank
-elsewhere so the fallback to Type is demonstrated (e.g. Local Favorites Fly Box).
+Precedence means: apparel shows its **material**; fly gear shows a factual **use**
+(or falls back to **Type**); a product with none shows its **Type**.
 
 ## Per-product values
-| Product | custom.use | custom.spec |
-|---|---|---|
-| Riffle Fly Rod | All-around | 9' · 4-piece · graphite |
-| Tailout Fly Rod | All-around | 9' · 4-piece · medium-fast |
-| Headwaters Signature Fly Rod | All-around | 9' · 4-piece · nickel-silver |
-| Riffle Fly Reel | *(blank → Reels)* | Sealed drag · large arbor |
-| Headwaters Fly Reel | *(blank → Reels)* | Sealed carbon drag |
-| Tapered Leader 3-Pack | *(blank → Lines & Leaders)* | 9' · knotless |
-| Dry Fly Assortment | Dry flies | 12 flies · #14–18 · barbless |
-| Nymph Assortment | Nymphs | 12 flies · #12–16 |
-| Streamer Selection | Streamers | 6 flies · #2–6 |
-| Local Favorites Fly Box | *(blank → Flies)* | Seasonal mix |
-| Guide Landing Net | *(blank → Packs & Nets)* | Walnut · rubber bag |
-| Waterproof Fly Box | *(blank → Packs & Nets)* | Gasketed · floats |
-| Fly Tying Starter Kit | *(blank → Tools)* | Vise + materials |
-| Rotary Tying Vise | *(blank → Tools)* | True rotary · #20–2/0 |
-| Storm Wading Jacket | Wet weather | 3-layer · taped · waterproof zips |
-| River Hoodie | Cold water | Grid fleece · midweight |
-| Field Tee | High sun | Heavyweight cotton blend |
-| Guide Cap | High sun | 6-panel · adjustable |
-| Tailwater Gift Card | *(blank)* | *(none)* |
+| Product | custom.material | custom.use | custom.spec |
+|---|---|---|---|
+| Riffle Fly Rod | — | All-around | 9ft · 4-piece · graphite |
+| Tailout Fly Rod | — | All-water | 9ft · 4-piece · medium-fast |
+| Headwaters Signature Fly Rod | — | All-around | 9ft · 4-piece · nickel-silver |
+| Riffle Fly Reel | — | — | Sealed drag · large arbor |
+| Headwaters Fly Reel | — | — | Sealed carbon drag |
+| Tapered Leader 3-Pack | — | — | 9ft · knotless |
+| Dry Fly Assortment | — | Dry flies | 12 flies · #14–18 · barbless |
+| Nymph Assortment | — | Nymphs | 12 flies · #12–16 |
+| Streamer Selection | — | Streamers | 6 flies · #2–6 |
+| Local Favorites Fly Box | — | — | — |
+| Guide Landing Net | — | — | Walnut · rubber bag |
+| Waterproof Fly Box | — | — | Gasketed · floats |
+| Fly Tying Starter Kit | — | — | Vise + materials |
+| Rotary Tying Vise | — | — | True rotary · #20–2/0 |
+| Storm Wading Jacket | Recycled 3-layer nylon | — | Taped seams · waterproof zips |
+| River Hoodie | Grid fleece | — | Midweight |
+| Field Tee | Heavyweight cotton blend | — | — |
+| Guide Cap | — | — | 6-panel · adjustable |
+| Tailwater Gift Card (manual) | — | — | — |
 
-Local Favorites Fly Box is deliberately left with **no** `custom.use` and no
-`custom.spec` — the "product without optional metadata" state.
+**Local Favorites Fly Box** is deliberately left with no metafields — the
+"product without optional metadata" state (kind line falls back to `Flies`).

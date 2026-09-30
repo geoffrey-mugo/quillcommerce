@@ -10,18 +10,30 @@ apply consistent crop rules. Every asset is logged in `provenance-ledger.md`.
   studio-white catalog cutouts mixed with lifestyle.
 - **Product treatment:** every product shot on the paper surface (#F2EFE5) or a
   neutral stone/wood ground, **4:5**, even margins, soft shadow, no hard drop
-  shadow. One treatment across all 19 products so cards align.
+  shadow. One treatment across all 18 products so cards align.
 - **Editorial treatment:** in-situ river/trail, same grade as product, people
   optional and incidental (no posed models staring at camera).
 - **Consistency test:** any two cards side by side must look like one shop shot
   them on the same day.
 
-## Sourcing
-Prefer a **single licensable collection** (one photographer/collection on
-Pexels/Unsplash, or commissioned) so the grade is consistent. Do NOT assemble
-unrelated images and present them as one campaign. Record license + URL for each.
-Product close-ups that cannot be sourced coherently should be shot simply and
-consistently rather than faked with mismatched stock.
+## Sourcing — the production-method decision (gating)
+Stock libraries (Pexels/Unsplash) **cannot** truthfully supply product photography
+for fictional products: an unrelated reel or jacket shot by someone else cannot be
+presented as *the* product Tailwater sells, and 18 unrelated images will never be
+one consistent system. So **product imagery requires an original production method
+— decided before import:**
+
+1. **Commission / shoot** real stand-in products (most authentic, real cost/time).
+2. **Controlled 3D product set** (consistent, repeatable; modelling effort).
+3. **Original, art-directed generated product set** (AI or CGI), one consistent
+   look, with full provenance recorded — no real third-party product depicted.
+
+Editorial/lifestyle scenes (river, trail, hands) MAY use a single coherent stock
+collection **only** where the image does not claim to depict a specific product;
+record license + URL for each. Product close-ups may not.
+
+This decision is a hard gate: nothing imports with real imagery until the method
+is chosen and one consistent set exists.
 
 ## Product shots (1 primary each; 2nd optional for hover)
 | Product | Primary shot | Alt/hover |
@@ -47,7 +59,7 @@ consistently rather than faked with mismatched stock.
 | Article 1 lead | Field report | Rainy river morning, Deschutes-like |
 | Article 2 lead | Field report | Low clear creek, glassy run |
 | Article 3 lead | Guide | Leader/tippet on the water |
-| Conditions ×4 | Shop by condition | One representative frame per condition, same grade |
+| Category ×4 | Shop by category | One representative frame per category (Rods, Flies, Tackle, Apparel), same grade |
 
 ## Deliverable per asset
 Filename `tw-<slug>-NN.jpg`, longest edge ≥2000px, sRGB, product shots 4:5.
